@@ -11,7 +11,7 @@
 <title>PPR</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#0b0907; --bg2:#15100c; --card:#1a130e; --card2:#231910; --line:rgba(212,175,96,.18);
@@ -153,7 +153,9 @@ section{padding-top:56px}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
 /* ---------- light pastel, sharp edges, white logo on a copper plate ---------- */
-*{border-radius:0!important}
+*{border-radius:6px!important}
+.card,.sheet,.pic,.specs,.lines,.how{border-radius:12px!important}
+.search,.search button,.cta,.chip,.step{border-radius:8px!important}
 :root{--line:rgba(122,90,48,.2);--cream:#2a1d15;--muted:#6f6052;--dim:#978776;--gold:#b98a45;--gold-l:#9c7631;
   --copper:linear-gradient(135deg,#7d4e2a 0%,#a8693a 55%,#84532d 100%)}
 html,body{background:linear-gradient(180deg,#fbf7f1 0%,#f6ede6 55%,#f0e6da 100%) fixed;color:#2a1d15}
@@ -214,8 +216,22 @@ html,body{background:linear-gradient(180deg,#fbf7f1 0%,#f6ede6 55%,#f0e6da 100%)
 .lg .dot,.logo .dot{fill:#f1d99a}
 .lg .rule,.logo .rule{stroke:#e9cf87;stroke-width:1.2}
 .lg .dia{fill:#f1d99a}
-.lg text,.logo text{fill:#fff;font-family:"Cinzel",Georgia,serif;font-weight:700}
+.lg text,.logo text{fill:#fff}
 .lg .sub{fill:#f1d99a}
+.lg.dark text{fill:#2a1d15}
+.lg.dark .sub{fill:#8a6528}
+.lg.dark .rule,.lg.dark .rung{stroke:#b98a45}
+.lg.dark .dot{fill:#b98a45}
+.lg.dark .strand{stroke:url(#ringGold)}
+.hero .lg{margin-bottom:30px}
+.tip{color:var(--muted);font-size:13.5px;margin:12px 0 0;opacity:0;transition:opacity .35s}
+.tip.on{opacity:1}
+.hero #results{width:100%;max-width:1064px;text-align:left;padding-top:26px}
+.foot{margin-top:60px;padding-top:28px;border-top:1px solid var(--line);text-align:center}
+.foot h3{font-size:20px;margin:0 0 6px}
+.foot h4{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:30px 0 8px}
+.foot .wa{display:inline-block;background:var(--copper);color:#fff;text-decoration:none;font-weight:700;padding:12px 22px;margin:4px 0 0}
+.foot .notice{color:var(--muted);font-size:13px;line-height:1.65;max-width:640px;margin:0 auto}
 .intro-plate .strand{stroke-dasharray:320;stroke-dashoffset:320;animation:draw 1.4s .5s ease forwards}
 .intro-plate .rung,.intro-plate .dot{opacity:0;animation:rise .6s 1.5s ease forwards}
 .intro-plate text,.intro-plate .rule,.intro-plate .dia{opacity:0;animation:rise .9s 1.1s ease forwards}
@@ -237,7 +253,7 @@ html,body{background:linear-gradient(180deg,#fbf7f1 0%,#f6ede6 55%,#f0e6da 100%)
 </svg>
 <canvas id="specks" aria-hidden="true"></canvas>
 <div class="intro" id="intro" aria-hidden="true">
-  <div class="plate intro-plate"><div class="lg" data-logo="full"></div></div>
+  <div class="lg dark intro-plate" data-logo="full"></div>
 </div>
 <header class="bar" id="bar"><div class="bar-in">
   <div class="logo" data-logo="compact"></div>
@@ -247,19 +263,26 @@ html,body{background:linear-gradient(180deg,#fbf7f1 0%,#f6ede6 55%,#f0e6da 100%)
 </div></header>
 <div class="wrap">
   <div class="hero" id="top">
-    <div class="plate hero-in"><div class="lg" data-logo="full"></div></div>
+    <div class="lg dark hero-in" data-logo="full"></div>
     <form class="search hero-in d3" id="searchForm" role="search">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
       <input id="q" type="search" placeholder="What are your goals?" autocomplete="off" aria-label="What are your goals?">
       <button type="submit">Search</button>
     </form>
+    <p class="tip" id="tip">Look below, the options change as you type.</p>
+    <section id="results" hidden></section>
     <button class="hint" id="hint" type="button" aria-label="Scroll to browse">Browse<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
   </div>
   <main>
-    <section id="results" hidden></section>
     <section id="browse"><div class="sec-h rv"><h2>Most popular</h2><span>Our most ordered</span></div><div class="rail" id="popular"></div></section>
     <section><div class="sec-h rv"><h2>Packages</h2><span>Bac water included</span></div><div class="grid" id="packages"></div></section>
     <section><div class="sec-h rv"><h2>Shop all</h2></div><div class="chips rv" id="chips"></div><div class="grid" id="all"></div></section>
+    <footer class="foot rv">
+      <h3>Questions? Message us</h3>
+      <p><a class="wa" href="https://wa.me/61494599813" target="_blank" rel="noopener noreferrer">WhatsApp 0494 599 813</a></p>
+      <h4>Research Use Notice</h4>
+      <p class="notice">All products listed on this website are supplied strictly for in-vitro/laboratory research purposes only. They are not intended for human or veterinary use, and must not be used for therapeutic, diagnostic, or any other unauthorised purpose. By placing an order, you confirm that you understand and accept these terms.</p>
+    </footer>
   </main>
 </div>
 <div class="mask" id="mask"><div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Details"></div></div>
@@ -316,18 +339,17 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
       '<path class="strand" d="M20 8C20 26 52 26 52 42C52 58 20 58 20 74C20 90 52 90 52 106"/>' +
       '<path class="strand" d="M52 8C52 26 20 26 20 42C20 58 52 58 52 74C52 90 20 90 20 106"/>' + r.join("") + '</g>';
   }
+  // A refined serif wordmark, a small helix tucked at the top right, and the subtitle under a fine rule.
   function logoSvg(kind) {
+    var F = 'font-family="Cormorant Garamond,Georgia,serif" font-weight="600"';
     if (kind === "compact") {
-      return '<svg viewBox="0 0 330 72" role="img" aria-label="Proactive Peptides Research">' + helix(0, 4, .58) +
-        '<text x="52" y="42" font-size="36" textLength="262" lengthAdjust="spacingAndGlyphs">PROACTIVE</text>' +
-        '<text class="sub" x="53" y="64" font-size="11.5" font-weight="700" letter-spacing="4.2" textLength="260" lengthAdjust="spacingAndGlyphs">PEPTIDES RESEARCH</text></svg>';
+      return '<svg viewBox="0 0 248 62" role="img" aria-label="Proactive Peptides Research">' +
+        '<text x="4" y="46" font-size="50" ' + F + ' textLength="196" lengthAdjust="spacingAndGlyphs">Proactive</text>' + helix(204, 4, .4) + '</svg>';
     }
-    return '<svg viewBox="0 0 400 122" role="img" aria-label="Proactive Peptides Research">' + helix(6, 4, 1) +
-      '<text x="88" y="58" font-size="42" textLength="290" lengthAdjust="spacingAndGlyphs">PROACTIVE</text>' +
-      '<line class="rule" x1="90" y1="83" x2="152" y2="83"/><polygon class="dia" points="156,83 160,80 164,83 160,86"/>' +
-      '<text x="233" y="89" font-size="19" letter-spacing="7" text-anchor="middle" textLength="118" lengthAdjust="spacingAndGlyphs">PEPTIDES</text>' +
-      '<polygon class="dia" points="302,83 306,80 310,83 306,86"/><line class="rule" x1="314" y1="83" x2="376" y2="83"/>' +
-      '<text class="sub" x="233" y="111" font-size="11.5" letter-spacing="6.5" text-anchor="middle" textLength="150" lengthAdjust="spacingAndGlyphs">RESEARCH</text></svg>';
+    return '<svg viewBox="0 0 420 150" role="img" aria-label="Proactive Peptides Research">' +
+      '<text x="26" y="90" font-size="92" ' + F + ' textLength="330" lengthAdjust="spacingAndGlyphs">Proactive</text>' + helix(354, 6, .46) +
+      '<line class="rule" x1="118" y1="109" x2="192" y2="109"/><circle class="dot" cx="200" cy="109" r="2.4"/><line class="rule" x1="208" y1="109" x2="282" y2="109"/>' +
+      '<text class="sub" x="200" y="134" text-anchor="middle" font-size="15" ' + F + ' letter-spacing="6" textLength="236" lengthAdjust="spacingAndGlyphs">PEPTIDES RESEARCH</text></svg>';
   }
   Array.prototype.forEach.call(document.querySelectorAll("[data-logo]"), function (el) { el.innerHTML = logoSvg(el.dataset.logo); });
 
@@ -348,7 +370,7 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
       '<rect x="2" y="60" width="56" height="56" fill="#fff" stroke="#c9a24f" stroke-width=".9"/>' +
       '<rect x="4.5" y="62.5" width="51" height="51" fill="none" stroke="#e2cf9c" stroke-width=".5"/>' +
       emblem(22.5, 64, .17, "#9c7631") +
-      '<text x="30" y="83" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-weight="700" font-size="4.4" textLength="44" lengthAdjust="spacingAndGlyphs" fill="#7a5a26">PROACTIVE PEPTIDES</text>' +
+      '<text x="30" y="84" text-anchor="middle" font-family="Cormorant Garamond,Georgia,serif" font-weight="600" font-size="9" fill="#2a1d15">Proactive</text>' +
       '<text x="30" y="' + (strength ? 95 : 98) + '" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="' + (long ? 6.4 : 7.8) + '" font-weight="800" fill="#1f1610">' + esc(p.tag) + '</text>' +
       (strength ? '<text x="30" y="103" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="5.4" font-weight="600" fill="#6b5e52">' + esc(p.options[0].label) + '</text>' : '') +
       '<line x1="16" y1="' + (strength ? 108 : 105) + '" x2="44" y2="' + (strength ? 108 : 105) + '" stroke="#c9a24f" stroke-width=".6"/>' +
@@ -370,12 +392,12 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
       '<rect x="0" y="10" width="72" height="142" fill="none" stroke="#d8cfc2" stroke-width=".6"/>' +
       '<rect x="5" y="15" width="62" height="132" fill="none" stroke="#c9a24f" stroke-width=".9"/><rect x="7.5" y="17.5" width="57" height="127" fill="none" stroke="#e2cf9c" stroke-width=".4"/>' +
       emblem(25, 26, .34, "#9c7631") +
-      '<text x="36.5" y="63.5" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-weight="700" font-size="7.6" letter-spacing=".5" fill="#fff" opacity=".9">PROACTIVE</text>' +
-      '<text x="36" y="63" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-weight="700" font-size="7.6" letter-spacing=".5" fill="#2a1d15">PROACTIVE</text>' +
-      '<text x="36" y="72" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-weight="700" font-size="4.6" letter-spacing="1.8" fill="#7a5a26">PEPTIDES</text>' +
+      '<text x="36.4" y="64.4" text-anchor="middle" font-family="Cormorant Garamond,Georgia,serif" font-weight="600" font-size="13" fill="#fff" opacity=".9">Proactive</text>' +
+      '<text x="36" y="64" text-anchor="middle" font-family="Cormorant Garamond,Georgia,serif" font-weight="600" font-size="13" fill="#2a1d15">Proactive</text>' +
+      '<text x="36" y="72" text-anchor="middle" font-family="Cormorant Garamond,Georgia,serif" font-weight="600" font-size="4.2" letter-spacing="1.4" textLength="40" lengthAdjust="spacingAndGlyphs" fill="#7a5a26">PEPTIDES RESEARCH</text>' +
       '<line x1="20" y1="80" x2="52" y2="80" stroke="#c9a24f" stroke-width=".6"/>' +
       '<text x="36" y="112" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="' + (p.tag.length > 7 ? 6 : 7.4) + '" font-weight="800" fill="#1f1610">' + esc(p.tag) + '</text>' +
-      '<text x="36" y="138" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-weight="700" font-size="4" letter-spacing="1.6" fill="#9c7631">RESEARCH</text></g>';
+      '</g>';
   }
   function shot(p, strength) {
     return '<svg viewBox="0 0 200 200" role="img" aria-label="' + esc(p.name) + '">' + box(p, 28, 22) + vialW(p, 100, 44, 1, strength) + '</svg>';
@@ -407,6 +429,7 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
   }
   function search(q) {
     var box = $("results"); q = String(q || "").trim().toLowerCase();
+    $("tip").classList.toggle("on", !!q);
     if (!q) { box.hidden = true; box.innerHTML = ""; return; }
     var skip = " i im i'm want wanna to a an my me for and the some get help with of in on is be like would need looking after something more ";
     var words = q.replace(/[^a-z0-9+ ']/g, " ").split(/\s+/).filter(function (w) { return w.length > 1 && skip.indexOf(" " + w + " ") < 0; });
