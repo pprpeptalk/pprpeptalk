@@ -229,9 +229,17 @@ html,body{background:linear-gradient(180deg,#fbf7f1 0%,#f6ede6 55%,#f0e6da 100%)
 .hero #results{width:100%;max-width:1064px;text-align:left;padding-top:26px}
 .foot{margin-top:60px;padding-top:28px;border-top:1px solid var(--line);text-align:center}
 .foot h3{font-size:20px;margin:0 0 6px}
-.foot h4{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:30px 0 8px}
+.nc{max-width:560px;margin:34px auto 0;text-align:left;background:#fffdf9;border:1px solid rgba(185,138,69,.35);border-radius:16px!important;padding:22px 24px 20px;box-shadow:0 10px 30px -18px rgba(90,60,25,.35)}
+.nc-h{display:flex;align-items:center;gap:12px;margin:0 0 16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.nc-i{flex:none;width:38px;height:38px;border-radius:50%!important;background:rgba(185,138,69,.12);display:flex;align-items:center;justify-content:center}
+.nc-i svg{width:20px;height:20px;fill:none;stroke:#9c7631;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.nc h4{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;font-size:24px;letter-spacing:0;color:var(--cream)}
+.nc ul{list-style:none;margin:0;padding:0}
+.nc li{position:relative;padding-left:24px;font-size:15px;line-height:1.55;color:#4d4136}
+.nc li+li{margin-top:12px}
+.nc li::before{content:"";position:absolute;left:3px;top:.52em;width:7px;height:7px;background:#b98a45;transform:rotate(45deg)}
+.nc b{color:var(--cream);font-weight:700}
 .foot .wa{display:inline-block;background:var(--copper);color:#fff;text-decoration:none;font-weight:700;padding:12px 22px;margin:4px 0 0}
-.foot .notice{color:var(--muted);font-size:13px;line-height:1.65;max-width:640px;margin:0 auto}
 .intro-plate .strand{stroke-dasharray:320;stroke-dashoffset:320;animation:draw 1.4s .5s ease forwards}
 .intro-plate .rung,.intro-plate .dot{opacity:0;animation:rise .6s 1.5s ease forwards}
 .intro-plate text,.intro-plate .rule,.intro-plate .dia{opacity:0;animation:rise .9s 1.1s ease forwards}
@@ -280,8 +288,14 @@ html,body{background:linear-gradient(180deg,#fbf7f1 0%,#f6ede6 55%,#f0e6da 100%)
     <footer class="foot rv">
       <h3>Questions? Message us</h3>
       <p><a class="wa" href="https://wa.me/61494599813" target="_blank" rel="noopener noreferrer">WhatsApp 0494 599 813</a></p>
-      <h4>Research Use Notice</h4>
-      <p class="notice">All products listed on this website are supplied strictly for in-vitro/laboratory research purposes only. They are not intended for human or veterinary use, and must not be used for therapeutic, diagnostic, or any other unauthorised purpose. By placing an order, you confirm that you understand and accept these terms.</p>
+      <div class="nc">
+        <div class="nc-h"><span class="nc-i"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6.2L4.6 18.4A2 2 0 0 0 6.3 21.4h11.4a2 2 0 0 0 1.7-3L14 9.2V3"/><path d="M7.2 15h9.6"/></svg></span><h4>Research Use Notice</h4></div>
+        <ul>
+          <li><b>Research only.</b> All products on this website are supplied strictly for in vitro and laboratory research.</li>
+          <li><b>Not for human or veterinary use.</b> They must not be used for therapeutic, diagnostic or any other unauthorised purpose.</li>
+          <li><b>Ordering means you agree.</b> By placing an order, you confirm you understand and accept these terms.</li>
+        </ul>
+      </div>
     </footer>
   </main>
 </div>
