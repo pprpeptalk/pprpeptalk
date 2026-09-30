@@ -383,7 +383,7 @@ body.logo-in #heroLogo{opacity:1}
   </div>
   <main>
     <section id="browse"><div class="sec-h rv"><h2>Most popular</h2><span>Our most ordered</span></div><div class="rail" id="popular"></div></section>
-    <section><div class="sec-h rv"><h2>Packages</h2><span>Bac water included</span></div><div class="grid" id="packages"></div></section>
+    <section><div class="sec-h rv"><h2>Packages</h2><span>Made to go together</span></div><div class="grid" id="packages"></div></section>
     <section><div class="sec-h rv"><h2>Shop all</h2></div><div class="chips rv" id="chips"></div><div class="grid" id="all"></div></section>
     <footer class="foot rv">
       <h3>Questions? Message us</h3>
@@ -589,7 +589,7 @@ body.logo-in #heroLogo{opacity:1}
       }).join("") + '</div>' : '') +
       '<div class="specs"><div><span>Strength</span><span>' + esc(o.label) + '</span></div>' +
         '<div><span>Form</span><span>' + (p.liquid ? "Sterile liquid" : "Freeze dried powder") + '</span></div>' +
-        (isBac ? '' : '<div><span>Comes with</span><span>Bac water, ' + money(bacPrice()) + ' each</span></div>') +
+        (isBac ? '' : '<div><span>Bac water</span><span>' + money(bacPrice()) + ' each, added to cart</span></div>') +
         '<div><span>Storage</span><span>Keep cool and out of the light</span></div>' +
         '<div><span>Price' + (GOLD ? '<em class="gcx">Gold Coast cash</em>' : '') + '</span><span class="big">' + (o.price == null ? "On request" : money(priceOf(o))) + '</span></div></div>' +
       '<div class="buy"><div class="step"><button type="button" data-q="-1" aria-label="One less">&minus;</button>' +
@@ -608,7 +608,7 @@ body.logo-in #heroLogo{opacity:1}
       '<div class="specs">' + k.items.map(function (it) { var p = prod(it[0]), o = p.options[it[1]];
         return '<div><span>' + esc(p.name + " " + o.label) + (it[2] > 1 ? " x" + it[2] : "") + '</span><span>' + (o.price == null ? "On request" : money(priceOf(o) * it[2])) + '</span></div>'; }).join("") +
       '<div><span>Package price' + (GOLD ? '<em class="gcx">Gold Coast cash</em>' : '') + '</span><span class="big">' + money(t.price) + '</span></div>' +
-      '<div><span>Bac water x' + t.vials + '</span><span>' + money(bacPrice() * t.vials) + ', added too</span></div></div>' +
+      '<div><span>Bac water x' + t.vials + '</span><span>' + money(bacPrice() * t.vials) + ', added to cart</span></div></div>' +
       '<div class="buy"><button class="cta" type="button" data-addpack="' + k.id + '">Add package to cart</button></div>');
   }
 
