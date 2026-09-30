@@ -11,13 +11,13 @@
 <title>PPR</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#0b0907; --bg2:#15100c; --card:#1a130e; --card2:#231910; --line:rgba(212,175,96,.18);
   --gold:#d4af60; --gold-l:#f1d99a; --gold-d:#9c7631; --cream:#f4ecdf; --muted:#b9aa98; --dim:#8a7b6d;
   --goldgrad:linear-gradient(135deg,#9c7631 0%,#f1d99a 42%,#d4af60 62%,#8c6a2a 100%);
-  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --script:"Grand Hotel","Snell Roundhand","Brush Script MT",cursive;
 }
 *{box-sizing:border-box}
@@ -234,6 +234,10 @@ html,body{background:linear-gradient(180deg,#fbf7f1 0%,#f6ede6 55%,#f0e6da 100%)
 .ru p:last-child{margin-bottom:0}
 .ru b{color:var(--cream);font-weight:700}
 .foot .wa{display:inline-block;background:var(--copper);color:#fff;text-decoration:none;font-weight:700;padding:12px 22px;margin:4px 0 0}
+h1,h2,h3,h4,.card h3,.sec-h h2,.sheet h2{font-weight:600;letter-spacing:-.02em}
+button,.cta,.chip,.search button{font-weight:600;letter-spacing:-.01em}
+.big{font-weight:600;letter-spacing:-.02em}
+.sheet .pic svg g{filter:none}
 .intro-plate .strand{stroke-dasharray:320;stroke-dashoffset:320;animation:draw 1.4s .5s ease forwards}
 .intro-plate .rung,.intro-plate .dot{opacity:0;animation:rise .6s 1.5s ease forwards}
 .intro-plate text,.intro-plate .rule,.intro-plate .dia{opacity:0;animation:rise .9s 1.1s ease forwards}
@@ -249,7 +253,7 @@ html,body{background:linear-gradient(180deg,#fbf7f1 0%,#f6ede6 55%,#f0e6da 100%)
     
     <linearGradient id="glassW" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c9c3b9" stop-opacity=".55"/><stop offset=".12" stop-color="#fff" stop-opacity=".7"/><stop offset=".5" stop-color="#fff" stop-opacity=".35"/><stop offset=".88" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#bdb6aa" stop-opacity=".6"/></linearGradient>
     <linearGradient id="boxF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#efe9df"/></linearGradient>
-    <linearGradient id="foilG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3dfa5"/><stop offset=".35" stop-color="#b9893c"/><stop offset=".6" stop-color="#e9cc7d"/><stop offset="1" stop-color="#a8792f"/></linearGradient><linearGradient id="wrapG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c4b39c"/><stop offset=".12" stop-color="#ebe2d3"/><stop offset=".32" stop-color="#faf6ee"/><stop offset=".62" stop-color="#f1eade"/><stop offset=".86" stop-color="#d3c4ad"/><stop offset=".97" stop-color="#bfad96"/><stop offset="1" stop-color="#cfbfa9"/></linearGradient><linearGradient id="boxF3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8f1e6"/><stop offset="1" stop-color="#e5dbca"/></linearGradient><linearGradient id="boxS3" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#cdbfa9"/><stop offset="1" stop-color="#b3a38b"/></linearGradient><linearGradient id="aoG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a3418" stop-opacity="0"/><stop offset="1" stop-color="#4a3418" stop-opacity=".22"/></linearGradient><filter id="softF" x="-2%" y="-2%" width="104%" height="104%"><feGaussianBlur stdDeviation=".13"/></filter><filter id="shadowF" x="-20%" y="-80%" width="140%" height="260%"><feGaussianBlur stdDeviation="1.4"/></filter><filter id="contactF" x="-10%" y="-150%" width="120%" height="400%"><feGaussianBlur stdDeviation=".5"/></filter><filter id="grainF" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 .16"/></feComponentTransfer></filter><path id="arc1" d="M27 58.4Q37.75 60.4 48.5 58.4"/><path id="arc2" d="M27 62.4Q37.75 64.4 48.5 62.4"/><path id="arc2b" d="M27 63.4Q37.75 65.4 48.5 63.4"/><path id="arc3" d="M27 65.3Q37.75 67.3 48.5 65.3"/><path id="arc4" d="M27 70.1Q37.75 72.1 48.5 70.1"/><linearGradient id="labelG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d3c5b1"/><stop offset=".22" stop-color="#fbf8f2"/><stop offset=".7" stop-color="#f7f2e9"/><stop offset="1" stop-color="#c9bba6"/></linearGradient><linearGradient id="boxF2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fbf6ee"/><stop offset="1" stop-color="#ebe2d3"/></linearGradient><linearGradient id="boxS2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d6c9b5"/><stop offset="1" stop-color="#c2b29b"/></linearGradient><linearGradient id="boxS" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ddd5c8"/><stop offset="1" stop-color="#cfc5b5"/></linearGradient>
+    <linearGradient id="foilG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3dfa5"/><stop offset=".35" stop-color="#b9893c"/><stop offset=".6" stop-color="#e9cc7d"/><stop offset="1" stop-color="#a8792f"/></linearGradient><linearGradient id="wrapG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c4b39c"/><stop offset=".12" stop-color="#ebe2d3"/><stop offset=".32" stop-color="#faf6ee"/><stop offset=".62" stop-color="#f1eade"/><stop offset=".86" stop-color="#d3c4ad"/><stop offset=".97" stop-color="#bfad96"/><stop offset="1" stop-color="#cfbfa9"/></linearGradient><linearGradient id="boxF3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8f1e6"/><stop offset="1" stop-color="#e5dbca"/></linearGradient><linearGradient id="boxS3" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#cdbfa9"/><stop offset="1" stop-color="#b3a38b"/></linearGradient><linearGradient id="aoG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a3418" stop-opacity="0"/><stop offset="1" stop-color="#4a3418" stop-opacity=".22"/></linearGradient><filter id="softF" x="-2%" y="-2%" width="104%" height="104%"><feGaussianBlur stdDeviation=".08"/></filter><filter id="shadowF" x="-20%" y="-80%" width="140%" height="260%"><feGaussianBlur stdDeviation="1.4"/></filter><filter id="contactF" x="-10%" y="-150%" width="120%" height="400%"><feGaussianBlur stdDeviation=".5"/></filter><filter id="grainF" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 .16"/></feComponentTransfer></filter><path id="arc1" d="M27 58.4Q37.75 60.4 48.5 58.4"/><path id="arc2" d="M27 62.4Q37.75 64.4 48.5 62.4"/><path id="arc2b" d="M27 63.4Q37.75 65.4 48.5 63.4"/><path id="arc3" d="M27 65.3Q37.75 67.3 48.5 65.3"/><path id="arc4" d="M27 70.1Q37.75 72.1 48.5 70.1"/><linearGradient id="labelG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d3c5b1"/><stop offset=".22" stop-color="#fbf8f2"/><stop offset=".7" stop-color="#f7f2e9"/><stop offset="1" stop-color="#c9bba6"/></linearGradient><linearGradient id="boxF2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fbf6ee"/><stop offset="1" stop-color="#ebe2d3"/></linearGradient><linearGradient id="boxS2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d6c9b5"/><stop offset="1" stop-color="#c2b29b"/></linearGradient><linearGradient id="boxS" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ddd5c8"/><stop offset="1" stop-color="#cfc5b5"/></linearGradient>
     <radialGradient id="shadowG"><stop offset="0" stop-color="#000" stop-opacity=".7"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
   </defs>
 </svg>
@@ -259,7 +263,7 @@ html,body{background:linear-gradient(180deg,#fbf7f1 0%,#f6ede6 55%,#f0e6da 100%)
 </div>
 <header class="bar" id="bar"><div class="bar-in">
   <div class="logo" data-logo="compact"></div>
-  <button class="bag-btn" id="bagBtn" type="button" aria-label="Open your bag">
+  <button class="bag-btn" id="bagBtn" type="button" aria-label="Open your cart">
     <svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 12H6.2L5 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><i id="bagCount"></i>
   </button>
 </div></header>
@@ -358,7 +362,7 @@ html,body{background:linear-gradient(180deg,#fbf7f1 0%,#f6ede6 55%,#f0e6da 100%)
 
   /* ---------- product shots: Jordy's vial photo sits behind, a box and a label are drawn on top ----------
      Coordinates are percentages of the photo. Strength only shows on the label inside the details, never on the cards. */
-  var SANS = 'font-family="-apple-system,Helvetica,Arial,sans-serif"', SERIF = 'font-family="Cormorant Garamond,Georgia,serif" font-weight="600"';
+  var SANS = 'font-family="Inter,-apple-system,Helvetica,Arial,sans-serif"', SERIF = 'font-family="Cormorant Garamond,Georgia,serif" font-weight="600"';
   function helixP(x, y, sc, col) {
     return '<g transform="translate(' + x + ',' + y + ') scale(' + sc + ')" fill="none" stroke="' + col + '" stroke-width="2.8" stroke-linecap="round">' +
       '<path d="M20 8C20 26 52 26 52 42C52 58 20 58 20 74"/><path d="M52 8C52 26 20 26 20 42C20 58 52 58 52 74"/>' +
@@ -471,7 +475,7 @@ html,body{background:linear-gradient(180deg,#fbf7f1 0%,#f6ede6 55%,#f0e6da 100%)
         '<input id="pq" inputmode="numeric" value="' + CUR.qty + '" aria-label="Quantity"><button type="button" data-q="1" aria-label="One more">+</button></div>' +
         '<button class="cta" type="button" data-add="1">' + addLabel() + '</button></div>');
   }
-  function addLabel() { var p = prod(CUR.id), o = p.options[CUR.opt]; return o.price == null ? "Add to bag" : "Add to bag, " + money(o.price * CUR.qty); }
+  function addLabel() { var p = prod(CUR.id), o = p.options[CUR.opt]; return o.price == null ? "Add to cart" : "Add to cart, " + money(o.price * CUR.qty); }
   function packTotal(k) {
     var t = 0, unknown = false;
     k.items.forEach(function (it) { var o = prod(it[0]).options[it[1]]; if (o.price == null) unknown = true; else t += o.price * it[2]; });
@@ -521,9 +525,9 @@ html,body{background:linear-gradient(180deg,#fbf7f1 0%,#f6ede6 55%,#f0e6da 100%)
   }
   function openBag() {
     BAG = BAG.filter(function (l) { return info(l); });
-    if (!BAG.length) { open('<h2>Your bag</h2><p class="empty">Your bag is empty.<br>Have a look through the collection.</p><div class="stack"><button class="cta ghost" type="button" data-close="1">Keep browsing</button></div>'); return; }
+    if (!BAG.length) { open('<h2>Your cart</h2><p class="empty">Your cart is empty.<br>Have a look through the collection.</p><div class="stack"><button class="cta ghost" type="button" data-close="1">Keep browsing</button></div>'); return; }
     var t = totals(), wa = "https://wa.me/" + SHOP.whatsapp + "?text=" + encodeURIComponent(orderText());
-    open('<h2>Your bag</h2><div class="lines">' + BAG.map(function (l, i) { var inf = info(l);
+    open('<h2>Your cart</h2><div class="lines">' + BAG.map(function (l, i) { var inf = info(l);
         return '<div class="line"><div class="lrow"><div class="nm"><b>' + esc(inf.name) + '</b><span>' + esc(inf.sub) + '</span></div>' +
           '<div class="step"><button type="button" data-lq="' + i + ',-1" aria-label="One less">&minus;</button><input value="' + l.qty + '" readonly aria-label="Quantity">' +
           '<button type="button" data-lq="' + i + ',1" aria-label="One more">+</button></div><div class="lp">' + (inf.price == null ? "To confirm" : money(inf.price * l.qty)) + '</div></div>' +
@@ -536,7 +540,7 @@ html,body{background:linear-gradient(180deg,#fbf7f1 0%,#f6ede6 55%,#f0e6da 100%)
         '<div><span>Bac water x' + t.bacN + '</span><span>' + money(t.bac) + '</span></div>' +
         '<div><span>Postage</span><span>' + (t.post ? money(t.post) + " if posted" : "Free") + '</span></div>' +
         '<div class="tot"><span>Total</span><span>' + money(t.sub) + '</span></div></div>' +
-      '<div class="how"><h4>How ordering works</h4><ol><li>Check your bag is right.</li><li>Tap Send order on WhatsApp and hit send.</li><li>We reply with payment options and sort the rest.</li></ol>' +
+      '<div class="how"><h4>How ordering works</h4><ol><li>Check your cart is right.</li><li>Tap Send order on WhatsApp and hit send.</li><li>We reply with payment options and sort the rest.</li></ol>' +
         '<p>Express postage is ' + money(SHOP.postage) + ', free from ' + money(SHOP.freeFrom).replace(".00", "") + '. Pick ups have no postage.</p></div>' +
       '<div class="stack"><a class="cta" id="waGo" href="' + esc(wa) + '" target="_blank" rel="noopener noreferrer">Send order on WhatsApp</a>' +
       '<button class="cta ghost" type="button" data-copy="1">Copy order</button></div>');
