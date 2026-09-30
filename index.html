@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
 <style>:root{--u:1px}
-@media (max-width:540px){:root{--u:.82px}}
+@media (max-width:540px){:root{--u:.74px}}
 
 :root{
   --bg:#0b0907; --bg2:#15100c; --card:#1a130e; --card2:#231910; --line:rgba(212,175,96,.18);
@@ -232,7 +232,8 @@ html,body{background:linear-gradient(180deg,#fbf7f1 0%,#f6ede6 55%,#f0e6da 100%)
 .hero .lg{margin-bottom:calc(30*var(--u))}
 .tip{color:var(--muted);font-size:calc(13.5*var(--u));margin:calc(12*var(--u)) 0 0;opacity:0;transition:opacity .35s}
 .tip.on{opacity:1}
-.hero #results{width:100%;max-width:calc(1064*var(--u));text-align:left;padding-top:calc(26*var(--u))}
+.hero #results{width:100%;max-width:calc(1064*var(--u));text-align:left;padding-top:calc(26*var(--u));padding-bottom:calc(30*var(--u))}
+body.searching .hint{display:none}
 .foot{margin-top:calc(60*var(--u));padding-top:calc(28*var(--u));border-top:1px solid var(--line);text-align:center}
 .foot h3{font-size:calc(20*var(--u));margin:0 0 calc(6*var(--u))}
 .ru{max-width:calc(680*var(--u));margin:calc(36*var(--u)) auto 0;text-align:left;padding-top:calc(24*var(--u));border-top:1px solid rgba(185,138,69,.45)}
@@ -342,8 +343,8 @@ body.logo-in #heroLogo{opacity:1}
 
 @media (max-width:540px){
   .search input,.fld input{font-size:16px}
-  .lg svg{width:min(72vw,calc(420*var(--u)))}
-  .intro-logo{width:min(70vw,calc(560*var(--u)))}
+  .lg svg{width:min(65vw,calc(420*var(--u)))}
+  .intro-logo{width:min(63vw,calc(560*var(--u)))}
 }
 </style>
 </head>
@@ -457,7 +458,7 @@ body.logo-in #heroLogo{opacity:1}
       '<path class="strand" d="M52 8C52 26 20 26 20 42C20 58 52 58 52 74C52 90 20 90 20 106"/>' + r.join("") + '</g>';
   }
   // A refined serif wordmark, a small helix tucked at the top right, and the subtitle under a fine rule.
-  /* The logo: PROACTIVE in Cormorant capitals, a gold line with a dot, RESEARCH spaced out, and Jordy's own
+  /* The logo: PROACTIVE in Cormorant capitals, a gold line with a dot, RESEARCH spaced out, and the brand's own
      helix on the left. The lettering is stored as shapes so it looks the same on every phone and computer. */
   function useP(id, fill, extra) { return '<use href="#pp-' + id + '" fill="' + fill + '"' + (extra || '') + '/>'; }
   var LOGO_FULL = "<svg viewBox=\"-86.3 -75.4 681.2 140\" role=\"img\" aria-label=\"Proactive Research\"><g class=\"pp-h\" transform=\"translate(-85.6,-74.2) scale(0.5626)\"><use href=\"#pp-hf\" fill=\"url(#ppAntique)\"/><use href=\"#pp-hk\" fill=\"#6b4a1c\" opacity=\".75\"/></g><g class=\"pp-w\"><use href=\"#pp-cw\" fill=\"#2a1d15\"/></g><g class=\"pp-r\"><path d=\"M130.2 24H280.2M310.2 24H460.2\" stroke=\"#b98a45\" stroke-width=\"1.6\" stroke-linecap=\"round\"/><circle cx=\"295.2\" cy=\"24\" r=\"3.2\" fill=\"#b98a45\"/></g><g class=\"pp-s\" transform=\"translate(182.8,54.4) scale(0.21)\"><use href=\"#pp-cr\" fill=\"#8a6528\"/></g></svg>";
@@ -467,7 +468,7 @@ body.logo-in #heroLogo{opacity:1}
   Array.prototype.forEach.call(document.querySelectorAll("[data-logo]"), function (el) { el.innerHTML = logoSvg(el.dataset.logo); });
   $("introLogo").innerHTML = LOGO_INTRO;
 
-  /* ---------- product shots: Jordy's vial photo sits behind, a box and a label are drawn on top ----------
+  /* ---------- product shots: the brand's vial photo sits behind, a box and a label are drawn on top ----------
      Coordinates are percentages of the photo. Strength only shows on the label inside the details, never on the cards. */
   var SANS = 'font-family="Inter,-apple-system,Helvetica,Arial,sans-serif"', SERIF = 'font-family="Cormorant Garamond,Georgia,serif" font-weight="600"';
   function helixP(x, y, sc, col) {
@@ -556,7 +557,7 @@ body.logo-in #heroLogo{opacity:1}
   function search(q) {
     var box = $("results"); q = String(q || "").trim().toLowerCase();
     $("tip").classList.toggle("on", !!q);
-    if (!q) { box.hidden = true; box.innerHTML = ""; return; }
+    if (!q) { box.hidden = true; box.innerHTML = ""; document.body.classList.remove("searching"); return; }
     var skip = " i im i'm want wanna to a an my me for and the some get help with of in on is be like would need looking after something more ";
     var words = q.replace(/[^a-z0-9+ ']/g, " ").split(/\s+/).filter(function (w) { return w.length > 1 && skip.indexOf(" " + w + " ") < 0; });
     if (!words.length) words = [q];
@@ -564,7 +565,7 @@ body.logo-in #heroLogo{opacity:1}
       var hay = (p.name + " " + p.tag + " " + p.type + " " + p.about + " " + p.options.map(function (o) { return o.label; }).join(" ")).toLowerCase();
       return { p: p, n: words.filter(function (w) { return hay.indexOf(w) >= 0; }).length };
     }).filter(function (h) { return h.n > 0; }).sort(function (a, b) { return b.n - a.n; }).map(function (h) { return h.p; });
-    box.hidden = false;
+    box.hidden = false; document.body.classList.add("searching");
     box.innerHTML = '<div class="sec-h"><h2>Results</h2><span>' + hits.length + (hits.length === 1 ? " match" : " matches") + '</span></div>' +
       (hits.length ? '<div class="grid">' + hits.map(card).join("") + '</div>' : '<p class="none">Nothing matched that. Try other words, or scroll down to see everything.</p>');
     watch(); fit(box);
@@ -689,7 +690,7 @@ body.logo-in #heroLogo{opacity:1}
         '<div class="fld sm"><label for="fL">Last name initial</label><input id="fL" maxlength="1" autocomplete="off" autocapitalize="characters" value="' + esc(ME.l) + '"></div></div>' +
         '<div class="fld"><label for="fP">Phone</label><input id="fP" type="tel" inputmode="tel" autocomplete="tel" maxlength="16" value="' + esc(ME.ph) + '"></div>' +
         '<div class="fld"><label for="fA">' + (GOLD ? "Address for drop off" : "Postal address") + '</label><input id="fA" autocomplete="street-address" maxlength="200" placeholder="Street, suburb, postcode" value="' + esc(ME.ad) + '"></div>' +
-        '<input id="fH" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">' +
+        '<input id="fH" class="hp" type="checkbox" tabindex="-1" aria-hidden="true">' +
         '<p class="err" id="fErr" role="alert"></p></div>' +
       '<div class="warn"><b>Please note.</b> Placing your order opens WhatsApp with it all typed out. You need to press <b>Send</b> in WhatsApp for it to reach us.</div>' +
       '<div class="stack"><button class="cta" type="button" id="placeBtn">Place order</button>' +
@@ -730,7 +731,7 @@ body.logo-in #heroLogo{opacity:1}
     store("pprshop.last", JSON.stringify({ sig: sig, ref: ref }));
     var msg = orderText(ref), btn = $("placeBtn");
     BUSY = true; btn.disabled = true; btn.textContent = "Placing your order\u2026";
-    var body = { action: "shopOrder", ref: ref, hp: $("fH") ? $("fH").value : "", first: ME.f, initial: ME.l, phone: ME.ph, address: ME.ad, gc: GOLD, lines: lines };
+    var body = { action: "shopOrder", ref: ref, hp: $("fH") && $("fH").checked ? "x" : "", first: ME.f, initial: ME.l, phone: ME.ph, address: ME.ad, gc: GOLD, lines: lines };
     var shownYet = false;
     function show(saved) { if (shownYet) return; shownYet = true; BUSY = false; showSend(ref, msg, saved); }
     var timer = setTimeout(function () { show(null); }, 15000);
@@ -786,7 +787,7 @@ body.logo-in #heroLogo{opacity:1}
         BAG = BAG.filter(function (x) { return x.qty > 0; }); save(); }
       return openBag(true); }
     if (d.rm) { readForm(); if (BAG[+d.rm]) { BAG.splice(+d.rm, 1); save(); toast("Bac water removed"); } return openBag(true); }
-    if (d.done) { BAG = []; save(); store("pprshop.last", "{}"); SENT = null; close(); return toast("Thanks, we'll be in touch"); }
+    if (d.done) { BAG = []; save(); ME = { f: "", l: "", ph: "", ad: "" }; store("pprshop.me", "null"); store("pprshop.last", "{}"); SENT = null; close(); return toast("Thanks, we'll be in touch"); }
     if (d.copy) return copy();
   });
   document.addEventListener("keydown", function (e) {
@@ -841,7 +842,11 @@ body.logo-in #heroLogo{opacity:1}
 
   (function tidyOld() {
     var extra = 0, changed = false;
-    BAG = BAG.filter(function (l) { return l && (l.k === "p" || l.k === "pack") && l.qty > 0 && info(l); });
+    BAG = BAG.filter(function (l) { return l && typeof l === "object" && (l.k === "p" || l.k === "pack"); }).map(function (l) {
+      var q = parseInt(l.qty, 10), o = parseInt(l.opt, 10), out = { k: l.k, id: String(l.id), opt: o > 0 ? o : 0, qty: q > 0 ? Math.min(99, q) : 0 };
+      if (Object.prototype.hasOwnProperty.call(l, "bac")) out.bac = !!l.bac;
+      return out;
+    }).filter(function (l) { return l.qty > 0 && info(l); });
     BAG.forEach(function (l) { if (Object.prototype.hasOwnProperty.call(l, "bac")) { changed = true; if (l.bac && !isBac(l)) extra += info(l).perBac * l.qty; delete l.bac; } });
     if (changed) { addBac(extra); save(); }
   })();
@@ -861,7 +866,7 @@ body.logo-in #heroLogo{opacity:1}
     if (early) intro.classList.add("skip");
     document.body.classList.remove("lock"); document.body.classList.add("ready");
     var hero = document.querySelector("#heroLogo svg"), a = il.getBoundingClientRect(), b = hero ? hero.getBoundingClientRect() : null;
-    if (RM || !b || !b.width || !a.width) { document.body.classList.add("logo-in"); intro.classList.add("gone"); return; }
+    if (RM || !b || !b.width || !a.width || window.scrollY > 4 || b.top < 0 || b.bottom > innerHeight) { document.body.classList.add("logo-in"); intro.classList.add("gone"); return; }
     il.style.transformOrigin = "0 0";
     il.style.transform = "translate(" + (b.left - a.left) + "px," + (b.top - a.top) + "px) scale(" + (b.width / a.width) + ")";
     intro.classList.add("gliding");
