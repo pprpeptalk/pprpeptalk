@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#fbf7f1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'unsafe-inline'; img-src data:; connect-src https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'">
 <title>PPR</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -242,6 +242,43 @@ button,.cta,.chip,.search button{font-weight:600;letter-spacing:-.01em}
 .intro-plate .rung,.intro-plate .dot{opacity:0;animation:rise .6s 1.5s ease forwards}
 .intro-plate text,.intro-plate .rule,.intro-plate .dia{opacity:0;animation:rise .9s 1.1s ease forwards}
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}.rv{opacity:1;transform:none}.mark circle{stroke-dashoffset:0}.mark b,.intro p{opacity:1}}
+.gc{position:relative;display:flex;gap:12px;align-items:flex-start;padding:14px 16px;margin:0 0 14px;border:1px solid var(--line);border-radius:14px!important;background:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color .2s,background .2s}
+.gc.on{border-color:#a8693a;background:#fdf8f1}
+.gc input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.gc .tick{flex:none;width:24px;height:24px;border:1.5px solid #b9a58a;border-radius:7px!important;background:#fff;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s}
+.gc input:checked + .tick{background:#a8693a;border-color:#a8693a}
+.gc input:checked + .tick::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:translateY(-1px) rotate(45deg)}
+.gc input:focus-visible + .tick{box-shadow:0 0 0 3px rgba(168,105,58,.3)}
+.gct b{display:block;font-size:16px;font-weight:600}
+.gct span{display:block;font-size:13.5px;color:var(--muted);margin-top:2px;line-height:1.4}
+.bacl{background:#fcf9f4}
+.bacrm{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:13.5px;color:var(--muted)}
+.bacrm button{border:0;background:transparent;color:#a8693a;font-weight:600;cursor:pointer;padding:6px 2px;font-size:14px;font-family:inherit}
+.cashnote{margin:6px 4px 0;font-size:13px;color:#a8693a;text-align:right}
+.me{margin:24px 0 14px}
+.me h3{font-size:19px;margin:0 0 12px}
+.two{display:flex;gap:10px}
+.two .fld{flex:1;min-width:0}
+.two .fld.sm{flex:0 0 118px}
+.fld{margin:0 0 12px}
+.fld label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:0 0 6px;white-space:nowrap}
+.fld input{display:block;width:100%;box-sizing:border-box;height:48px;padding:0 14px;font:16px/1.2 var(--sans);color:#2a1d15;background:#fff;border:1px solid rgba(122,90,48,.28);border-radius:12px!important;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none}
+.fld input::placeholder{color:#b3a595}
+.fld input:focus{border-color:#a8693a;box-shadow:0 0 0 3px rgba(168,105,58,.18)}
+.fld input.bad{border-color:#c0392b;box-shadow:0 0 0 3px rgba(192,57,43,.12)}
+.err{color:#b03a2e;font-size:14px;margin:2px 0 0}
+.err:empty{display:none}
+.hp{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;opacity:0}
+.warn{background:#fff7e8;border:1px solid #efd6a4;border-radius:14px!important;padding:13px 15px;margin:0 0 14px;font-size:14.5px;line-height:1.5;color:#5a4330}
+.cta:disabled{opacity:.6;cursor:default}
+.done{text-align:center;padding:10px 0 4px}
+.dn-i{width:64px;height:64px;margin:4px auto 14px;border-radius:50%!important;background:var(--copper);display:flex;align-items:center;justify-content:center}
+.dn-i svg{width:32px;height:32px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linejoin:round}
+.sheet .done h2{margin:0 0 8px}
+.lead{font-size:17px;line-height:1.5;color:#2a1d15;margin:0 0 20px}
+.refl{text-align:center;font-size:14px;color:var(--muted);margin:16px 0 4px}
+.saved{text-align:center;font-size:14px;color:var(--muted);line-height:1.5;margin:0 auto 18px;max-width:380px}
+.gcx{font-style:normal;font-size:12px;color:#a8693a;font-weight:600;margin-left:8px}
 </style>
 </head>
 <body class="lock">
@@ -305,18 +342,18 @@ button,.cta,.chip,.search button{font-weight:600;letter-spacing:-.01em}
   var SHOP = {
     whatsapp: "61494599813", freeFrom: 199, postage: 12, bacId: "bac",
     products: [
-      { id: "reta", name: "Retatrutide", tag: "RETA", type: "Singles", popular: 1, about: "Used for weight loss by lowering appetite.", options: [{ label: "15mg", price: 140 }, { label: "20mg", price: 160 }] },
-      { id: "klow", name: "KLOW", tag: "KLOW", type: "Blends", popular: 2, about: "Used for the same things as GLOW, plus inflammation in the gut and skin.", options: [{ label: "80mg", price: 190 }] },
-      { id: "bpctb", name: "BPC-157 + TB-500", tag: "BPC + TB", type: "Blends", popular: 3, about: "Used for recovering from injuries, especially muscles, tendons and joints.", options: [{ label: "10mg + 10mg", price: 200 }] },
-      { id: "cjc", name: "CJC-1295 + Ipamorelin", tag: "CJC + IPA", type: "Blends", popular: 4, about: "Used to raise your body's own growth hormone, for recovery, sleep and body shape.", options: [{ label: "5mg + 5mg", price: 130 }] },
-      { id: "glow", name: "GLOW", tag: "GLOW", type: "Blends", about: "Used for skin, hair and recovery, all in one vial.", options: [{ label: "70mg", price: 170 }] },
-      { id: "bpc", name: "BPC-157", tag: "BPC-157", type: "Singles", about: "Used for healing, mainly gut issues and muscle or tendon injuries.", options: [{ label: "10mg", price: 120 }] },
-      { id: "tesa", name: "Tesamorelin", tag: "TESA", type: "Singles", about: "Used to reduce stubborn belly fat.", options: [{ label: "10mg", price: 85 }] },
-      { id: "nad", name: "NAD+", tag: "NAD+", type: "Singles", about: "Used for energy, focus and healthy ageing.", options: [{ label: "100mg", price: 50 }] },
-      { id: "ghk", name: "GHK-Cu", tag: "GHK-CU", type: "Singles", about: "Used for skin firmness, fine lines and healing.", options: [{ label: "50mg", price: 65 }] },
-      { id: "mots", name: "MOTS-c", tag: "MOTS-C", type: "Singles", about: "Used for energy, fitness and fat loss.", options: [{ label: "20mg", price: 75 }] },
-      { id: "mt2", name: "Melanotan II", tag: "MT-2", type: "Singles", about: "Used for tanning.", options: [{ label: "10mg", price: 60 }] },
-      { id: "bac", name: "Bacteriostatic water", tag: "BAC WATER", type: "Essentials", liquid: true, about: "Used to mix freeze dried peptides.", options: [{ label: "3ml", price: 20 }] }
+      { id: "reta", name: "Retatrutide", tag: "RETA", type: "Singles", popular: 1, about: "Used for weight loss by lowering appetite.", options: [{ label: "15mg", price: 140, cash: 130, sku: "RETAT15" }, { label: "20mg", price: 160, cash: 150, sku: "RETAT20" }] },
+      { id: "klow", name: "KLOW", tag: "KLOW", type: "Blends", popular: 2, about: "Used for the same things as GLOW, plus inflammation in the gut and skin.", options: [{ label: "80mg", price: 190, cash: 180, sku: "Klow" }] },
+      { id: "bpctb", name: "BPC-157 + TB-500", tag: "BPC + TB", type: "Blends", popular: 3, about: "Used for recovering from injuries, especially muscles, tendons and joints.", options: [{ label: "10mg + 10mg", price: 200, cash: 185, sku: "BPC157" }] },
+      { id: "cjc", name: "CJC-1295 + Ipamorelin", tag: "CJC + IPA", type: "Blends", popular: 4, about: "Used to raise your body's own growth hormone, for recovery, sleep and body shape.", options: [{ label: "5mg + 5mg", price: 130, cash: 120, sku: "CJC1295" }] },
+      { id: "glow", name: "GLOW", tag: "GLOW", type: "Blends", about: "Used for skin, hair and recovery, all in one vial.", options: [{ label: "70mg", price: 170, cash: 160, sku: "Glow" }] },
+      { id: "bpc", name: "BPC-157", tag: "BPC-157", type: "Singles", about: "Used for healing, mainly gut issues and muscle or tendon injuries.", options: [{ label: "10mg", price: 120, cash: 100, sku: "BPC" }] },
+      { id: "tesa", name: "Tesamorelin", tag: "TESA", type: "Singles", about: "Used to reduce stubborn belly fat.", options: [{ label: "10mg", price: 85, cash: 75, sku: "Tesamorlin" }] },
+      { id: "nad", name: "NAD+", tag: "NAD+", type: "Singles", about: "Used for energy, focus and healthy ageing.", options: [{ label: "100mg", price: 50, cash: 45, sku: "NAD" }] },
+      { id: "ghk", name: "GHK-Cu", tag: "GHK-CU", type: "Singles", about: "Used for skin firmness, fine lines and healing.", options: [{ label: "50mg", price: 65, cash: 60, sku: "GHK-CU" }] },
+      { id: "mots", name: "MOTS-c", tag: "MOTS-C", type: "Singles", about: "Used for energy, fitness and fat loss.", options: [{ label: "20mg", price: 75, cash: 65, sku: "Mots-c" }] },
+      { id: "mt2", name: "Melanotan II", tag: "MT-2", type: "Singles", about: "Used for tanning.", options: [{ label: "10mg", price: 60, cash: 50, sku: "MEL" }] },
+      { id: "bac", name: "Bacteriostatic water", tag: "BAC WATER", type: "Essentials", liquid: true, about: "Used to mix freeze dried peptides.", options: [{ label: "3ml", price: 20, cash: 15, sku: "BACWATER" }] }
     ],
     // Stacks: peptides that go well together. Each vial comes with bac water.
     packages: [
@@ -330,11 +367,20 @@ button,.cta,.chip,.search button{font-weight:600;letter-spacing:-.01em}
   var $ = function (id) { return document.getElementById(id); };
   var BAG = [], TYPE = "All", CUR = null, toastT = null, RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
   try { BAG = JSON.parse(localStorage.getItem("pprshop.bag2") || "[]") || []; } catch (e) { BAG = []; }
+  if (!Array.isArray(BAG)) BAG = [];
+  /* Gold Coast customers pay cash, get the cash price and have no postage. Their details stay on
+     their own device so they don't retype them, and go nowhere until they place the order. */
+  var GOLD = false, ME = { f: "", l: "", ph: "", ad: "" }, SENT = null, BUSY = false;
+  var HUB = "https://script.google.com/macros/s/AKfycbyxu8CB1qFgk4L9zpgktHyaBTJCToIxgE6sv7rz6sxHKLMdRD6w1-b_y8A9m9glgG-vUQ/exec";
+  try { GOLD = localStorage.getItem("pprshop.gc") === "1"; } catch (e) {}
+  try { var me0 = JSON.parse(localStorage.getItem("pprshop.me") || "null"); if (me0) ME = { f: String(me0.f || ""), l: String(me0.l || ""), ph: String(me0.ph || ""), ad: String(me0.ad || "") }; } catch (e) {}
+  function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function priceOf(o) { return o.price == null ? null : (GOLD && o.cash != null ? o.cash : o.price); }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function money(v) { return "$" + (Math.round(v * 100) / 100).toLocaleString("en-AU", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
   function prod(id) { for (var i = 0; i < SHOP.products.length; i++) if (SHOP.products[i].id === id) return SHOP.products[i]; return null; }
   function pack(id) { for (var i = 0; i < SHOP.packages.length; i++) if (SHOP.packages[i].id === id) return SHOP.packages[i]; return null; }
-  function bacPrice() { return prod(SHOP.bacId).options[0].price; }
+  function bacPrice() { return priceOf(prod(SHOP.bacId).options[0]); }
   function toast(t) { var el = $("toast"); el.textContent = t; el.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(function () { el.classList.remove("on"); }, 1900); }
 
   /* ---------- the logo: helix mark plus the wordmark, drawn as vector art ---------- */
@@ -456,7 +502,7 @@ button,.cta,.chip,.search button{font-weight:600;letter-spacing:-.01em}
   function watch() { Array.prototype.forEach.call(document.querySelectorAll(".rv:not(.in)"), function (el) { if (IO && !RM) IO.observe(el); else el.classList.add("in"); }); }
 
   /* ---------- details: prices and specs only show in here ---------- */
-  function open(html) { $("sheet").innerHTML = '<button class="x" type="button" data-close="1" aria-label="Close">&times;</button>' + html; $("mask").classList.add("on"); document.body.classList.add("lock"); $("sheet").scrollTop = 0; }
+  function open(html, keep) { var y = $("sheet").scrollTop; $("sheet").innerHTML = '<button class="x" type="button" data-close="1" aria-label="Close">&times;</button>' + html; $("mask").classList.add("on"); document.body.classList.add("lock"); $("sheet").scrollTop = keep ? y : 0; }
   function close() { $("mask").classList.remove("on"); $("sheet").innerHTML = ""; document.body.classList.remove("lock"); CUR = null; }
   function openProduct(id) { if (!prod(id)) return; CUR = { id: id, opt: 0, qty: 1 }; drawProduct(); }
   function drawProduct() {
@@ -464,89 +510,179 @@ button,.cta,.chip,.search button{font-weight:600;letter-spacing:-.01em}
     open('<div class="pic">' + shot({ name: p.name, tag: p.tag, liquid: p.liquid, options: [o] }, true) + '</div>' +
       '<h2>' + esc(p.name) + '</h2><p class="use">' + esc(p.about) + '</p>' +
       (p.options.length > 1 ? '<div class="opts">' + p.options.map(function (x, i) {
-        return '<button class="opt' + (i === CUR.opt ? " on" : "") + '" type="button" data-opt="' + i + '"><b>' + esc(x.label) + '</b><span>' + (x.price == null ? "Price on request" : money(x.price)) + '</span></button>';
+        return '<button class="opt' + (i === CUR.opt ? " on" : "") + '" type="button" data-opt="' + i + '"><b>' + esc(x.label) + '</b><span>' + (x.price == null ? "Price on request" : money(priceOf(x))) + '</span></button>';
       }).join("") + '</div>' : '') +
       '<div class="specs"><div><span>Strength</span><span>' + esc(o.label) + '</span></div>' +
         '<div><span>Form</span><span>' + (p.liquid ? "Sterile liquid" : "Freeze dried powder") + '</span></div>' +
-        (isBac ? '' : '<div><span>Comes with</span><span>Bac water, ' + money(bacPrice()) + '</span></div>') +
+        (isBac ? '' : '<div><span>Comes with</span><span>Bac water, ' + money(bacPrice()) + ' each</span></div>') +
         '<div><span>Storage</span><span>Keep cool and out of the light</span></div>' +
-        '<div><span>Price</span><span class="big">' + (o.price == null ? "On request" : money(o.price)) + '</span></div></div>' +
+        '<div><span>Price' + (GOLD ? '<em class="gcx">Gold Coast cash</em>' : '') + '</span><span class="big">' + (o.price == null ? "On request" : money(priceOf(o))) + '</span></div></div>' +
       '<div class="buy"><div class="step"><button type="button" data-q="-1" aria-label="One less">&minus;</button>' +
         '<input id="pq" inputmode="numeric" value="' + CUR.qty + '" aria-label="Quantity"><button type="button" data-q="1" aria-label="One more">+</button></div>' +
         '<button class="cta" type="button" data-add="1">' + addLabel() + '</button></div>');
   }
-  function addLabel() { var p = prod(CUR.id), o = p.options[CUR.opt]; return o.price == null ? "Add to cart" : "Add to cart, " + money(o.price * CUR.qty); }
+  function addLabel() { var p = prod(CUR.id), o = p.options[CUR.opt]; return o.price == null ? "Add to cart" : "Add to cart, " + money(priceOf(o) * CUR.qty); }
   function packTotal(k) {
     var t = 0, unknown = false;
-    k.items.forEach(function (it) { var o = prod(it[0]).options[it[1]]; if (o.price == null) unknown = true; else t += o.price * it[2]; });
+    k.items.forEach(function (it) { var o = prod(it[0]).options[it[1]]; if (o.price == null) unknown = true; else t += priceOf(o) * it[2]; });
     return { price: t, unknown: unknown, vials: k.items.reduce(function (s, it) { return s + it[2]; }, 0) };
   }
   function openPack(id) {
     var k = pack(id); if (!k) return; var t = packTotal(k);
     open('<div class="pic">' + packShot(k) + '</div><h2>' + esc(k.name) + '</h2><p class="use">' + esc(k.about) + '</p>' +
       '<div class="specs">' + k.items.map(function (it) { var p = prod(it[0]), o = p.options[it[1]];
-        return '<div><span>' + esc(p.name + " " + o.label) + (it[2] > 1 ? " x" + it[2] : "") + '</span><span>' + (o.price == null ? "On request" : money(o.price * it[2])) + '</span></div>'; }).join("") +
-      '<div><span>Bac water x' + t.vials + '</span><span>' + money(bacPrice() * t.vials) + '</span></div>' +
-      '<div><span>Package price</span><span class="big">' + money(t.price + bacPrice() * t.vials) + '</span></div></div>' +
-      '<div class="buy"><button class="cta" type="button" data-addpack="' + k.id + '">Add package to bag</button></div>');
+        return '<div><span>' + esc(p.name + " " + o.label) + (it[2] > 1 ? " x" + it[2] : "") + '</span><span>' + (o.price == null ? "On request" : money(priceOf(o) * it[2])) + '</span></div>'; }).join("") +
+      '<div><span>Package price' + (GOLD ? '<em class="gcx">Gold Coast cash</em>' : '') + '</span><span class="big">' + money(t.price) + '</span></div>' +
+      '<div><span>Bac water x' + t.vials + '</span><span>' + money(bacPrice() * t.vials) + ', added too</span></div></div>' +
+      '<div class="buy"><button class="cta" type="button" data-addpack="' + k.id + '">Add package to cart</button></div>');
   }
 
-  /* ---------- the bag: bac water comes with every vial until it's removed ---------- */
-  function save() { try { localStorage.setItem("pprshop.bag2", JSON.stringify(BAG)); } catch (e) {} count(); }
-  function count() { var n = BAG.reduce(function (s, l) { return s + l.qty; }, 0), el = $("bagCount"); el.textContent = n ? String(n) : ""; }
+  /* ---------- the cart: bac water goes in as its own item, one per vial, and can be taken out ---------- */
+  function save() { store("pprshop.bag2", JSON.stringify(BAG)); count(); }
+  function isBac(l) { return l.k === "p" && l.id === SHOP.bacId; }
+  function count() {
+    var n = 0, b = 0; BAG.forEach(function (l) { if (isBac(l)) b += l.qty; else n += l.qty; });
+    if (!n) n = b; $("bagCount").textContent = n ? String(n) : "";
+  }
   function info(l) {
     if (l.k === "pack") { var k = pack(l.id); if (!k) return null; var t = packTotal(k);
       return { name: k.name, sub: k.items.map(function (it) { var p = prod(it[0]); return p.name + " " + p.options[it[1]].label + (it[2] > 1 ? " x" + it[2] : ""); }).join(", "), price: t.unknown ? null : t.price, perBac: t.vials }; }
     var p = prod(l.id); if (!p || !p.options[l.opt]) return null;
-    return { name: p.name, sub: p.options[l.opt].label, price: p.options[l.opt].price, perBac: p.id === SHOP.bacId ? 0 : 1 };
+    return { name: p.name, sub: p.options[l.opt].label, price: priceOf(p.options[l.opt]), perBac: p.id === SHOP.bacId ? 0 : 1 };
   }
+  function bacLine() { for (var i = 0; i < BAG.length; i++) if (isBac(BAG[i])) return BAG[i]; return null; }
+  function addBac(n) { if (!(n > 0)) return; var b = bacLine(); if (b) b.qty = Math.min(99, b.qty + n); else BAG.push({ k: "p", id: SHOP.bacId, opt: 0, qty: Math.min(99, n) }); }
   function add(l, qty) {
-    var hit = null; BAG.forEach(function (x) { if (x.k === l.k && x.id === l.id && x.opt === l.opt) hit = x; });
-    if (hit) { hit.qty = Math.min(99, hit.qty + qty); hit.bac = true; } else BAG.push({ k: l.k, id: l.id, opt: l.opt || 0, qty: qty, bac: true });
+    var hit = null; BAG.forEach(function (x) { if (x.k === l.k && x.id === l.id && (x.opt || 0) === (l.opt || 0)) hit = x; });
+    if (hit) hit.qty = Math.min(99, hit.qty + qty); else BAG.push({ k: l.k, id: l.id, opt: l.opt || 0, qty: qty });
+    var i = info({ k: l.k, id: l.id, opt: l.opt || 0 });
+    if (i && i.perBac) addBac(i.perBac * qty);
     save(); var b = $("bagBtn"); b.classList.remove("bump"); void b.offsetWidth; b.classList.add("bump");
   }
+  // Bac water always shows last in the cart.
+  function shown() { var a = [], b = []; BAG.forEach(function (l, i) { (isBac(l) ? b : a).push(i); }); return a.concat(b); }
   function totals() {
-    var goods = 0, bac = 0, bacN = 0, unknown = false;
-    BAG.forEach(function (l) { var i = info(l); if (!i) return;
-      if (i.price == null) unknown = true; else goods += i.price * l.qty;
-      if (l.bac && i.perBac) { bacN += i.perBac * l.qty; bac += bacPrice() * i.perBac * l.qty; } });
-    var sub = goods + bac;
-    return { goods: goods, bac: bac, bacN: bacN, sub: sub, unknown: unknown, post: !sub || sub >= SHOP.freeFrom ? 0 : SHOP.postage };
+    var sub = 0, unknown = false;
+    BAG.forEach(function (l) { var i = info(l); if (!i) return; if (i.price == null) unknown = true; else sub += i.price * l.qty; });
+    var post = GOLD || !sub || sub >= SHOP.freeFrom ? 0 : SHOP.postage;
+    return { sub: sub, unknown: unknown, post: post, total: sub + post };
   }
-  function orderText() {
-    var t = totals(), out = ["Hi PPR, I'd like to order:"];
-    BAG.forEach(function (l) { var i = info(l); if (!i) return;
+  function who() { var f = ME.f ? ME.f.charAt(0).toUpperCase() + ME.f.slice(1) : ""; return [f, ME.l].filter(Boolean).join(" "); }
+  function orderText(ref) {
+    var t = totals(), out = ["Hi PPR, I'd like to place an order.", ""];
+    if (ref) out.push("Ref " + ref);
+    if (who()) out.push("Name: " + who());
+    if (ME.ph) out.push("Phone: " + ME.ph);
+    if (ME.ad) out.push("Address: " + ME.ad);
+    out.push(GOLD ? "Gold Coast, paying cash" : "Posting, paying by bank transfer", "");
+    shown().forEach(function (ix) { var l = BAG[ix], i = info(l); if (!i) return;
       out.push(i.name + (l.k === "pack" ? "" : " " + i.sub) + " x" + l.qty + ", " + (i.price == null ? "price to confirm" : money(i.price * l.qty)));
       if (l.k === "pack") out.push("   " + i.sub);
-      if (i.perBac) out.push(l.bac ? "   with bac water x" + i.perBac * l.qty + ", " + money(bacPrice() * i.perBac * l.qty) : "   no bac water");
     });
-    out.push("", "Total " + money(t.sub) + (t.unknown ? " plus items to confirm" : "") + (t.post ? ", plus " + money(t.post) + " express postage if posted" : ", postage free"));
+    out.push("", GOLD ? "Postage: none, Gold Coast" : "Postage: " + (t.post ? money(t.post) + " express" : "free"));
+    out.push("Total: " + money(t.total) + (t.unknown ? " plus items to confirm" : ""));
     return out.join("\n");
   }
-  function openBag() {
+  // Stacks are sent as the products inside them, so every line on the sheet is a real product.
+  function skuLines() {
+    var m = {}, order = [];
+    function put(p, opt, q) { var o = p && p.options[opt]; if (!o || !o.sku) return; if (!m[o.sku]) { m[o.sku] = 0; order.push(o.sku); } m[o.sku] += q; }
+    shown().forEach(function (ix) { var l = BAG[ix];
+      if (l.k === "pack") { var k = pack(l.id); if (k) k.items.forEach(function (it) { put(prod(it[0]), it[1], it[2] * l.qty); }); }
+      else put(prod(l.id), l.opt, l.qty);
+    });
+    return order.map(function (s) { return { sku: s, qty: m[s] }; });
+  }
+  function openBag(keep) {
     BAG = BAG.filter(function (l) { return info(l); });
     if (!BAG.length) { open('<h2>Your cart</h2><p class="empty">Your cart is empty.<br>Have a look through the collection.</p><div class="stack"><button class="cta ghost" type="button" data-close="1">Keep browsing</button></div>'); return; }
-    var t = totals(), wa = "https://wa.me/" + SHOP.whatsapp + "?text=" + encodeURIComponent(orderText());
-    open('<h2>Your cart</h2><div class="lines">' + BAG.map(function (l, i) { var inf = info(l);
-        return '<div class="line"><div class="lrow"><div class="nm"><b>' + esc(inf.name) + '</b><span>' + esc(inf.sub) + '</span></div>' +
+    var t = totals();
+    open('<h2>Your cart</h2>' +
+      '<label class="gc' + (GOLD ? " on" : "") + '"><input type="checkbox" id="gcBox"' + (GOLD ? " checked" : "") + '><span class="tick" aria-hidden="true"></span>' +
+        '<span class="gct"><b>I\'m on the Gold Coast</b><span>Pay cash for the cash price and no postage. We\'ll sort pick up or drop off.</span></span></label>' +
+      '<div class="lines">' + shown().map(function (i) { var l = BAG[i], inf = info(l), bac = isBac(l);
+        return '<div class="line' + (bac ? " bacl" : "") + '"><div class="lrow"><div class="nm"><b>' + esc(bac ? "Bac water" : inf.name) + '</b><span>' + esc(bac ? "3ml, one for each vial" : inf.sub) + '</span></div>' +
           '<div class="step"><button type="button" data-lq="' + i + ',-1" aria-label="One less">&minus;</button><input value="' + l.qty + '" readonly aria-label="Quantity">' +
           '<button type="button" data-lq="' + i + ',1" aria-label="One more">+</button></div><div class="lp">' + (inf.price == null ? "To confirm" : money(inf.price * l.qty)) + '</div></div>' +
-          (inf.perBac ? (l.bac
-            ? '<div class="bac"><span>Bac water x' + inf.perBac * l.qty + ', ' + money(bacPrice() * inf.perBac * l.qty) + '</span><button type="button" data-bac="' + i + '">Remove</button></div>'
-            : '<div class="bac off"><span>No bac water</span><button type="button" data-bac="' + i + '">Add back</button></div>') : '') +
-          '</div>';
+          (bac ? '<div class="bacrm"><span>Don\'t need bac water?</span><button type="button" data-rm="' + i + '">Remove</button></div>' : '') + '</div>';
       }).join("") + '</div>' +
-      '<div class="sum"><div><span>Products</span><span>' + money(t.goods) + (t.unknown ? " plus items to confirm" : "") + '</span></div>' +
-        '<div><span>Bac water x' + t.bacN + '</span><span>' + money(t.bac) + '</span></div>' +
-        '<div><span>Postage</span><span>' + (t.post ? money(t.post) + " if posted" : "Free") + '</span></div>' +
-        '<div class="tot"><span>Total</span><span>' + money(t.sub) + '</span></div></div>' +
-      '<div class="how"><h4>How ordering works</h4><ol><li>Check your cart is right.</li><li>Tap Send order on WhatsApp and hit send.</li><li>We reply with payment options and sort the rest.</li></ol>' +
-        '<p>Express postage is ' + money(SHOP.postage) + ', free from ' + money(SHOP.freeFrom).replace(".00", "") + '. Pick ups have no postage.</p></div>' +
-      '<div class="stack"><a class="cta" id="waGo" href="' + esc(wa) + '" target="_blank" rel="noopener noreferrer">Send order on WhatsApp</a>' +
-      '<button class="cta ghost" type="button" data-copy="1">Copy order</button></div>');
+      '<div class="sum"><div><span>Subtotal</span><span>' + money(t.sub) + (t.unknown ? " plus items to confirm" : "") + '</span></div>' +
+        '<div><span>Postage</span><span>' + (GOLD ? "None, Gold Coast" : t.post ? money(t.post) + " express" : "Free") + '</span></div>' +
+        '<div class="tot"><span>Total</span><span>' + money(t.total) + '</span></div>' +
+        '<p class="cashnote">' + (GOLD ? "Gold Coast cash prices" : "Express postage is free from " + money(SHOP.freeFrom).replace(".00", "")) + '</p></div>' +
+      '<div class="me"><h3>Your details</h3>' +
+        '<div class="two"><div class="fld"><label for="fF">First name</label><input id="fF" autocomplete="given-name" maxlength="30" value="' + esc(ME.f) + '"></div>' +
+        '<div class="fld sm"><label for="fL">Last name initial</label><input id="fL" maxlength="1" autocomplete="off" autocapitalize="characters" value="' + esc(ME.l) + '"></div></div>' +
+        '<div class="fld"><label for="fP">Phone</label><input id="fP" type="tel" inputmode="tel" autocomplete="tel" maxlength="16" value="' + esc(ME.ph) + '"></div>' +
+        '<div class="fld"><label for="fA">' + (GOLD ? "Address for drop off" : "Postal address") + '</label><input id="fA" autocomplete="street-address" maxlength="200" placeholder="Street, suburb, postcode" value="' + esc(ME.ad) + '"></div>' +
+        '<input id="fH" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">' +
+        '<p class="err" id="fErr" role="alert"></p></div>' +
+      '<div class="warn"><b>Please note.</b> Placing your order opens WhatsApp with it all typed out. You need to press <b>Send</b> in WhatsApp for it to reach us.</div>' +
+      '<div class="stack"><button class="cta" type="button" id="placeBtn">Place order</button>' +
+      '<button class="cta ghost" type="button" data-copy="1">Copy order</button></div>' +
+      '<div class="how"><h4>How ordering works</h4><ol><li>Fill in your details and tap Place order.</li><li>WhatsApp opens with your order typed out. Press Send.</li><li>We reply with payment details and sort the rest.</li></ol></div>', keep);
+  }
+  function readForm() {
+    if (!$("fF")) return;
+    ME = { f: $("fF").value.replace(/\s+/g, " ").trim(), l: $("fL").value.replace(/[^A-Za-z]/g, "").slice(0, 1).toUpperCase(),
+      ph: $("fP").value.replace(/\s+/g, " ").trim(), ad: $("fA").value.replace(/\s+/g, " ").trim() };
+    store("pprshop.me", JSON.stringify(ME));
+  }
+  function checkForm() {
+    readForm();
+    var bad = [], d = ME.ph.replace(/\D/g, "");
+    if (/^61\d{9}$/.test(d)) d = "0" + d.slice(2);
+    if (!/^[A-Za-z\u00C0-\u024F][A-Za-z\u00C0-\u024F' -]*$/.test(ME.f)) bad.push(["fF", "your first name"]);
+    if (!ME.l) bad.push(["fL", "the first letter of your last name"]);
+    if (!/^\d{8,12}$/.test(d)) bad.push(["fP", "a phone number we can reach you on"]);
+    if (ME.ad.length < 6) bad.push(["fA", GOLD ? "your address for drop off" : "your postal address"]);
+    return bad;
+  }
+  function nice(list) { return list.length < 2 ? list.join("") : list.slice(0, -1).join(", ") + " and " + list[list.length - 1]; }
+  function placeOrder() {
+    if (BUSY) return;
+    var bad = checkForm();
+    Array.prototype.forEach.call(document.querySelectorAll(".me input"), function (x) { x.classList.remove("bad"); });
+    if (bad.length) {
+      bad.forEach(function (b) { $(b[0]).classList.add("bad"); });
+      $("fErr").textContent = "Please add " + nice(bad.map(function (b) { return b[1]; })) + ".";
+      $(bad[0][0]).focus(); return;
+    }
+    $("fErr").textContent = "";
+    var lines = skuLines(), sig = JSON.stringify([lines, ME, GOLD]), last = {};
+    try { last = JSON.parse(localStorage.getItem("pprshop.last") || "{}") || {}; } catch (e) {}
+    // The same order placed twice keeps its ref, so the sheet never gets it twice.
+    var ref = last.sig === sig && last.ref ? last.ref : "WEB" + (Date.now().toString(36) + Math.random().toString(36).slice(2, 5)).toUpperCase();
+    store("pprshop.last", JSON.stringify({ sig: sig, ref: ref }));
+    var msg = orderText(ref), btn = $("placeBtn");
+    BUSY = true; btn.disabled = true; btn.textContent = "Placing your order\u2026";
+    var body = { action: "shopOrder", ref: ref, hp: $("fH") ? $("fH").value : "", first: ME.f, initial: ME.l, phone: ME.ph, address: ME.ad, gc: GOLD, lines: lines };
+    var shownYet = false;
+    function show(saved) { if (shownYet) return; shownYet = true; BUSY = false; showSend(ref, msg, saved); }
+    var timer = setTimeout(function () { show(null); }, 15000);
+    fetch(HUB, { method: "POST", redirect: "follow", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json(); })
+      .then(function (res) { clearTimeout(timer); var ok = !!(res && res.ok); if (shownYet) setSaved(ok); else show(ok); })
+      .catch(function () { clearTimeout(timer); if (shownYet) setSaved(false); else show(false); });
+  }
+  function savedText(saved) {
+    if (saved) return "We've saved a copy too. If your message doesn't come through, we'll text you on " + esc(ME.ph) + " to confirm.";
+    if (saved === null) return "Sending it on WhatsApp is how it reaches us, so make sure you press Send.";
+    return "Sending it on WhatsApp is how it reaches us, so make sure you press Send.";
+  }
+  function setSaved(saved) { var el = $("savedMsg"); if (el) el.innerHTML = savedText(saved); }
+  function showSend(ref, msg, saved) {
+    SENT = { ref: ref, msg: msg };
+    var wa = "https://wa.me/" + SHOP.whatsapp + "?text=" + encodeURIComponent(msg);
+    open('<div class="done"><div class="dn-i" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 11.5a8.5 8.5 0 0 1-12.4 7.6L3.5 20.5l1.4-4A8.5 8.5 0 1 1 20 11.5Z"/></svg></div>' +
+      '<h2>Last step</h2><p class="lead">Tap below, then press <b>Send</b> in WhatsApp. Your order isn\'t placed until you do.</p></div>' +
+      '<div class="stack"><a class="cta" id="waGo" href="' + esc(wa) + '" target="_blank" rel="noopener noreferrer">Open WhatsApp and send</a>' +
+      '<button class="cta ghost" type="button" data-copy="1">Copy order</button></div>' +
+      '<p class="refl">Order ref <b>' + esc(ref) + '</b></p><p class="saved" id="savedMsg">' + savedText(saved) + '</p>' +
+      '<div class="stack"><button class="cta ghost" type="button" data-done="1">Done, clear my cart</button></div>');
   }
   function copy() {
-    var t = orderText();
+    var t = $("waGo") && SENT ? SENT.msg : (readForm(), orderText());
     function fallback() { var ta = document.createElement("textarea"); ta.value = t; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
       document.body.appendChild(ta); ta.select(); var ok = false; try { ok = document.execCommand("copy"); } catch (e) {} document.body.removeChild(ta); toast(ok ? "Order copied" : "Couldn't copy, use the WhatsApp button"); }
     if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(function () { toast("Order copied"); }, fallback); else fallback();
@@ -555,11 +691,12 @@ button,.cta,.chip,.search button{font-weight:600;letter-spacing:-.01em}
   /* ---------- listeners ---------- */
   document.addEventListener("click", function (e) {
     if (e.target.id === "mask") return close();
-    var b = e.target.closest("[data-close],[data-open],[data-pack],[data-type],[data-opt],[data-q],[data-add],[data-addpack],[data-lq],[data-bac],[data-copy],#bagBtn,#waGo,#hint");
+    var b = e.target.closest("[data-close],[data-open],[data-pack],[data-type],[data-opt],[data-q],[data-add],[data-addpack],[data-lq],[data-rm],[data-done],[data-copy],#bagBtn,#waGo,#placeBtn,#hint");
     if (!b) return; var d = b.dataset;
     if (b.id === "bagBtn") return openBag();
     if (b.id === "hint") return $("browse").scrollIntoView({ behavior: RM ? "auto" : "smooth" });
-    if (b.id === "waGo") return toast("Opening WhatsApp");
+    if (b.id === "waGo") { toast("Opening WhatsApp, press Send"); setTimeout(function () { var w = $("waGo"); if (w) w.textContent = "Open WhatsApp again"; }, 900); return; }
+    if (b.id === "placeBtn") return placeOrder();
     if (d.close) return close();
     if (d.open) return openProduct(d.open);
     if (d.pack) return openPack(d.pack);
@@ -567,17 +704,30 @@ button,.cta,.chip,.search button{font-weight:600;letter-spacing:-.01em}
     if (d.opt) { CUR.opt = +d.opt; return drawProduct(); }
     if (d.q) { CUR.qty = Math.max(1, Math.min(99, CUR.qty + +d.q)); $("pq").value = CUR.qty; document.querySelector("[data-add]").textContent = addLabel(); return; }
     if (d.add) { var p = prod(CUR.id); add({ k: "p", id: CUR.id, opt: CUR.opt }, CUR.qty); close(); return toast(p.id === SHOP.bacId ? "Bac water added" : p.name + " added, with bac water"); }
-    if (d.addpack) { add({ k: "pack", id: d.addpack, opt: 0 }, 1); close(); return toast(pack(d.addpack).name + " added"); }
-    if (d.lq) { var s = d.lq.split(","), l = BAG[+s[0]]; if (l) { l.qty += +s[1]; if (l.qty < 1) BAG.splice(+s[0], 1); save(); } return openBag(); }
-    if (d.bac) { var ln = BAG[+d.bac]; if (ln) { ln.bac = !ln.bac; save(); } return openBag(); }
+    if (d.addpack) { add({ k: "pack", id: d.addpack, opt: 0 }, 1); close(); return toast(pack(d.addpack).name + " added, with bac water"); }
+    if (d.lq) { readForm(); var s = d.lq.split(","), l = BAG[+s[0]];
+      if (l) { var inf = info(l), was = l.qty, bl = bacLine(); l.qty = Math.max(0, Math.min(99, l.qty + +s[1]));
+        // one more or one less vial takes its bac water with it, if bac water is still in the cart
+        if (inf && inf.perBac && bl && bl !== l) bl.qty = Math.max(0, Math.min(99, bl.qty + inf.perBac * (l.qty - was)));
+        BAG = BAG.filter(function (x) { return x.qty > 0; }); save(); }
+      return openBag(true); }
+    if (d.rm) { readForm(); if (BAG[+d.rm]) { BAG.splice(+d.rm, 1); save(); toast("Bac water removed"); } return openBag(true); }
+    if (d.done) { BAG = []; save(); store("pprshop.last", "{}"); SENT = null; close(); return toast("Thanks, we'll be in touch"); }
     if (d.copy) return copy();
   });
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && $("mask").classList.contains("on")) return close();
     if ((e.key === "Enter" || e.key === " ") && e.target.classList && e.target.classList.contains("card")) { e.preventDefault(); e.target.click(); }
   });
+  document.addEventListener("change", function (e) {
+    if (e.target.id !== "gcBox") return;
+    readForm(); GOLD = e.target.checked; store("pprshop.gc", GOLD ? "1" : "0"); openBag(true);
+    toast(GOLD ? "Gold Coast cash prices on" : "Standard prices on");
+  });
   document.addEventListener("input", function (e) {
     if (e.target.id === "q") search(e.target.value);
+    if (e.target.id === "fL") e.target.value = e.target.value.replace(/[^A-Za-z]/g, "").slice(0, 1).toUpperCase();
+    if (/^f[FLPA]$/.test(e.target.id)) { e.target.classList.remove("bad"); readForm(); }
     if (e.target.id === "pq" && CUR) { var v = parseInt(e.target.value, 10); if (v > 0) { CUR.qty = Math.min(99, v); document.querySelector("[data-add]").textContent = addLabel(); } }
   });
   $("searchForm").addEventListener("submit", function (e) {
@@ -615,8 +765,14 @@ button,.cta,.chip,.search button{font-weight:600;letter-spacing:-.01em}
     requestAnimationFrame(tick);
   })();
 
+  (function tidyOld() {
+    var extra = 0, changed = false;
+    BAG = BAG.filter(function (l) { return l && (l.k === "p" || l.k === "pack") && l.qty > 0 && info(l); });
+    BAG.forEach(function (l) { if (Object.prototype.hasOwnProperty.call(l, "bac")) { changed = true; if (l.bac && !isBac(l)) extra += info(l).perBac * l.qty; delete l.bac; } });
+    if (changed) { addBac(extra); save(); }
+  })();
   drawShop(); count();
-  window.__shop = { orderText: orderText, SHOP: SHOP, bag: function () { return BAG; }, totals: totals };
+  window.__shop = { orderText: orderText, SHOP: SHOP, bag: function () { return BAG; }, totals: totals, skuLines: skuLines };
   var done = false;
   function lift() { if (done) return; done = true; $("intro").classList.add("gone"); document.body.classList.remove("lock"); document.body.classList.add("ready"); }
   setTimeout(lift, RM ? 200 : 2000);
