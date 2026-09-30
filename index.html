@@ -154,6 +154,7 @@ section{padding-top:56px}
 
 /* ---------- light pastel, sharp edges, white logo on a copper plate ---------- */
 *{border-radius:6px!important}
+.bar,.bar *{border-radius:0!important}
 .card,.sheet,.pic,.specs,.lines,.how{border-radius:12px!important}
 .search,.search button,.cta,.chip,.step{border-radius:8px!important}
 :root{--line:rgba(122,90,48,.2);--cream:#2a1d15;--muted:#6f6052;--dim:#978776;--gold:#b98a45;--gold-l:#9c7631;
@@ -444,7 +445,7 @@ button,.cta,.chip,.search button{font-weight:600;letter-spacing:-.01em}
       embT(70.2, 48.3, 1.55, SERIF + ' letter-spacing=".42"', "RESEARCH", "#9c7631", 13) +
       '<line x1="64.8" y1="52" x2="75.6" y2="52" stroke="url(#foilG)" stroke-width=".3"/>' +
       embT(70.2, 68, tagSize(tag, true), 'font-weight="700" ' + SANS, esc(tag), "#1f1610", 15) +
-      (small ? embT(70.2, 71.4, 1.6, SANS + ' font-weight="600" letter-spacing=".25"', esc(small), "#6b5e52", 12) : '');
+      (small ? embT(70.2, 71.6, 1.75, SANS + ' font-weight="600" letter-spacing=".2"', esc(small), "#6b5e52", 13) : '');
   }
   function labelP(tag, strength) {
     return '<path d="M27 47.3Q37.75 49.3 48.5 47.3L48.5 72.3Q37.75 74.3 27 72.3Z" fill="#4a3418" opacity=".28"/>' +
@@ -460,12 +461,12 @@ button,.cta,.chip,.search button{font-weight:600;letter-spacing:-.01em}
   }
   function shot(p, strength) {
     return '<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" role="img" aria-label="' + esc(p.name) + '"><g filter="url(#softF)">' +
-      boxP(p.tag) + labelP(p.tag, strength ? p.options[0].label : "") + '</g></svg>';
+      boxP(p.tag, strength ? p.options[0].label : "") + '</g></svg>';
   }
   function packShot(k) {
     var tag = k.name.replace(/^The /, "").replace(/ Stack$/, "").toUpperCase();
     return '<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" role="img" aria-label="' + esc(k.name) + '"><g filter="url(#softF)">' +
-      boxP(tag, "STACK") + labelP(tag, "") + '</g></svg>';
+      boxP(tag, "STACK") + '</g></svg>';
   }
 
   /* ---------- browsing ---------- */
