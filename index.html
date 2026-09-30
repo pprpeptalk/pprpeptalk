@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
-<meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#0b0907">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#fbf7f1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
 <title>PPR</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#0b0907; --bg2:#15100c; --card:#1a130e; --card2:#231910; --line:rgba(212,175,96,.18);
@@ -83,7 +83,7 @@ section{padding-top:56px}
 @media (min-width:760px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.rail .card{flex-basis:240px}}
 .card{background:linear-gradient(180deg,var(--card2),var(--card));border:.5px solid var(--line);border-radius:20px;overflow:hidden;cursor:pointer;text-align:left;transition:transform .35s ease,box-shadow .35s ease,border-color .35s}
 .card:hover{transform:translateY(-4px);border-color:rgba(212,175,96,.45);box-shadow:0 18px 40px rgba(0,0,0,.45),0 0 30px rgba(212,175,96,.08)}
-.pic{aspect-ratio:1/1;background:radial-gradient(circle at 50% 38%,#2c2016 0%,#130e0a 72%);display:flex;align-items:center;justify-content:center}
+.pic{aspect-ratio:1/1;background:radial-gradient(circle at 50% 36%,#faf7f1 0%,#e9e1d4 62%,#d9cfbf 100%);display:flex;align-items:center;justify-content:center}
 .pic svg{width:86%;height:86%}
 .card .txt{padding:12px 14px 16px}
 .card h3{font-size:16px;font-weight:700;margin:0 0 3px}
@@ -151,6 +151,62 @@ section{padding-top:56px}
 .toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(10px);z-index:50;background:rgba(20,15,11,.95);border:.5px solid var(--gold);color:var(--gold-l);padding:11px 18px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap}
 .toast.on{opacity:1;transform:translateX(-50%)}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* ---------- light pastel, sharp edges, white logo on a copper plate ---------- */
+*{border-radius:0!important}
+:root{--line:rgba(122,90,48,.2);--cream:#2a1d15;--muted:#6f6052;--dim:#978776;--gold:#b98a45;--gold-l:#9c7631;
+  --copper:linear-gradient(135deg,#7d4e2a 0%,#a8693a 55%,#84532d 100%)}
+html,body{background:linear-gradient(180deg,#fbf7f1 0%,#f6ede6 55%,#f0e6da 100%) fixed;color:#2a1d15}
+.intro{background:radial-gradient(circle at 50% 45%,#fffaf3 0%,#f1e6d6 75%)}
+.plate{display:inline-flex;align-items:center;gap:16px;background:var(--copper);color:#fff;padding:18px 30px 18px 20px;box-shadow:0 18px 40px rgba(94,58,28,.25),inset 0 0 0 1px rgba(255,255,255,.22)}
+.plate .helix{width:32px;height:54px;flex:none}
+.helix path{fill:none;stroke:url(#ringGold);stroke-width:2.4}
+.helix .rg{stroke-width:1.4}
+.word{display:flex;flex-direction:column;align-items:flex-start}
+.word b{font:700 44px/1 "Cinzel",Georgia,serif;letter-spacing:.14em;color:#fff}
+.word span{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.88);margin-top:9px;padding-top:8px;border-top:1px solid rgba(241,217,154,.6);white-space:nowrap}
+.hero{position:relative}
+.hero .plate{margin-bottom:34px}
+.intro-plate{opacity:0;animation:plate 1s .1s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes plate{from{opacity:0;clip-path:inset(0 50% 0 50%)}to{opacity:1;clip-path:inset(0 0 0 0)}}
+.intro-plate .helix path{stroke-dasharray:140;stroke-dashoffset:140;animation:draw 1.3s .5s ease forwards}
+.intro-plate .word b{opacity:0;animation:spread 1s .8s ease forwards}
+.intro-plate .word span{opacity:0;animation:rise .8s 1.1s ease forwards}
+@keyframes spread{from{opacity:0;letter-spacing:.42em}to{opacity:1;letter-spacing:.14em}}
+.bar.solid{background:var(--copper);border-color:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
+.logo{display:flex;align-items:center;gap:9px;font:700 22px/1 "Cinzel",Georgia,serif;letter-spacing:.14em;color:#fff}
+.logo b{font:inherit}
+.logo .helix{width:17px;height:28px}
+.bag-btn{background:var(--copper);border:0;box-shadow:0 6px 16px rgba(94,58,28,.25)}
+.bag-btn svg{stroke:#fff}
+.bag-btn i{background:#fff;color:#7d4e2a}
+.search{background:#fff;border:1px solid rgba(168,105,58,.45);box-shadow:0 18px 44px rgba(94,58,28,.12)}
+.search:focus-within{border-color:#a8693a;box-shadow:0 0 0 4px rgba(168,105,58,.12),0 18px 44px rgba(94,58,28,.12)}
+.search input{color:#2a1d15}
+.search svg{stroke:#a8693a}
+.search button,.cta{background:var(--copper);color:#fff}
+.cta.ghost{background:transparent;color:#7d4e2a;border:1px solid #a8693a}
+.hint{color:var(--muted)}
+.hint svg{stroke:#a8693a}
+.card{background:#fff;border:1px solid var(--line);box-shadow:0 6px 18px rgba(94,58,28,.06)}
+.card:hover{border-color:#a8693a;box-shadow:0 18px 36px rgba(94,58,28,.14)}
+.card h3,.sec-h h2,.sheet h2,.sum .tot{color:#2a1d15}
+.card p{color:var(--muted)}
+.chip{background:#fff;color:var(--muted);border:1px solid var(--line)}
+.chip.on{background:var(--copper);color:#fff}
+.mask{background:rgba(42,29,21,.35)}
+.sheet{background:#fffdf9;border:1px solid var(--line)}
+.x{background:#fff;color:#7d4e2a;border:1px solid var(--line)}
+.opt,.specs,.lines,.how,.step{background:#fff}
+.opt{color:#2a1d15}
+.opt.on{border-color:#a8693a;box-shadow:inset 0 0 0 1px #a8693a}
+.step button{color:#7d4e2a}
+.step input{color:#2a1d15}
+.bac{background:rgba(168,105,58,.08);color:#7d4e2a}
+.bac button{color:#a8693a}
+.bac.off{color:var(--dim)}
+.toast{background:#2a1d15;color:#fff;border:0}
+@media (max-width:380px){.word b{font-size:38px}.word span{font-size:9px;letter-spacing:.24em}}
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}.rv{opacity:1;transform:none}.mark circle{stroke-dashoffset:0}.mark b,.intro p{opacity:1}}
 </style>
 </head>
@@ -161,24 +217,25 @@ section{padding-top:56px}
     <linearGradient id="capG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7d5c22"/><stop offset=".35" stop-color="#f1d99a"/><stop offset=".6" stop-color="#c79a45"/><stop offset="1" stop-color="#6e5020"/></linearGradient>
     <linearGradient id="glassG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset=".25" stop-color="#fff" stop-opacity=".05"/><stop offset=".8" stop-color="#fff" stop-opacity=".03"/><stop offset="1" stop-color="#fff" stop-opacity=".14"/></linearGradient>
     <linearGradient id="labelG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#15100b"/><stop offset="1" stop-color="#0d0906"/></linearGradient>
+    <linearGradient id="glassW" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c9c3b9" stop-opacity=".55"/><stop offset=".12" stop-color="#fff" stop-opacity=".7"/><stop offset=".5" stop-color="#fff" stop-opacity=".35"/><stop offset=".88" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#bdb6aa" stop-opacity=".6"/></linearGradient>
+    <linearGradient id="boxF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#efe9df"/></linearGradient>
+    <linearGradient id="boxS" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ddd5c8"/><stop offset="1" stop-color="#cfc5b5"/></linearGradient>
     <radialGradient id="shadowG"><stop offset="0" stop-color="#000" stop-opacity=".7"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
   </defs>
 </svg>
 <canvas id="specks" aria-hidden="true"></canvas>
 <div class="intro" id="intro" aria-hidden="true">
-  <div class="mark"><svg viewBox="0 0 170 170"><circle cx="85" cy="85" r="80"/><circle class="in" cx="85" cy="85" r="69"/></svg><b class="gt">PPR</b></div>
-  <p>We put the pep in peptide</p>
+  <div class="plate intro-plate"><svg class="helix" viewBox="0 0 40 64" aria-hidden="true"><path d="M8 2C8 10 32 10 32 17C32 24 8 24 8 32C8 40 32 40 32 47C32 54 8 54 8 62"/><path d="M32 2C32 10 8 10 8 17C8 24 32 24 32 32C32 40 8 40 8 47C8 54 32 54 32 62"/><path class="rg" d="M11 17H29M11 32H29M11 47H29M14 4.5H26M14 59.5H26"/></svg><div class="word"><b>PPR</b><span>We put the pep in peptide</span></div></div>
 </div>
 <header class="bar" id="bar"><div class="bar-in">
-  <div class="logo gt">PPR</div>
+  <div class="logo"><svg class="helix" viewBox="0 0 40 64" aria-hidden="true"><path d="M8 2C8 10 32 10 32 17C32 24 8 24 8 32C8 40 32 40 32 47C32 54 8 54 8 62"/><path d="M32 2C32 10 8 10 8 17C8 24 32 24 32 32C32 40 8 40 8 47C8 54 32 54 32 62"/><path class="rg" d="M11 17H29M11 32H29M11 47H29M14 4.5H26M14 59.5H26"/></svg><b>PPR</b></div>
   <button class="bag-btn" id="bagBtn" type="button" aria-label="Open your bag">
     <svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 12H6.2L5 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><i id="bagCount"></i>
   </button>
 </div></header>
 <div class="wrap">
   <div class="hero" id="top">
-    <div class="script gt hero-in">PPR</div>
-    <p class="tag hero-in d2">We put the pep in peptide</p>
+    <div class="plate hero-in"><svg class="helix" viewBox="0 0 40 64" aria-hidden="true"><path d="M8 2C8 10 32 10 32 17C32 24 8 24 8 32C8 40 32 40 32 47C32 54 8 54 8 62"/><path d="M32 2C32 10 8 10 8 17C8 24 32 24 32 32C32 40 8 40 8 47C8 54 32 54 32 62"/><path class="rg" d="M11 17H29M11 32H29M11 47H29M14 4.5H26M14 59.5H26"/></svg><div class="word"><b>PPR</b><span>We put the pep in peptide</span></div></div>
     <form class="search hero-in d3" id="searchForm" role="search">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
       <input id="q" type="search" placeholder="What are your goals?" autocomplete="off" aria-label="What are your goals?">
@@ -214,15 +271,17 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
       { id: "bpc", name: "BPC-157", tag: "BPC-157", type: "Singles", about: "Used for healing, mainly gut issues and muscle or tendon injuries.", options: [{ label: "10mg", price: 120 }] },
       { id: "tesa", name: "Tesamorelin", tag: "TESA", type: "Singles", about: "Used to reduce stubborn belly fat.", options: [{ label: "10mg", price: 85 }] },
       { id: "nad", name: "NAD+", tag: "NAD+", type: "Singles", about: "Used for energy, focus and healthy ageing.", options: [{ label: "100mg", price: 50 }] },
-      { id: "ghk", name: "GHK-Cu", tag: "GHK-CU", type: "Singles", about: "Used for skin firmness, fine lines and healing.", options: [{ label: "50mg", price: null }] },
-      { id: "mots", name: "MOTS-c", tag: "MOTS-C", type: "Singles", about: "Used for energy, fitness and fat loss.", options: [{ label: "20mg", price: null }] },
-      { id: "mt2", name: "Melanotan II", tag: "MT-2", type: "Singles", about: "Used for tanning.", options: [{ label: "10mg", price: null }] },
+      { id: "ghk", name: "GHK-Cu", tag: "GHK-CU", type: "Singles", about: "Used for skin firmness, fine lines and healing.", options: [{ label: "50mg", price: 65 }] },
+      { id: "mots", name: "MOTS-c", tag: "MOTS-C", type: "Singles", about: "Used for energy, fitness and fat loss.", options: [{ label: "20mg", price: 75 }] },
+      { id: "mt2", name: "Melanotan II", tag: "MT-2", type: "Singles", about: "Used for tanning.", options: [{ label: "10mg", price: 60 }] },
       { id: "bac", name: "Bacteriostatic water", tag: "BAC WATER", type: "Essentials", liquid: true, about: "Used to mix freeze dried peptides.", options: [{ label: "3ml", price: 20 }] }
     ],
+    // Stacks: peptides that go well together. Each vial comes with bac water.
     packages: [
-      { id: "pk-cjcklow", name: "The CJC and KLOW Pack", about: "CJC-1295 + Ipamorelin and KLOW, each with bac water.", items: [["cjc", 0, 1], ["klow", 0, 1]] },
-      { id: "pk-recovery", name: "The Recovery Pack", about: "BPC-157 + TB-500 and GLOW, each with bac water.", items: [["bpctb", 0, 1], ["glow", 0, 1]] },
-      { id: "pk-reta", name: "The Retatrutide Pack", about: "Two Retatrutide vials, each with bac water.", items: [["reta", 1, 2]] }
+      { id: "pk-recovery", name: "The Recovery Stack", about: "BPC-157 + TB-500 for injuries, with CJC-1295 + Ipamorelin for recovery and sleep.", items: [["bpctb", 0, 1], ["cjc", 0, 1]] },
+      { id: "pk-lean", name: "The Lean Stack", about: "Retatrutide for weight loss, with Tesamorelin for stubborn belly fat.", items: [["reta", 1, 1], ["tesa", 0, 1]] },
+      { id: "pk-energy", name: "The Energy Stack", about: "NAD+ and MOTS-c together for energy, fitness and healthy ageing.", items: [["nad", 0, 1], ["mots", 0, 1]] },
+      { id: "pk-skin", name: "The Summer Stack", about: "GHK-Cu for skin, with Melanotan II for a tan.", items: [["ghk", 0, 1], ["mt2", 0, 1]] }
     ]
   };
 
@@ -236,33 +295,51 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
   function bacPrice() { return prod(SHOP.bacId).options[0].price; }
   function toast(t) { var el = $("toast"); el.textContent = t; el.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(function () { el.classList.remove("on"); }, 1900); }
 
-  /* ---------- product shots: a glass vial with a gold cap and its own label ---------- */
-  function vial(p, x, s, strength) {
-    x = x || 0; s = s || 1;
-    var liq = p.liquid;
-    return '<g transform="translate(' + x + ',0) scale(' + s + ')" style="transform-origin:100px 190px">' +
-      '<ellipse cx="100" cy="186" rx="44" ry="7" fill="url(#shadowG)"/>' +
-      '<rect x="70" y="60" width="60" height="122" rx="11" fill="url(#glassG)" stroke="rgba(255,255,255,.28)" stroke-width="1"/>' +
-      (liq ? '<rect x="72.5" y="112" width="55" height="67" rx="9" fill="rgba(235,225,205,.16)"/>' : '<rect x="74" y="150" width="52" height="28" rx="8" fill="#efe4cf" opacity=".92"/>') +
-      '<rect x="80" y="48" width="40" height="14" rx="2" fill="#cfc8bc" opacity=".55"/>' +
-      '<rect x="73" y="26" width="54" height="26" rx="5" fill="url(#capG)"/>' +
-      '<rect x="86" y="18" width="28" height="10" rx="3" fill="url(#capG)" opacity=".9"/>' +
-      '<rect x="73" y="47" width="54" height="3" fill="rgba(0,0,0,.25)"/>' +
-      '<rect x="71" y="90" width="58" height="54" fill="url(#labelG)" stroke="#c9a24f" stroke-width=".8"/>' +
-      '<line x1="76" y1="96" x2="124" y2="96" stroke="#c9a24f" stroke-width=".6"/><line x1="76" y1="138" x2="124" y2="138" stroke="#c9a24f" stroke-width=".6"/>' +
-      '<text x="100" y="111" text-anchor="middle" font-family="Grand Hotel,cursive" font-size="12" fill="#e6c983">PPR</text>' +
-      '<text x="100" y="124" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="' + (p.tag.length > 7 ? 7 : 8.5) + '" font-weight="700" letter-spacing=".6" fill="#f4ecdf">' + esc(p.tag) + '</text>' +
-      (strength ? '<text x="100" y="133.5" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="6" letter-spacing=".5" fill="#b9aa98">' + esc(p.options[0].label.toUpperCase()) + '</text>' : '') +
-      '<rect x="75" y="64" width="6" height="112" rx="3" fill="#fff" opacity=".13"/></g>';
+  /* ---------- product shots: a PPR box and a clear vial with a gold cap ----------
+     The label carries the PPR ring monogram and the product name. Strength only shows on the
+     label inside the details, never on the cards. */
+  function ring(cx, cy, r, fs) {
+    return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="url(#capG)" stroke-width="' + (r / 9) + '"/>' +
+      '<text x="' + cx + '" y="' + (cy + fs * .22) + '" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-weight="700" font-size="' + (fs * .6) + '" letter-spacing=".4" fill="#9c7631">PPR</text>';
   }
-  // Strength only shows on the label inside the details, never on the cards.
-  function shot(p, strength) { return '<svg viewBox="0 0 200 200" role="img" aria-label="' + esc(p.name) + '">' + vial(p, 0, 1, strength) + '</svg>'; }
+  function vialW(p, x, y, s, strength) {
+    var liq = p.liquid, long = p.tag.length > 7;
+    return '<g transform="translate(' + x + ',' + y + ') scale(' + s + ')">' +
+      '<ellipse cx="29" cy="132" rx="34" ry="5" fill="url(#shadowG)" opacity=".55"/>' +
+      '<rect x="0" y="36" width="58" height="94" rx="8" fill="url(#glassW)" stroke="#b9b1a4" stroke-width=".8"/>' +
+      (liq ? '<rect x="2.5" y="70" width="53" height="57" rx="6" fill="#dfe6ea" opacity=".45"/>' : '<rect x="4" y="112" width="50" height="15" rx="5" fill="#fbfaf7"/>') +
+      '<rect x="9" y="27" width="40" height="11" fill="#d8d2c8"/>' +
+      '<rect x="2" y="2" width="54" height="28" rx="4" fill="url(#capG)"/>' +
+      '<rect x="2" y="2" width="54" height="6" rx="3" fill="#f3dea6" opacity=".55"/>' +
+      [8, 14, 20, 26, 32, 38, 44, 50].map(function (lx) { return '<line x1="' + lx + '" y1="10" x2="' + lx + '" y2="28" stroke="#7d5c22" stroke-width=".7" opacity=".45"/>'; }).join("") +
+      '<rect x="2" y="54" width="54" height="56" fill="#fff" stroke="#d9c089" stroke-width=".7"/>' +
+      ring(29, 67, 7.5, 7) +
+      '<text x="29" y="' + (strength ? 88 : 91) + '" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="' + (long ? 6.2 : 7.4) + '" font-weight="800" fill="#1f1610">' + esc(p.tag) + '</text>' +
+      (strength ? '<text x="29" y="97" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="5.4" fill="#7a6d61">' + esc(p.options[0].label) + '</text>' : '') +
+      '<line x1="14" y1="' + (strength ? 102 : 100) + '" x2="44" y2="' + (strength ? 102 : 100) + '" stroke="#c9a24f" stroke-width=".6"/>' +
+      '<rect x="6" y="40" width="4" height="86" rx="2" fill="#fff" opacity=".75"/></g>';
+  }
+  function box(p, x, y) {
+    return '<g transform="translate(' + x + ',' + y + ')">' +
+      '<ellipse cx="40" cy="150" rx="50" ry="6" fill="url(#shadowG)" opacity=".5"/>' +
+      '<polygon points="70,8 84,2 84,142 70,148" fill="url(#boxS)"/>' +
+      '<polygon points="0,8 14,2 84,2 70,8" fill="#f6f2eb"/>' +
+      '<rect x="0" y="8" width="70" height="140" fill="url(#boxF)" stroke="#e2dacd" stroke-width=".6"/>' +
+      '<rect x="6" y="14" width="58" height="128" fill="none" stroke="#d9c089" stroke-width=".6"/>' +
+      ring(35, 52, 13, 12) +
+      '<text x="35" y="86" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="' + (p.tag.length > 7 ? 5.8 : 7) + '" font-weight="800" letter-spacing=".4" fill="#1f1610">' + esc(p.tag) + '</text>' +
+      '<line x1="22" y1="94" x2="48" y2="94" stroke="#c9a24f" stroke-width=".6"/>' +
+      '<text x="35" y="128" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-weight="700" font-size="6.5" letter-spacing="1.2" fill="#9c7631">PPR</text></g>';
+  }
+  function shot(p, strength) {
+    return '<svg viewBox="0 0 200 200" role="img" aria-label="' + esc(p.name) + '">' + box(p, 30, 26) + vialW(p, 96, 52, 1, strength) + '</svg>';
+  }
   function packShot(k) {
     var ps = []; k.items.forEach(function (it) { for (var n = 0; n < Math.min(it[2], 2); n++) ps.push(prod(it[0])); });
     ps.push(prod(SHOP.bacId));
-    var html = '<svg viewBox="0 0 200 200" role="img" aria-label="' + esc(k.name) + '">', n = ps.length, w = 62, start = 100 - (n - 1) * w / 2;
-    ps.forEach(function (p, i) { html += vial(p, (start + i * w - 100) * 1, .72); });
-    return html + '</svg>';
+    var n = ps.length, sc = n > 3 ? .62 : .78, w = 58 * sc + 8, start = 100 - (n * w - 8) / 2;
+    return '<svg viewBox="0 0 200 200" role="img" aria-label="' + esc(k.name) + '">' +
+      ps.map(function (p, i) { return vialW(p, start + i * w, 100 - 70 * sc, sc, false); }).join("") + '</svg>';
   }
 
   /* ---------- browsing ---------- */
@@ -446,7 +523,7 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
     function draw(p) {
       var a = .35 + .45 * Math.abs(Math.sin(p.ph));
       var g = x.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3);
-      g.addColorStop(0, "rgba(241,217,154," + a + ")"); g.addColorStop(.4, "rgba(212,175,96," + a * .6 + ")"); g.addColorStop(1, "rgba(212,175,96,0)");
+      g.addColorStop(0, "rgba(184,134,62," + a + ")"); g.addColorStop(.45, "rgba(212,175,96," + a * .5 + ")"); g.addColorStop(1, "rgba(212,175,96,0)");
       x.fillStyle = g; x.beginPath(); x.arc(p.x, p.y, p.r * 3, 0, 6.283); x.fill();
     }
     function tick() {
