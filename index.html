@@ -284,6 +284,32 @@ button,.cta,.chip,.search button{font-weight:600;letter-spacing:-.01em}
 .refl{text-align:center;font-size:14px;color:var(--muted);margin:16px 0 4px}
 .saved{text-align:center;font-size:14px;color:var(--muted);line-height:1.5;margin:0 auto 18px;max-width:380px}
 .gcx{font-style:normal;font-size:12px;color:#a8693a;font-weight:600;margin-left:8px}
+@media (max-width:380px){
+  .hero{padding:78px 16px 60px}
+  .hero .lg{margin-bottom:24px}
+  .search{gap:8px;padding:0 6px 0 14px}
+  .search input{height:54px;font-size:16px}
+  .search button{height:42px;padding:0 14px;font-size:15px}
+  .sec-h h2{font-size:22px}
+  .sec-h span{font-size:13px}
+  .sheet{padding:18px 16px calc(20px + env(safe-area-inset-bottom,0px))}
+  .sheet h2{font-size:24px}
+}
+@media (max-width:330px){
+  .search svg{display:none}
+  .search{padding-left:12px}
+  .sec-h span{display:none}
+  .two{flex-direction:column;gap:0}
+  .two .fld.sm{flex:1 1 auto}
+  .lrow{flex-wrap:wrap}
+  .lrow .nm{flex-basis:100%}
+  .lrow .step{margin-left:auto}
+}
+@media (max-height:520px){
+  .hero{padding-top:64px;padding-bottom:48px}
+  .hero .lg svg{width:min(70vw,300px)}
+  .sheet{max-height:96vh}
+}
 </style>
 </head>
 <body class="lock">
@@ -797,6 +823,8 @@ button,.cta,.chip,.search button{font-weight:600;letter-spacing:-.01em}
     BAG.forEach(function (l) { if (Object.prototype.hasOwnProperty.call(l, "bac")) { changed = true; if (l.bac && !isBac(l)) extra += info(l).perBac * l.qty; delete l.bac; } });
     if (changed) { addBac(extra); save(); }
   })();
+  function fitPlaceholder() { var q = $("q"); if (q) q.placeholder = innerWidth < 360 ? "Your goals?" : "What are your goals?"; }
+  fitPlaceholder(); addEventListener("resize", fitPlaceholder);
   drawShop(); count();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { fit(); });
   window.__shop = { orderText: orderText, SHOP: SHOP, bag: function () { return BAG; }, totals: totals, skuLines: skuLines,
