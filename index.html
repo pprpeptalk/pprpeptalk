@@ -206,7 +206,19 @@ html,body{background:linear-gradient(180deg,#fbf7f1 0%,#f6ede6 55%,#f0e6da 100%)
 .bac button{color:#a8693a}
 .bac.off{color:var(--dim)}
 .toast{background:#2a1d15;color:#fff;border:0}
-@media (max-width:380px){.word b{font-size:38px}.word span{font-size:9px;letter-spacing:.24em}}
+.plate{padding:22px 26px}
+.lg svg{display:block;width:min(78vw,330px);height:auto}
+.logo svg{display:block;height:34px;width:auto}
+.lg .strand,.logo .strand{fill:none;stroke:url(#ringGold);stroke-width:3;stroke-linecap:round}
+.lg .rung,.logo .rung{stroke:#e9cf87;stroke-width:1.8;stroke-linecap:round}
+.lg .dot,.logo .dot{fill:#f1d99a}
+.lg .rule,.logo .rule{stroke:#e9cf87;stroke-width:1.2}
+.lg .dia{fill:#f1d99a}
+.lg text,.logo text{fill:#fff;font-family:"Cinzel",Georgia,serif;font-weight:700}
+.lg .sub{fill:#f1d99a}
+.intro-plate .strand{stroke-dasharray:320;stroke-dashoffset:320;animation:draw 1.4s .5s ease forwards}
+.intro-plate .rung,.intro-plate .dot{opacity:0;animation:rise .6s 1.5s ease forwards}
+.intro-plate text,.intro-plate .rule,.intro-plate .dia{opacity:0;animation:rise .9s 1.1s ease forwards}
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}.rv{opacity:1;transform:none}.mark circle{stroke-dashoffset:0}.mark b,.intro p{opacity:1}}
 </style>
 </head>
@@ -225,17 +237,17 @@ html,body{background:linear-gradient(180deg,#fbf7f1 0%,#f6ede6 55%,#f0e6da 100%)
 </svg>
 <canvas id="specks" aria-hidden="true"></canvas>
 <div class="intro" id="intro" aria-hidden="true">
-  <div class="plate intro-plate"><svg class="helix" viewBox="0 0 40 64" aria-hidden="true"><path d="M8 2C8 10 32 10 32 17C32 24 8 24 8 32C8 40 32 40 32 47C32 54 8 54 8 62"/><path d="M32 2C32 10 8 10 8 17C8 24 32 24 32 32C32 40 8 40 8 47C8 54 32 54 32 62"/><path class="rg" d="M11 17H29M11 32H29M11 47H29M14 4.5H26M14 59.5H26"/></svg><div class="word"><b>PPR</b><span>We put the pep in peptide</span></div></div>
+  <div class="plate intro-plate"><div class="lg" data-logo="full"></div></div>
 </div>
 <header class="bar" id="bar"><div class="bar-in">
-  <div class="logo"><svg class="helix" viewBox="0 0 40 64" aria-hidden="true"><path d="M8 2C8 10 32 10 32 17C32 24 8 24 8 32C8 40 32 40 32 47C32 54 8 54 8 62"/><path d="M32 2C32 10 8 10 8 17C8 24 32 24 32 32C32 40 8 40 8 47C8 54 32 54 32 62"/><path class="rg" d="M11 17H29M11 32H29M11 47H29M14 4.5H26M14 59.5H26"/></svg><b>PPR</b></div>
+  <div class="logo" data-logo="compact"></div>
   <button class="bag-btn" id="bagBtn" type="button" aria-label="Open your bag">
     <svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 12H6.2L5 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><i id="bagCount"></i>
   </button>
 </div></header>
 <div class="wrap">
   <div class="hero" id="top">
-    <div class="plate hero-in"><svg class="helix" viewBox="0 0 40 64" aria-hidden="true"><path d="M8 2C8 10 32 10 32 17C32 24 8 24 8 32C8 40 32 40 32 47C32 54 8 54 8 62"/><path d="M32 2C32 10 8 10 8 17C8 24 32 24 32 32C32 40 8 40 8 47C8 54 32 54 32 62"/><path class="rg" d="M11 17H29M11 32H29M11 47H29M14 4.5H26M14 59.5H26"/></svg><div class="word"><b>PPR</b><span>We put the pep in peptide</span></div></div>
+    <div class="plate hero-in"><div class="lg" data-logo="full"></div></div>
     <form class="search hero-in d3" id="searchForm" role="search">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
       <input id="q" type="search" placeholder="What are your goals?" autocomplete="off" aria-label="What are your goals?">
@@ -295,51 +307,85 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
   function bacPrice() { return prod(SHOP.bacId).options[0].price; }
   function toast(t) { var el = $("toast"); el.textContent = t; el.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(function () { el.classList.remove("on"); }, 1900); }
 
-  /* ---------- product shots: a PPR box and a clear vial with a gold cap ----------
-     The label carries the PPR ring monogram and the product name. Strength only shows on the
-     label inside the details, never on the cards. */
-  function ring(cx, cy, r, fs) {
-    return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="url(#capG)" stroke-width="' + (r / 9) + '"/>' +
-      '<text x="' + cx + '" y="' + (cy + fs * .22) + '" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-weight="700" font-size="' + (fs * .6) + '" letter-spacing=".4" fill="#9c7631">PPR</text>';
+  /* ---------- the logo: helix mark plus the wordmark, drawn as vector art ---------- */
+  function helix(x, y, sc) {
+    var d = [], r = [];
+    [8, 42, 74, 106].forEach(function (yy) { r.push('<line class="rung" x1="24" y1="' + yy + '" x2="48" y2="' + yy + '"/><circle class="dot" cx="22" cy="' + yy + '" r="2.2"/><circle class="dot" cx="50" cy="' + yy + '" r="2.2"/>'); });
+    [25, 58, 90].forEach(function (yy) { r.push('<line class="rung" x1="31" y1="' + yy + '" x2="41" y2="' + yy + '" opacity=".7"/>'); });
+    return '<g transform="translate(' + x + ',' + y + ') scale(' + sc + ')">' +
+      '<path class="strand" d="M20 8C20 26 52 26 52 42C52 58 20 58 20 74C20 90 52 90 52 106"/>' +
+      '<path class="strand" d="M52 8C52 26 20 26 20 42C20 58 52 58 52 74C52 90 20 90 20 106"/>' + r.join("") + '</g>';
+  }
+  function logoSvg(kind) {
+    if (kind === "compact") {
+      return '<svg viewBox="0 0 330 72" role="img" aria-label="Proactive Peptides Research">' + helix(0, 4, .58) +
+        '<text x="52" y="42" font-size="36" textLength="262" lengthAdjust="spacingAndGlyphs">PROACTIVE</text>' +
+        '<text class="sub" x="53" y="64" font-size="11.5" font-weight="700" letter-spacing="4.2" textLength="260" lengthAdjust="spacingAndGlyphs">PEPTIDES RESEARCH</text></svg>';
+    }
+    return '<svg viewBox="0 0 400 122" role="img" aria-label="Proactive Peptides Research">' + helix(6, 4, 1) +
+      '<text x="88" y="58" font-size="42" textLength="290" lengthAdjust="spacingAndGlyphs">PROACTIVE</text>' +
+      '<line class="rule" x1="90" y1="83" x2="152" y2="83"/><polygon class="dia" points="156,83 160,80 164,83 160,86"/>' +
+      '<text x="233" y="89" font-size="19" letter-spacing="7" text-anchor="middle" textLength="118" lengthAdjust="spacingAndGlyphs">PEPTIDES</text>' +
+      '<polygon class="dia" points="302,83 306,80 310,83 306,86"/><line class="rule" x1="314" y1="83" x2="376" y2="83"/>' +
+      '<text class="sub" x="233" y="111" font-size="11.5" letter-spacing="6.5" text-anchor="middle" textLength="150" lengthAdjust="spacingAndGlyphs">RESEARCH</text></svg>';
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("[data-logo]"), function (el) { el.innerHTML = logoSvg(el.dataset.logo); });
+
+  /* ---------- product shots: box and vial with proper materials ----------
+     Strength only shows on the label inside the details, never on the cards. */
+  var KNURL = (function () { var o = ""; for (var k = 2; k < 60; k += 3) o += '<line x1="' + k + '" y1="27" x2="' + k + '" y2="39" stroke="#6b4a18" stroke-width=".9" opacity=".45"/>'; return o; })();
+  function emblem(x, y, sc, col) {
+    return '<g transform="translate(' + x + ',' + y + ') scale(' + sc + ')" fill="none" stroke="' + col + '" stroke-width="2.6" stroke-linecap="round">' +
+      '<path d="M20 8C20 26 52 26 52 42C52 58 20 58 20 74"/><path d="M52 8C52 26 20 26 20 42C20 58 52 58 52 74"/>' +
+      '<path d="M25 8H47M25 42H47M25 74H47" stroke-width="1.8"/></g>';
   }
   function vialW(p, x, y, s, strength) {
     var liq = p.liquid, long = p.tag.length > 7;
     return '<g transform="translate(' + x + ',' + y + ') scale(' + s + ')">' +
-      '<ellipse cx="29" cy="132" rx="34" ry="5" fill="url(#shadowG)" opacity=".55"/>' +
-      '<rect x="0" y="36" width="58" height="94" rx="8" fill="url(#glassW)" stroke="#b9b1a4" stroke-width=".8"/>' +
-      (liq ? '<rect x="2.5" y="70" width="53" height="57" rx="6" fill="#dfe6ea" opacity=".45"/>' : '<rect x="4" y="112" width="50" height="15" rx="5" fill="#fbfaf7"/>') +
-      '<rect x="9" y="27" width="40" height="11" fill="#d8d2c8"/>' +
-      '<rect x="2" y="2" width="54" height="28" rx="4" fill="url(#capG)"/>' +
-      '<rect x="2" y="2" width="54" height="6" rx="3" fill="#f3dea6" opacity=".55"/>' +
-      [8, 14, 20, 26, 32, 38, 44, 50].map(function (lx) { return '<line x1="' + lx + '" y1="10" x2="' + lx + '" y2="28" stroke="#7d5c22" stroke-width=".7" opacity=".45"/>'; }).join("") +
-      '<rect x="2" y="54" width="54" height="56" fill="#fff" stroke="#d9c089" stroke-width=".7"/>' +
-      ring(29, 67, 7.5, 7) +
-      '<text x="29" y="' + (strength ? 88 : 91) + '" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="' + (long ? 6.2 : 7.4) + '" font-weight="800" fill="#1f1610">' + esc(p.tag) + '</text>' +
-      (strength ? '<text x="29" y="97" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="5.4" fill="#7a6d61">' + esc(p.options[0].label) + '</text>' : '') +
-      '<line x1="14" y1="' + (strength ? 102 : 100) + '" x2="44" y2="' + (strength ? 102 : 100) + '" stroke="#c9a24f" stroke-width=".6"/>' +
-      '<rect x="6" y="40" width="4" height="86" rx="2" fill="#fff" opacity=".75"/></g>';
+      '<ellipse cx="30" cy="136" rx="36" ry="5.5" fill="url(#shadowG)" opacity=".6"/>' +
+      '<rect x="0" y="42" width="60" height="92" rx="7" fill="#eef0f2"/>' +
+      (liq ? '<rect x="2" y="78" width="56" height="53" rx="6" fill="#d7e2e8" opacity=".55"/>' : '<rect x="3" y="116" width="54" height="15" rx="4" fill="#f7f4ee"/><ellipse cx="30" cy="116" rx="27" ry="3.2" fill="#fbf9f4"/>') +
+      '<rect x="2" y="60" width="56" height="56" fill="#fff" stroke="#c9a24f" stroke-width=".9"/>' +
+      '<rect x="4.5" y="62.5" width="51" height="51" fill="none" stroke="#e2cf9c" stroke-width=".5"/>' +
+      emblem(22.5, 64, .17, "#9c7631") +
+      '<text x="30" y="83" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-weight="700" font-size="4.4" textLength="44" lengthAdjust="spacingAndGlyphs" fill="#7a5a26">PROACTIVE PEPTIDES</text>' +
+      '<text x="30" y="' + (strength ? 95 : 98) + '" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="' + (long ? 6.4 : 7.8) + '" font-weight="800" fill="#1f1610">' + esc(p.tag) + '</text>' +
+      (strength ? '<text x="30" y="103" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="5.4" font-weight="600" fill="#6b5e52">' + esc(p.options[0].label) + '</text>' : '') +
+      '<line x1="16" y1="' + (strength ? 108 : 105) + '" x2="44" y2="' + (strength ? 108 : 105) + '" stroke="#c9a24f" stroke-width=".6"/>' +
+      '<rect x="0" y="42" width="60" height="92" rx="7" fill="url(#glassW)"/>' +
+      '<rect x="4" y="46" width="5" height="84" rx="2.5" fill="#fff" opacity=".8"/><rect x="52" y="48" width="2" height="80" rx="1" fill="#fff" opacity=".5"/>' +
+      '<rect x="10" y="30" width="40" height="13" fill="#d5d0c7"/><rect x="10" y="30" width="40" height="2" fill="#fff" opacity=".6"/>' +
+      '<rect x="0" y="26" width="60" height="16" fill="url(#capG)"/>' + KNURL +
+      '<rect x="2" y="4" width="56" height="24" rx="2" fill="url(#capG)"/>' +
+      '<rect x="2" y="4" width="56" height="5" fill="#f6e3ad" opacity=".55"/><rect x="2" y="24" width="56" height="3" fill="#5c4014" opacity=".4"/>' +
+      '<ellipse cx="30" cy="4.5" rx="28" ry="3.2" fill="#e9cf87"/><ellipse cx="30" cy="4.5" rx="11" ry="1.5" fill="#b08a45" opacity=".6"/>' +
+      '</g>';
   }
   function box(p, x, y) {
     return '<g transform="translate(' + x + ',' + y + ')">' +
-      '<ellipse cx="40" cy="150" rx="50" ry="6" fill="url(#shadowG)" opacity=".5"/>' +
-      '<polygon points="70,8 84,2 84,142 70,148" fill="url(#boxS)"/>' +
-      '<polygon points="0,8 14,2 84,2 70,8" fill="#f6f2eb"/>' +
-      '<rect x="0" y="8" width="70" height="140" fill="url(#boxF)" stroke="#e2dacd" stroke-width=".6"/>' +
-      '<rect x="6" y="14" width="58" height="128" fill="none" stroke="#d9c089" stroke-width=".6"/>' +
-      ring(35, 52, 13, 12) +
-      '<text x="35" y="86" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="' + (p.tag.length > 7 ? 5.8 : 7) + '" font-weight="800" letter-spacing=".4" fill="#1f1610">' + esc(p.tag) + '</text>' +
-      '<line x1="22" y1="94" x2="48" y2="94" stroke="#c9a24f" stroke-width=".6"/>' +
-      '<text x="35" y="128" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-weight="700" font-size="6.5" letter-spacing="1.2" fill="#9c7631">PPR</text></g>';
+      '<ellipse cx="40" cy="154" rx="54" ry="6.5" fill="url(#shadowG)" opacity=".55"/>' +
+      '<polygon points="72,10 90,3 90,146 72,152" fill="url(#boxS)"/><polygon points="72,10 90,3 90,146 72,152" fill="none" stroke="#c9a24f" stroke-width=".5" opacity=".6"/>' +
+      '<polygon points="0,10 18,3 90,3 72,10" fill="#f9f6f0"/>' +
+      '<rect x="0" y="10" width="72" height="142" fill="url(#boxF)"/>' +
+      '<rect x="0" y="10" width="72" height="142" fill="none" stroke="#d8cfc2" stroke-width=".6"/>' +
+      '<rect x="5" y="15" width="62" height="132" fill="none" stroke="#c9a24f" stroke-width=".9"/><rect x="7.5" y="17.5" width="57" height="127" fill="none" stroke="#e2cf9c" stroke-width=".4"/>' +
+      emblem(25, 26, .34, "#9c7631") +
+      '<text x="36.5" y="63.5" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-weight="700" font-size="7.6" letter-spacing=".5" fill="#fff" opacity=".9">PROACTIVE</text>' +
+      '<text x="36" y="63" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-weight="700" font-size="7.6" letter-spacing=".5" fill="#2a1d15">PROACTIVE</text>' +
+      '<text x="36" y="72" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-weight="700" font-size="4.6" letter-spacing="1.8" fill="#7a5a26">PEPTIDES</text>' +
+      '<line x1="20" y1="80" x2="52" y2="80" stroke="#c9a24f" stroke-width=".6"/>' +
+      '<text x="36" y="112" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="' + (p.tag.length > 7 ? 6 : 7.4) + '" font-weight="800" fill="#1f1610">' + esc(p.tag) + '</text>' +
+      '<text x="36" y="138" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-weight="700" font-size="4" letter-spacing="1.6" fill="#9c7631">RESEARCH</text></g>';
   }
   function shot(p, strength) {
-    return '<svg viewBox="0 0 200 200" role="img" aria-label="' + esc(p.name) + '">' + box(p, 30, 26) + vialW(p, 96, 52, 1, strength) + '</svg>';
+    return '<svg viewBox="0 0 200 200" role="img" aria-label="' + esc(p.name) + '">' + box(p, 28, 22) + vialW(p, 100, 44, 1, strength) + '</svg>';
   }
   function packShot(k) {
     var ps = []; k.items.forEach(function (it) { for (var n = 0; n < Math.min(it[2], 2); n++) ps.push(prod(it[0])); });
     ps.push(prod(SHOP.bacId));
-    var n = ps.length, sc = n > 3 ? .62 : .78, w = 58 * sc + 8, start = 100 - (n * w - 8) / 2;
+    var n = ps.length, sc = n > 3 ? .6 : .76, w = 60 * sc + 10, start = 100 - (n * w - 10) / 2;
     return '<svg viewBox="0 0 200 200" role="img" aria-label="' + esc(k.name) + '">' +
-      ps.map(function (p, i) { return vialW(p, start + i * w, 100 - 70 * sc, sc, false); }).join("") + '</svg>';
+      ps.map(function (p, i) { return vialW(p, start + i * w, 100 - 72 * sc, sc, false); }).join("") + '</svg>';
   }
 
   /* ---------- browsing ---------- */
