@@ -619,6 +619,41 @@ body.logo-in #heroLogo{opacity:1}
     $("all").innerHTML = SHOP.products.filter(function (p) { return TYPE === "All" || p.type === TYPE; }).map(card).join("");
     watch(); fit();
   }
+  /* Words people type for what they're after, matched by search only and never shown. They stay close to
+     each product's own description. */
+  var KEYS = {
+    reta: "weight loss fat loss lose weight appetite diet slim slimming",
+    klow: "skin hair recovery healing gut inflammation collagen",
+    bpctb: "injury recovery healing repair muscle tendon joint ligament sports",
+    cjc: "muscle lean strength gym body shape body composition growth hormone recovery sleep",
+    glow: "skin hair nails recovery healing collagen beauty",
+    bpc: "healing repair gut stomach digestion muscle tendon injury recovery",
+    tesa: "fat loss belly fat stomach fat weight loss body shape lean",
+    nad: "energy focus brain longevity ageing aging fatigue tired",
+    ghk: "skin wrinkles fine lines firmness collagen ageing aging healing beauty",
+    mots: "energy fitness fat loss weight loss endurance exercise metabolism gym",
+    mt2: "tan tanning sun bronze",
+    bac: "water mix mixing reconstitute bacteriostatic"
+  };
+  // muscles finds muscle, injuries finds injury, aging and ageing find each other
+  function forms(w) {
+    var f = [w];
+    if (/ies$/.test(w) && w.length > 4) f.push(w.slice(0, -3) + "y");
+    if (/s$/.test(w) && w.length > 3) f.push(w.slice(0, -1));
+    if (w === "aging") f.push("ageing"); if (w === "ageing") f.push("aging");
+    return f;
+  }
+  // Whole words only, so fat doesn't find fatigue. From four letters a word also matches the start of
+  // a longer one, so it finds things while you're still typing.
+  function tokens(hay) {
+    var t = {}; hay.split(/[^a-z0-9+]+/).forEach(function (w) { if (w) forms(w).forEach(function (f) { t[f] = 1; }); }); return t;
+  }
+  function score(hay, words) {
+    var t = tokens(hay), keys = Object.keys(t);
+    return words.filter(function (w) {
+      return forms(w).some(function (f) { return t[f] || (f.length >= 4 && keys.some(function (k) { return k.indexOf(f) === 0; })); });
+    }).length;
+  }
   function search(q) {
     var box = $("results"); q = String(q || "").trim().toLowerCase();
     $("tip").classList.toggle("on", !!q);
@@ -626,13 +661,19 @@ body.logo-in #heroLogo{opacity:1}
     var skip = " i im i'm want wanna to a an my me for and the some get help with of in on is be like would need looking after something more ";
     var words = q.replace(/[^a-z0-9+ ']/g, " ").split(/\s+/).filter(function (w) { return w.length > 1 && skip.indexOf(" " + w + " ") < 0; });
     if (!words.length) words = [q];
-    var hits = SHOP.products.map(function (p) {
-      var hay = (p.name + " " + p.tag + " " + p.type + " " + p.about + " " + p.options.map(function (o) { return o.label; }).join(" ")).toLowerCase();
-      return { p: p, n: words.filter(function (w) { return hay.indexOf(w) >= 0; }).length };
-    }).filter(function (h) { return h.n > 0; }).sort(function (a, b) { return b.n - a.n; }).map(function (h) { return h.p; });
+    function hayOf(p) { return (p.name + " " + p.tag + " " + p.type + " " + p.about + " " + (KEYS[p.id] || "") + " " + p.options.map(function (o) { return o.label; }).join(" ")).toLowerCase(); }
+    var hits = SHOP.products.map(function (p) { return { p: p, n: score(hayOf(p), words) }; })
+      .filter(function (h) { return h.n > 0; }).sort(function (a, b) { return b.n - a.n; }).map(function (h) { return h.p; });
+    // Stacks come up too, on their own words or the words of what's in them.
+    var packs = SHOP.packages.map(function (k) {
+      var hay = (k.name + " " + k.about + " " + k.items.map(function (it) { var p = prod(it[0]); return p ? hayOf(p) : ""; }).join(" ")).toLowerCase();
+      return { k: k, n: score((k.name + " " + k.about).toLowerCase(), words) * 2 + score(hay, words) };
+    }).filter(function (h) { return h.n > 0; }).sort(function (a, b) { return b.n - a.n; }).map(function (h) { return h.k; });
+    var total = hits.length + packs.length;
     box.hidden = false; document.body.classList.add("searching");
-    box.innerHTML = '<div class="sec-h"><h2>Results</h2><span>' + hits.length + (hits.length === 1 ? " match" : " matches") + '</span></div>' +
-      (hits.length ? '<div class="grid">' + hits.map(card).join("") + '</div>' : '<p class="none">Nothing matched that. Try other words, or scroll down to see everything.</p>');
+    box.innerHTML = '<div class="sec-h"><h2>Results</h2><span>' + total + (total === 1 ? " match" : " matches") + '</span></div>' +
+      (total ? '<div class="grid">' + hits.map(card).join("") + packs.map(function (k, i) { return packCard(k, hits.length + i); }).join("") + '</div>' :
+        '<p class="none">Nothing matched that. Try other words, or scroll down to see everything.</p>');
     watch(); fit(box);
   }
   // Things fade and rise in as they come into view.
