@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
 <style>:root{--u:1px}
-@media (max-width:540px){:root{--u:.74px}}
+@media (max-width:540px){:root{--u:.67px}}
 
 :root{
   --bg:#0b0907; --bg2:#15100c; --card:#1a130e; --card2:#231910; --line:rgba(212,175,96,.18);
@@ -182,18 +182,16 @@ html,body{background:linear-gradient(180deg,#fbf7f1 0%,#f6ede6 55%,#f0e6da 100%)
 .bar::after{content:"";position:absolute;left:0;right:0;bottom:0;height:calc(3*var(--u));background:var(--copper);opacity:0;transition:opacity .4s}
 .bar.solid::after{opacity:1}
 /* the strip across the top: what we stand for, slowly scrolling */
-:root{--strip:calc(32*var(--u))}
-.strip{position:fixed;top:0;left:0;right:0;z-index:21;height:calc(var(--strip) + env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px);background:var(--copper);color:#fff5e8;overflow:hidden;transform:translateY(-100%);transition:transform .5s ease}
+:root{--strip:26px}
+.strip{position:fixed;top:0;left:0;right:0;z-index:21;height:calc(var(--strip) + env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px);background:linear-gradient(135deg,#c7975f 0%,#d9b082 55%,#c7975f 100%);color:#2e1c10;overflow:hidden;transform:translateY(-100%);transition:transform .5s ease}
+.strip,.strip *{border-radius:0!important}
 body.logo-in .strip{transform:none}
 body.gated .strip{display:none}
-.strip-track{display:flex;align-items:center;height:var(--strip);width:max-content;animation:strip 46s linear infinite}
-.strip:hover .strip-track{animation-play-state:paused}
-.strip-track span{font:600 calc(11*var(--u))/1 var(--sans);letter-spacing:calc(1.6*var(--u));text-transform:uppercase;white-space:nowrap;padding:0 calc(14*var(--u))}
-.strip-track i{width:calc(4*var(--u));height:calc(4*var(--u));border-radius:50%;background:#e6c982;flex:none}
-@keyframes strip{to{transform:translateX(-50%)}}
+.strip-track{display:flex;align-items:center;height:var(--strip);width:max-content;will-change:transform}
+.strip-track span{font:700 10px/1 var(--sans);letter-spacing:1.4px;text-transform:uppercase;white-space:nowrap;padding:0 13px}
+.strip-track i{width:3px;height:3px;background:#fff6e8;flex:none}
 .bar{top:calc(var(--strip) + env(safe-area-inset-top,0px))}
 html{scroll-padding-top:calc(var(--strip) + calc(70*var(--u)))}
-@media (prefers-reduced-motion:reduce){.strip-track{animation:none}}
 /* the age and research gate: nothing else moves until it's answered */
 .gate{position:fixed;inset:0;z-index:70;background:radial-gradient(circle at 50% 40%,#fffaf3 0%,#f1e6d6 75%);display:flex;align-items:center;justify-content:center;padding:calc(20*var(--u));overflow:auto}
 .gate[hidden]{display:none}
@@ -379,8 +377,8 @@ body.logo-in #heroLogo{opacity:1}
 
 @media (max-width:540px){
   .search input,.fld input{font-size:16px}
-  .lg svg{width:min(65vw,calc(420*var(--u)))}
-  .intro-logo{width:min(63vw,calc(560*var(--u)))}
+  .lg svg{width:min(59vw,calc(420*var(--u)))}
+  .intro-logo{width:min(57vw,calc(560*var(--u)))}
 }
 </style>
 </head>
@@ -921,11 +919,31 @@ body.logo-in #heroLogo{opacity:1}
   }
   function startIntro() { setTimeout(function () { lift(false); }, RM ? 250 : 2300); }
   $("intro").addEventListener("click", function () { lift(true); });
-  /* The strip: the same six points twice over, so the scroll loops without a join. */
+  /* The strip: the same six points twice over, moved along by script a few pixels at a time. When the first
+     copy has gone past it snaps back by exactly one copy, so it loops forever with no join. Holds still
+     while a finger is on it. */
   (function () {
-    var t = $("stripTrack"), items = ["Free express shipping over $199", "Earn loyalty points", "Tested", "Australian stock", "Dispatches within 24 hours", "Trusted Australian supplier"], h = "";
+    var t = $("stripTrack"), s = $("strip"), items = ["Free express shipping over $199", "Earn loyalty points", "Tested", "Australian stock", "Dispatches within 24 hours", "Trusted Australian supplier"], h = "";
     for (var r = 0; r < 2; r++) items.forEach(function (x) { h += "<span" + (r ? ' aria-hidden="true"' : "") + ">" + x + "</span><i></i>"; });
-    if (t) t.innerHTML = h;
+    if (!t || !s) return;
+    t.innerHTML = h;
+    var x = 0, last = 0, half = 0, hold = false, SPEED = 44;   // pixels a second
+    function measure() { half = t.scrollWidth / 2; }
+    function step(now) {
+      if (!last) last = now;
+      var dt = Math.min(50, now - last); last = now;
+      if (half <= 0) measure();   // hidden behind the gate at load, so measure once it's really on screen
+      if (!hold && half > 0 && document.body.classList.contains("logo-in")) {
+        x += SPEED * dt / 1000; if (x >= half) x -= half;
+        t.style.transform = "translate3d(" + (-x) + "px,0,0)";
+      }
+      requestAnimationFrame(step);
+    }
+    measure(); requestAnimationFrame(step);
+    window.addEventListener("resize", measure);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+    s.addEventListener("touchstart", function () { hold = true; }, { passive: true });
+    s.addEventListener("touchend", function () { hold = false; }, { passive: true }); s.addEventListener("touchcancel", function () { hold = false; }, { passive: true });
   })();
   /* The gate: both boxes ticked before Enter works, remembered on this device for 30 days. While it's
      up the intro waits, so the logo still draws itself the moment they're through. */
