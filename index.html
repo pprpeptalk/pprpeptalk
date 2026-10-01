@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
 <style>:root{--u:1px}
-@media (max-width:540px){:root{--u:.6px}}
+@media (max-width:540px){:root{--u:.7px}}
 
 :root{
   --bg:#0b0907; --bg2:#15100c; --card:#1a130e; --card2:#231910; --line:rgba(212,175,96,.18);
@@ -78,7 +78,7 @@ section{padding-top:calc(56*var(--u))}
 .sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:calc(12*var(--u));margin-bottom:calc(18*var(--u))}
 .sec-h h2{font-size:calc(26*var(--u));font-weight:700;margin:0;letter-spacing:.01em}
 .sec-h span{color:var(--dim);font-size:calc(14*var(--u))}
-.rail{display:flex;gap:calc(14*var(--u));overflow-x:auto;scroll-snap-type:x mandatory;padding:calc(4*var(--u)) calc(18*var(--u)) calc(14*var(--u));margin:0 -18px;scrollbar-width:none}
+.rail{display:flex;gap:calc(14*var(--u));overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:calc(18*var(--u));padding:calc(4*var(--u)) calc(18*var(--u)) calc(14*var(--u));margin:0 calc(-18*var(--u));scrollbar-width:none}
 .rail::-webkit-scrollbar{display:none}
 .rail .card{flex:0 0 min(64vw,calc(240*var(--u)));scroll-snap-align:start}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:calc(14*var(--u))}
@@ -271,6 +271,7 @@ body.searching .hint{display:none}
 .foot{margin-top:calc(60*var(--u));padding-top:calc(28*var(--u));border-top:1px solid var(--line);text-align:center}
 .foot h3{font-size:calc(20*var(--u));margin:0 0 calc(6*var(--u))}
 .ru{max-width:calc(680*var(--u));margin:calc(36*var(--u)) auto 0;text-align:center;padding-top:calc(24*var(--u));border-top:1px solid rgba(185,138,69,.45)}
+.ru h4{font-size:calc(18*var(--u));font-weight:700;margin:0 0 calc(12*var(--u));text-align:center;color:var(--cream);letter-spacing:.01em}
 .ru p{margin:0 0 calc(16*var(--u));font-size:calc(16*var(--u));line-height:1.62;color:#4d4136}
 .ru p:last-child{margin-bottom:0}
 .ru b{color:var(--cream);font-weight:700}
@@ -377,8 +378,26 @@ body.logo-in #heroLogo{opacity:1}
 
 @media (max-width:540px){
   .search input,.fld input{font-size:16px}
-  .lg svg{width:min(53vw,calc(420*var(--u)))}
-  .intro-logo{width:min(51vw,calc(560*var(--u)))}
+  .lg svg{width:min(48vw,calc(420*var(--u)))}
+  .intro-logo{width:min(48vw,calc(560*var(--u)))}
+  /* Pushed back on a phone: wider gutters, more space between things, smaller pictures, lighter type. */
+  main{padding-left:22px;padding-right:22px}
+  section{padding-top:46px}
+  .sec-h{margin-bottom:14px}
+  .sec-h h2{font-size:19px;font-weight:600;letter-spacing:0;color:#3a2a1e}
+  .sec-h span{font-size:12px}
+  .grid{gap:16px}
+  .rail{gap:16px;padding-left:22px;padding-right:22px;margin:0 -22px;scroll-padding-left:22px}
+  .rail .card{flex-basis:44vw}
+  .card{border-radius:14px!important;box-shadow:0 4px 14px rgba(94,58,28,.05)}
+  .card .txt{padding:10px 12px 13px}
+  .card h3{font-size:13.5px;font-weight:600}
+  .card p{font-size:12px;line-height:1.4}
+  .card .pic{aspect-ratio:1/0.82}
+  .search{max-width:86%;box-shadow:0 10px 28px rgba(94,58,28,.08)}
+  .strip-track span{font-weight:600;font-size:9.5px;letter-spacing:1.2px}
+  .foot{margin-top:52px}
+  .ru{margin-top:28px}
 }
 </style>
 </head>
@@ -434,7 +453,8 @@ body.logo-in #heroLogo{opacity:1}
       <p><a class="wa" href="https://wa.me/61494599813" target="_blank" rel="noopener noreferrer">WhatsApp 0494 599 813</a></p>
       <p class="foot-links"><a href="policy.html" target="_blank" rel="noopener noreferrer">Privacy &amp; Terms</a><a href="returns.html" target="_blank" rel="noopener noreferrer">Returns &amp; Refunds</a></p>
       <div class="ru">
-        <p><b>Research use only.</b> Products on this site are supplied strictly for in vitro laboratory research. They are not medicines, foods, cosmetics, supplements or therapeutic goods, and they are not for human or veterinary use. We can't give medical, dosing, therapeutic, cosmetic, veterinary or personal use advice. By placing an order you confirm you understand and accept this.</p>
+        <h4>Research use only</h4>
+        <p>Products on this site are supplied strictly for in vitro laboratory research. They are not medicines, foods, cosmetics, supplements or therapeutic goods, and they are not for human or veterinary use. We can't give medical, dosing, therapeutic, cosmetic, veterinary or personal use advice. By placing an order you confirm you understand and accept this.</p>
         <p>If there's a problem with your order, message us and we'll work with you to sort it out. Nothing in our policies limits any rights you may have under the Australian Consumer Law.</p>
       </div>
     </footer>
