@@ -721,7 +721,7 @@ body.logo-in #heroLogo{opacity:1}
     var t = totals();
     open('<h2>Your cart</h2>' +
       '<label class="gc' + (GOLD ? " on" : "") + '"><input type="checkbox" id="gcBox"' + (GOLD ? " checked" : "") + '><span class="tick" aria-hidden="true"></span>' +
-        '<span class="gct"><b>I\'m on the Gold Coast</b><span>Pay cash for the cash price and no postage. We\'ll sort pick up or drop off.</span></span></label>' +
+        '<span class="gct"><b>I\'m on the Gold Coast</b><span>Gold Coast pricing. Pay cash for the cash price, with no postage.</span></span></label>' +
       '<div class="lines">' + shown().map(function (i) { var l = BAG[i], inf = info(l), bac = isBac(l);
         return '<div class="line' + (bac ? " bacl" : "") + '"><div class="lrow"><div class="nm"><b>' + esc(bac ? "Bac water" : inf.name) + '</b><span>' + esc(bac ? "3ml, one for each vial" : inf.sub) + '</span></div>' +
           '<div class="step"><button type="button" data-lq="' + i + ',-1" aria-label="One less">&minus;</button><input value="' + l.qty + '" readonly aria-label="Quantity">' +
@@ -736,7 +736,7 @@ body.logo-in #heroLogo{opacity:1}
         '<div class="two"><div class="fld"><label for="fF">First name</label><input id="fF" autocomplete="given-name" maxlength="30" value="' + esc(ME.f) + '"></div>' +
         '<div class="fld sm"><label for="fL">Last name initial</label><input id="fL" maxlength="1" autocomplete="off" autocapitalize="characters" value="' + esc(ME.l) + '"></div></div>' +
         '<div class="fld"><label for="fP">Phone</label><input id="fP" type="tel" inputmode="tel" autocomplete="tel" maxlength="16" value="' + esc(ME.ph) + '"></div>' +
-        '<div class="fld"><label for="fA">' + (GOLD ? "Address for drop off" : "Postal address") + '</label><input id="fA" autocomplete="street-address" maxlength="200" placeholder="Street, suburb, postcode" value="' + esc(ME.ad) + '"></div>' +
+        '<div class="fld"><label for="fA">' + (GOLD ? "Address" : "Postal address") + '</label><input id="fA" autocomplete="street-address" maxlength="200" placeholder="Street, suburb, postcode" value="' + esc(ME.ad) + '"></div>' +
         '<input id="fH" class="hp" type="checkbox" tabindex="-1" aria-hidden="true">' +
         '<p class="err" id="fErr" role="alert"></p></div>' +
       '<div class="warn"><b>Please note.</b> Placing your order opens WhatsApp with it all typed out. You need to press <b>Send</b> in WhatsApp for it to reach us.</div>' +
@@ -757,7 +757,7 @@ body.logo-in #heroLogo{opacity:1}
     if (!/^[A-Za-z\u00C0-\u024F][A-Za-z\u00C0-\u024F' -]*$/.test(ME.f)) bad.push(["fF", "your first name"]);
     if (!ME.l) bad.push(["fL", "the first letter of your last name"]);
     if (!/^\d{8,12}$/.test(d)) bad.push(["fP", "a phone number we can reach you on"]);
-    if (ME.ad.length < 6) bad.push(["fA", GOLD ? "your address for drop off" : "your postal address"]);
+    if (ME.ad.length < 6) bad.push(["fA", GOLD ? "your address" : "your postal address"]);
     return bad;
   }
   function nice(list) { return list.length < 2 ? list.join("") : list.slice(0, -1).join(", ") + " and " + list[list.length - 1]; }
