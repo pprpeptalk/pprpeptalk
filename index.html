@@ -181,6 +181,42 @@ html,body{background:linear-gradient(180deg,#fbf7f1 0%,#f6ede6 55%,#f0e6da 100%)
 .bar.solid{background:rgba(251,247,241,.94);border-color:transparent;-webkit-backdrop-filter:blur(calc(14*var(--u)));backdrop-filter:blur(calc(14*var(--u)));box-shadow:0 calc(6*var(--u)) calc(18*var(--u)) -12px rgba(94,58,28,.35)}
 .bar::after{content:"";position:absolute;left:0;right:0;bottom:0;height:calc(3*var(--u));background:var(--copper);opacity:0;transition:opacity .4s}
 .bar.solid::after{opacity:1}
+/* the strip across the top: what we stand for, slowly scrolling */
+:root{--strip:calc(32*var(--u))}
+.strip{position:fixed;top:0;left:0;right:0;z-index:21;height:calc(var(--strip) + env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px);background:var(--copper);color:#fff5e8;overflow:hidden;transform:translateY(-100%);transition:transform .5s ease}
+body.logo-in .strip{transform:none}
+body.gated .strip{display:none}
+.strip-track{display:flex;align-items:center;height:var(--strip);width:max-content;animation:strip 46s linear infinite}
+.strip:hover .strip-track{animation-play-state:paused}
+.strip-track span{font:600 calc(11*var(--u))/1 var(--sans);letter-spacing:calc(1.6*var(--u));text-transform:uppercase;white-space:nowrap;padding:0 calc(14*var(--u))}
+.strip-track i{width:calc(4*var(--u));height:calc(4*var(--u));border-radius:50%;background:#e6c982;flex:none}
+@keyframes strip{to{transform:translateX(-50%)}}
+.bar{top:calc(var(--strip) + env(safe-area-inset-top,0px))}
+html{scroll-padding-top:calc(var(--strip) + calc(70*var(--u)))}
+@media (prefers-reduced-motion:reduce){.strip-track{animation:none}}
+/* the age and research gate: nothing else moves until it's answered */
+.gate{position:fixed;inset:0;z-index:70;background:radial-gradient(circle at 50% 40%,#fffaf3 0%,#f1e6d6 75%);display:flex;align-items:center;justify-content:center;padding:calc(20*var(--u));overflow:auto}
+.gate[hidden]{display:none}
+.gate-card{width:100%;max-width:440px;background:rgba(255,253,248,.94);border:.5px solid var(--line);box-shadow:0 20px 50px rgba(94,58,28,.14);padding:28px 24px 22px;text-align:center}
+.gate-mark svg{width:min(58vw,230px);height:auto;display:block;margin:0 auto 16px}
+.gate h2{font-weight:600;font-size:24px;margin:0 0 8px;letter-spacing:-.02em;line-height:1.15}
+.gate-sub{font-size:14px;color:var(--muted);margin:0 0 16px;line-height:1.5}
+.gate-row{display:flex;gap:12px;align-items:flex-start;text-align:left;font-size:14px;line-height:1.5;padding:12px 0;border-top:.5px solid var(--line);cursor:pointer;position:relative}
+.gate-row:last-of-type{border-bottom:.5px solid var(--line)}
+.gate-row input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.gate-box{flex:none;width:22px;height:22px;border:1.5px solid #a8693a;border-radius:5px;margin-top:1px;position:relative;background:#fff;transition:background .2s}
+.gate-row input:checked + .gate-box{background:var(--copper);border-color:transparent}
+.gate-row input:checked + .gate-box::after{content:"";position:absolute;left:7px;top:3px;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.gate-row input:focus-visible + .gate-box{outline:2px solid #a8693a;outline-offset:2px}
+.gate-row a{color:#8a5a2b;text-decoration:underline}
+.gate-go{width:100%;height:52px;font-size:16px;margin-top:18px}
+.gate-go[disabled]{opacity:.45;cursor:default}
+.gate-leave{display:inline-block;margin-top:14px;font-size:13px;color:var(--dim);text-decoration:none}
+body.gated .intro *{animation-play-state:paused!important}
+body.gated .bar{display:none}
+.foot-links{margin:calc(18*var(--u)) 0 0;font-size:calc(13*var(--u))}
+.foot-links a{color:#8a5a2b;text-decoration:none;font-weight:600;margin:0 calc(8*var(--u))}
+.foot-links a:hover{text-decoration:underline}
 .logo{display:flex;align-items:center;gap:calc(9*var(--u));font:700 calc(22*var(--u))/1 "Cinzel",Georgia,serif;letter-spacing:.14em;color:#fff}
 .logo b{font:inherit}
 .logo .helix{width:17px;height:28px}
@@ -363,6 +399,16 @@ body.logo-in #heroLogo{opacity:1}
 </svg>
 <canvas id="specks" aria-hidden="true"></canvas>
 <div class="intro" id="intro" aria-hidden="true"><div class="intro-bg"></div><div class="intro-logo" id="introLogo"></div></div>
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateT" hidden><div class="gate-card">
+  <div class="gate-mark" data-logo="full"></div>
+  <h2 id="gateT">Age Verification Required</h2>
+  <p class="gate-sub">This site is for qualified research professionals and legitimate research use only.</p>
+  <label class="gate-row"><input type="checkbox" id="g18"><span class="gate-box"></span><span>I confirm I am 18+ years of age or older.</span></label>
+  <label class="gate-row"><input type="checkbox" id="gRes"><span class="gate-box"></span><span>I confirm that I am an independent researcher, laboratory, clinic, or educational institution and that these products are for research use only by experienced professionals, not for human or animal use. I agree to the <a href="policy.html" target="_blank" rel="noopener noreferrer">Terms of Service</a> and <a href="policy.html#privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</span></label>
+  <button class="cta gate-go" id="gateGo" type="button" disabled>Enter</button>
+  <a class="gate-leave" href="https://www.google.com" rel="noopener noreferrer">Leave this site</a>
+</div></div>
+<div class="strip" id="strip" aria-label="Why shop with us"><div class="strip-track" id="stripTrack"></div></div>
 <header class="bar" id="bar"><div class="bar-in">
   <div class="logo" data-logo="compact"></div>
   <button class="bag-btn" id="bagBtn" type="button" aria-label="Open your cart">
@@ -388,6 +434,7 @@ body.logo-in #heroLogo{opacity:1}
     <footer class="foot rv">
       <h3>Questions? Message us</h3>
       <p><a class="wa" href="https://wa.me/61494599813" target="_blank" rel="noopener noreferrer">WhatsApp 0494 599 813</a></p>
+      <p class="foot-links"><a href="policy.html" target="_blank" rel="noopener noreferrer">Privacy &amp; Terms</a><a href="returns.html" target="_blank" rel="noopener noreferrer">Returns &amp; Refunds</a></p>
       <div class="ru">
         <p><b>Research use only.</b> Products on this site are supplied strictly for in vitro laboratory research. They are not medicines, foods, cosmetics, supplements or therapeutic goods, and they are not for human or veterinary use. We can't give medical, dosing, therapeutic, cosmetic, veterinary or personal use advice. By placing an order you confirm you understand and accept this.</p>
         <p>If there's a problem with your order, message us and we'll work with you to sort it out. Nothing in our policies limits any rights you may have under the Australian Consumer Law.</p>
@@ -872,8 +919,31 @@ body.logo-in #heroLogo{opacity:1}
     intro.classList.add("gliding");
     setTimeout(function () { document.body.classList.add("logo-in"); intro.classList.add("gone"); }, 1000);
   }
-  setTimeout(function () { lift(false); }, RM ? 250 : 2300);
+  function startIntro() { setTimeout(function () { lift(false); }, RM ? 250 : 2300); }
   $("intro").addEventListener("click", function () { lift(true); });
+  /* The strip: the same six points twice over, so the scroll loops without a join. */
+  (function () {
+    var t = $("stripTrack"), items = ["Free express shipping over $199", "Earn loyalty points", "Tested", "Australian stock", "Dispatches within 24 hours", "Trusted Australian supplier"], h = "";
+    for (var r = 0; r < 2; r++) items.forEach(function (x) { h += "<span" + (r ? ' aria-hidden="true"' : "") + ">" + x + "</span><i></i>"; });
+    if (t) t.innerHTML = h;
+  })();
+  /* The gate: both boxes ticked before Enter works, remembered on this device for 30 days. While it's
+     up the intro waits, so the logo still draws itself the moment they're through. */
+  (function () {
+    var g = $("gate"), KEY = "pprshop.age", DAYS = 30, ok = false;
+    try { var t = +localStorage.getItem(KEY) || 0; ok = t > 0 && Date.now() - t < DAYS * 864e5 && Date.now() >= t; } catch (e) {}
+    if (!g || ok) { startIntro(); return; }
+    g.hidden = false; document.body.classList.add("gated");
+    var a = $("g18"), b = $("gRes"), go = $("gateGo");
+    function upd() { go.disabled = !(a.checked && b.checked); }
+    a.addEventListener("change", upd); b.addEventListener("change", upd); upd();
+    go.addEventListener("click", function () {
+      if (go.disabled) return;
+      try { localStorage.setItem(KEY, String(Date.now())); } catch (e) {}
+      g.hidden = true; document.body.classList.remove("gated");
+      startIntro();
+    });
+  })();
 })();
 </script>
 </body>
