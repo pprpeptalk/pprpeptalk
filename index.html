@@ -466,13 +466,18 @@ body.logo-in #heroLogo{opacity:1}
 // Never run inside another site's page.
 
 (function () {
-  /* ---------- the shop: change prices, products, packages and wording here ----------
-     price null means "price on request". "about" is what the search looks through.
-     Every vial comes with bac water in the bag; people remove it there if they don't want it. */
+  /* ---------- the shop ----------
+     The Products tab on the PEPS HUB sheet runs what is for sale. A row with Status set to Active is on the
+     site with the sheet's Customer Cost, Cash Price, size (Strength + Unit) and Use / Benefits text. Any other
+     Status and it is off. The list below is the page's own copy of that: it gives each product its customer
+     facing name, tag, tab and search words (matched by SKU), it is what shows if the sheet has never been
+     reached, and anything on the sheet that is not in here still shows, using the sheet's Product name.
+     price null means "price on request". Every vial comes with bac water in the bag; people remove it there
+     if they don't want it. */
   var SHOP = {
     whatsapp: "61494599813", freeFrom: 199, postage: 12, bacId: "bac",
     products: [
-      { id: "reta", name: "Retatrutide", tag: "RETA", type: "Singles", popular: 1, about: "Used for weight loss by lowering appetite.", options: [{ label: "15mg", price: 140, cash: 130, sku: "RETAT15" }] },
+      { id: "reta", name: "Retatrutide", tag: "RETA", type: "Singles", popular: 1, about: "Used for weight loss by lowering appetite.", options: [{ label: "20mg", price: 160, cash: 150, sku: "RETAT20" }] },
       { id: "klow", name: "KLOW", tag: "KLOW", type: "Blends", popular: 2, about: "Used for the same things as GLOW, plus inflammation in the gut and skin.", options: [{ label: "80mg", price: 190, cash: 180, sku: "Klow" }] },
       { id: "bpctb", name: "BPC-157 + TB-500", tag: "BPC + TB", type: "Blends", popular: 3, about: "Used for recovering from injuries, especially muscles, tendons and joints.", options: [{ label: "10mg + 10mg", price: 200, cash: 185, sku: "BPC157" }] },
       { id: "cjc", name: "CJC-1295 + Ipamorelin", tag: "CJC + IPA", type: "Blends", popular: 4, about: "Used to raise your body's own growth hormone, for recovery, sleep and body shape.", options: [{ label: "5mg + 5mg", price: 130, cash: 120, sku: "CJC1295" }] },
@@ -480,19 +485,26 @@ body.logo-in #heroLogo{opacity:1}
       { id: "bpc", name: "BPC-157", tag: "BPC-157", type: "Singles", about: "Used for healing, mainly gut issues and muscle or tendon injuries.", options: [{ label: "10mg", price: 120, cash: 100, sku: "BPC" }] },
       { id: "tesa", name: "Tesamorelin", tag: "TESA", type: "Singles", about: "Used to reduce stubborn belly fat.", options: [{ label: "10mg", price: 85, cash: 75, sku: "Tesamorlin" }] },
       { id: "nad", name: "NAD+", tag: "NAD+", type: "Singles", about: "Used for energy, focus and healthy ageing.", options: [{ label: "100mg", price: 50, cash: 45, sku: "NAD" }] },
-      { id: "ghk", name: "GHK-Cu", tag: "GHK-CU", type: "Singles", about: "Used for skin firmness, fine lines and healing.", options: [{ label: "50mg", price: 65, cash: 60, sku: "GHK-CU" }] },
-      { id: "mots", name: "MOTS-c", tag: "MOTS-C", type: "Singles", about: "Used for energy, fitness and fat loss.", options: [{ label: "20mg", price: 75, cash: 65, sku: "Mots-c" }] },
+      { id: "ghk", name: "GHK-Cu", tag: "GHK-CU", type: "Singles", about: "Used for skin firmness, fine lines and healing.", options: [{ label: "50mg", price: 65, cash: 60, sku: "GHK-CU50" }, { label: "100mg", price: 110, cash: 100, sku: "GHK-CU100" }] },
+      { id: "mots", name: "MOTS-c", tag: "MOTS-C", type: "Singles", about: "Used for energy, fitness and fat loss.", options: [{ label: "10mg", price: 75, cash: 65, sku: "Mots-c" }] },
       { id: "mt2", name: "Melanotan II", tag: "MT-2", type: "Singles", about: "Used for tanning.", options: [{ label: "10mg", price: 60, cash: 50, sku: "MEL" }] },
       { id: "bac", name: "Bacteriostatic water", tag: "BAC WATER", type: "Essentials", liquid: true, about: "Used to mix freeze dried peptides.", options: [{ label: "3ml", price: 20, cash: 15, sku: "BACWATER" }] }
     ],
-    // Stacks: peptides that go well together. Each vial comes with bac water.
+    // Stacks: peptides that go well together, named by SKU. If a SKU is off the sheet the stack uses another
+    // size of the same product, and if the product is off altogether the stack is off too. Each vial comes
+    // with bac water.
     packages: [
-      { id: "pk-recovery", name: "The Recovery Stack", about: "BPC-157 + TB-500 for injuries, with CJC-1295 + Ipamorelin for recovery and sleep.", items: [["bpctb", 0, 1], ["cjc", 0, 1]] },
-      { id: "pk-lean", name: "The Lean Stack", about: "Retatrutide for weight loss, with Tesamorelin for stubborn belly fat.", items: [["reta", 0, 1], ["tesa", 0, 1]] },
-      { id: "pk-energy", name: "The Energy Stack", about: "NAD+ and MOTS-c together for energy, fitness and healthy ageing.", items: [["nad", 0, 1], ["mots", 0, 1]] },
-      { id: "pk-skin", name: "The Summer Stack", about: "GHK-Cu for skin, with Melanotan II for a tan.", items: [["ghk", 0, 1], ["mt2", 0, 1]] }
+      { id: "pk-recovery", name: "The Recovery Stack", about: "BPC-157 + TB-500 for injuries, with CJC-1295 + Ipamorelin for recovery and sleep.", skus: [["BPC157", 1], ["CJC1295", 1]] },
+      { id: "pk-lean", name: "The Lean Stack", about: "Retatrutide for weight loss, with Tesamorelin for stubborn belly fat.", skus: [["RETAT20", 1], ["Tesamorlin", 1]] },
+      { id: "pk-energy", name: "The Energy Stack", about: "NAD+ and MOTS-c together for energy, fitness and healthy ageing.", skus: [["NAD", 1], ["Mots-c", 1]] },
+      { id: "pk-skin", name: "The Summer Stack", about: "GHK-Cu for skin, with Melanotan II for a tan.", skus: [["GHK-CU50", 1], ["MEL", 1]] }
     ]
   };
+  // Old or spare SKUs and which product above they belong to, so a size coming back on the sheet lands under
+  // the right name. Lower case.
+  var ALIAS = { retat15: "reta", "ghk-cu": "ghk" };
+  // Sizes the sheet can't say in one Strength cell. Lower case SKU, the words customers see.
+  var LABELS = { bpc157: "10mg + 10mg", cjc1295: "5mg + 5mg" };
 
   var $ = function (id) { return document.getElementById(id); };
   var BAG = [], TYPE = "All", CUR = null, toastT = null, RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -512,6 +524,101 @@ body.logo-in #heroLogo{opacity:1}
   function pack(id) { for (var i = 0; i < SHOP.packages.length; i++) if (SHOP.packages[i].id === id) return SHOP.packages[i]; return null; }
   function bacPrice() { return priceOf(prod(SHOP.bacId).options[0]); }
   function toast(t) { var el = $("toast"); el.textContent = t; el.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(function () { el.classList.remove("on"); }, 1900); }
+
+  /* ---------- the sheet runs the shop ----------
+     BASE is the page's own list above, PACKS the stacks as written. BY_SKU says which product each SKU
+     belongs to. The sheet's rows are turned into products with buildProducts, the stacks are pointed at
+     whatever is on with resolvePack, and lines in the cart follow their SKU with fixBag. */
+  var BASE = SHOP.products.slice(), PACKS = SHOP.packages.slice(), BY_SKU = {}, LIVE_AT = 0, VIEW = null;
+  function skuKey(s) { return String(s == null ? "" : s).trim().toLowerCase(); }
+  BASE.forEach(function (p) { p.options.forEach(function (o) { BY_SKU[skuKey(o.sku)] = p.id; }); });
+  for (var ak in ALIAS) BY_SKU[ak] = ALIAS[ak];
+  function baseProd(id) { for (var i = 0; i < BASE.length; i++) if (BASE[i].id === id) return BASE[i]; return null; }
+  // "GLOW = GHK-Cu + BPC-157 + TB-500" becomes GLOW, "NAD+(Nicotinamide...)" becomes NAD+.
+  function cleanName(s) { return String(s == null ? "" : s).split(/\s*=\s*/)[0].replace(/\([^)]*\)/g, "").replace(/\s+/g, " ").trim(); }
+  function slug(s) { return cleanName(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "item"; }
+  function sizeNum(s) { var m = String(s == null ? "" : s).match(/[\d.]+/); return m ? parseFloat(m[0]) : 0; }
+  function num(v) { var n = typeof v === "number" ? v : parseFloat(String(v == null ? "" : v).replace(/[^0-9.]/g, "")); return isFinite(n) && n >= 0 ? n : null; }
+  function buildProducts(items) {
+    var list = [], byId = {};
+    items.forEach(function (it) {
+      if (!it || typeof it !== "object") return;
+      var sku = String(it.sku == null ? "" : it.sku).trim().slice(0, 40); if (!sku) return;
+      var key = skuKey(sku), id = BY_SKU[key] || "s-" + slug(it.name || sku), b = baseProd(id), p = byId[id];
+      if (!p) {
+        var nm = b ? b.name : (cleanName(it.name) || sku).slice(0, 60), solvent = /solvent|water/i.test(String(it.cat || "")), blend = / \+ /.test(nm);
+        p = { id: id, name: nm, tag: b ? b.tag : nm.toUpperCase().slice(0, 12), type: b ? b.type : (solvent ? "Essentials" : blend ? "Blends" : "Singles"),
+          about: String(it.about || (b ? b.about : "")).slice(0, 300), options: [] };
+        if (b && b.popular) p.popular = b.popular;
+        if (b ? b.liquid : solvent) p.liquid = true;
+        byId[id] = p; list.push(p);
+      } else if (!p.about && it.about) p.about = String(it.about).slice(0, 300);
+      if (p.options.some(function (o) { return skuKey(o.sku) === key; })) return;   // the same SKU twice
+      p.options.push({ label: (LABELS[key] || String(it.size || "").trim() || (b && b.options[0] ? b.options[0].label : "")).slice(0, 40), price: num(it.price), cash: num(it.cash), sku: sku });
+    });
+    list.forEach(function (p) { p.options.sort(function (a, b) { return sizeNum(a.label) - sizeNum(b.label); }); });
+    var pos = {}; BASE.forEach(function (p, i) { pos[p.id] = i; });   // same order as the list above, anything new after it
+    list.sort(function (a, b) { var x = pos[a.id], y = pos[b.id]; if (x == null && y == null) return a.name.localeCompare(b.name); if (x == null) return 1; if (y == null) return -1; return x - y; });
+    if (!byId[SHOP.bacId]) { var bw = baseProd(SHOP.bacId); if (bw) list.push(bw); }   // the cart leans on bac water, so it is never missing
+    return list;
+  }
+  function findSku(sku) {
+    var want = skuKey(sku); if (!want) return null;
+    for (var i = 0; i < SHOP.products.length; i++) for (var j = 0; j < SHOP.products[i].options.length; j++) if (skuKey(SHOP.products[i].options[j].sku) === want) return { id: SHOP.products[i].id, opt: j };
+    return null;
+  }
+  function resolvePack(k) {
+    var items = [], out = {};
+    for (var i = 0; i < k.skus.length; i++) {
+      var want = skuKey(k.skus[i][0]), f = findSku(want), qty = k.skus[i][1];
+      if (!f) { var p = BY_SKU[want] ? prod(BY_SKU[want]) : null; if (p && p.options.length) f = { id: p.id, opt: 0 }; }   // that size is off, use the one that's on
+      if (!f) return null;   // the product is off the sheet, so the stack is off too
+      items.push([f.id, f.opt, qty]);
+    }
+    for (var key in k) out[key] = k[key];
+    out.items = items; return out;
+  }
+  function loadProducts(items) {
+    SHOP.products = items ? buildProducts(items) : BASE.slice();
+    SHOP.packages = PACKS.map(resolvePack).filter(Boolean);
+    if (!SHOP.products.some(function (p) { return p.type === TYPE; }) && TYPE !== "All") TYPE = "All";
+  }
+  // Lines in the cart follow their SKU, so a size moving or going off the sheet never turns one product into another.
+  function fixBag() {
+    var before = JSON.stringify(BAG);
+    BAG = BAG.filter(function (l) {
+      if (l.k === "p") {
+        if (l.sku) { var f = findSku(l.sku); if (!f) return false; l.id = f.id; l.opt = f.opt; }
+        else { var p = prod(l.id), o = p && p.options[l.opt]; if (!o) return false; l.sku = o.sku; }
+      }
+      return !!info(l);
+    });
+    if (JSON.stringify(BAG) !== before) save();
+  }
+  function setProducts(items) { loadProducts(items); fixBag(); }
+  // Whatever the sheet is showing is drawn again with the new list, or closed if what it showed is gone.
+  function redrawOpen() {
+    if (!$("mask").classList.contains("on") || !VIEW) return;
+    if (VIEW === "bag") return openBag(true);
+    if (VIEW === "product") { var p = CUR && prod(CUR.id); if (!p) return close(); if (!p.options[CUR.opt]) CUR.opt = 0; return drawProduct(); }
+    if (VIEW.indexOf("pack:") === 0) { var id = VIEW.slice(5); return pack(id) ? openPack(id) : close(); }
+  }
+  /* The page opens on its last copy of the sheet so nothing waits, then asks the sheet for the current list and
+     swaps it in. If the sheet can't be reached the last copy stays, and with no copy at all the list above shows.
+     Asked again when the page comes back after five minutes out of sight. */
+  function refreshLive() {
+    if (!window.fetch) return;
+    fetch(HUB + "?action=shop", { method: "GET", redirect: "follow", cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || d.ok !== true || !Array.isArray(d.items) || !d.items.length) return;
+        LIVE_AT = Date.now();
+        store("pprshop.live", JSON.stringify({ t: LIVE_AT, items: d.items }));
+        setProducts(d.items); drawShop(); count(); redrawOpen();
+      })
+      .catch(function () {});
+  }
+  document.addEventListener("visibilitychange", function () { if (!document.hidden && Date.now() - LIVE_AT > 5 * 60000) refreshLive(); });
 
   /* ---------- the logo: helix mark plus the wordmark, drawn as vector art ---------- */
   function helix(x, y, sc) {
@@ -683,8 +790,8 @@ body.logo-in #heroLogo{opacity:1}
   function watch() { Array.prototype.forEach.call(document.querySelectorAll(".rv:not(.in)"), function (el) { if (IO && !RM) IO.observe(el); else el.classList.add("in"); }); }
 
   /* ---------- details: prices and specs only show in here ---------- */
-  function open(html, keep) { var y = $("sheet").scrollTop; $("sheet").innerHTML = '<button class="x" type="button" data-close="1" aria-label="Close">&times;</button>' + html; $("mask").classList.add("on"); document.body.classList.add("lock"); $("sheet").scrollTop = keep ? y : 0; fit($("sheet")); }
-  function close() { $("mask").classList.remove("on"); $("sheet").innerHTML = ""; document.body.classList.remove("lock"); CUR = null; }
+  function open(html, keep) { VIEW = null; var y = $("sheet").scrollTop; $("sheet").innerHTML = '<button class="x" type="button" data-close="1" aria-label="Close">&times;</button>' + html; $("mask").classList.add("on"); document.body.classList.add("lock"); $("sheet").scrollTop = keep ? y : 0; fit($("sheet")); }
+  function close() { $("mask").classList.remove("on"); $("sheet").innerHTML = ""; document.body.classList.remove("lock"); CUR = null; VIEW = null; }
   function openProduct(id) { if (!prod(id)) return; CUR = { id: id, opt: 0, qty: 1 }; drawProduct(); }
   function drawProduct() {
     var p = prod(CUR.id), o = p.options[CUR.opt], isBac = p.id === SHOP.bacId;
@@ -701,6 +808,7 @@ body.logo-in #heroLogo{opacity:1}
       '<div class="buy"><div class="step"><button type="button" data-q="-1" aria-label="One less">&minus;</button>' +
         '<input id="pq" inputmode="numeric" value="' + CUR.qty + '" aria-label="Quantity"><button type="button" data-q="1" aria-label="One more">+</button></div>' +
         '<button class="cta" type="button" data-add="1">' + addLabel() + '</button></div>');
+    VIEW = "product";
   }
   function addLabel() { var p = prod(CUR.id), o = p.options[CUR.opt]; return o.price == null ? "Add to cart" : "Add to cart, " + money(priceOf(o) * CUR.qty); }
   function packTotal(k) {
@@ -716,6 +824,7 @@ body.logo-in #heroLogo{opacity:1}
       '<div><span>Package price' + (GOLD ? '<em class="gcx">Gold Coast cash</em>' : '') + '</span><span class="big">' + money(t.price) + '</span></div>' +
       '<div><span>Bac water x' + t.vials + '</span><span>' + money(bacPrice() * t.vials) + ', added to cart</span></div></div>' +
       '<div class="buy"><button class="cta" type="button" data-addpack="' + k.id + '">Add package to cart</button></div>');
+    VIEW = "pack:" + id;
   }
 
   /* ---------- the cart: bac water goes in as its own item, one per vial, and can be taken out ---------- */
@@ -732,10 +841,11 @@ body.logo-in #heroLogo{opacity:1}
     return { name: p.name, sub: p.options[l.opt].label, price: priceOf(p.options[l.opt]), perBac: p.id === SHOP.bacId ? 0 : 1 };
   }
   function bacLine() { for (var i = 0; i < BAG.length; i++) if (isBac(BAG[i])) return BAG[i]; return null; }
-  function addBac(n) { if (!(n > 0)) return; var b = bacLine(); if (b) b.qty = Math.min(99, b.qty + n); else BAG.push({ k: "p", id: SHOP.bacId, opt: 0, qty: Math.min(99, n) }); }
+  function addBac(n) { if (!(n > 0)) return; var b = bacLine(); if (b) b.qty = Math.min(99, b.qty + n); else BAG.push({ k: "p", id: SHOP.bacId, opt: 0, sku: prod(SHOP.bacId).options[0].sku, qty: Math.min(99, n) }); }
   function add(l, qty) {
     var hit = null; BAG.forEach(function (x) { if (x.k === l.k && x.id === l.id && (x.opt || 0) === (l.opt || 0)) hit = x; });
-    if (hit) hit.qty = Math.min(99, hit.qty + qty); else BAG.push({ k: l.k, id: l.id, opt: l.opt || 0, qty: qty });
+    if (hit) hit.qty = Math.min(99, hit.qty + qty);
+    else { var nl = { k: l.k, id: l.id, opt: l.opt || 0, qty: qty }; if (l.k === "p") { var np = prod(l.id), no = np && np.options[nl.opt]; if (no) nl.sku = no.sku; } BAG.push(nl); }
     var i = info({ k: l.k, id: l.id, opt: l.opt || 0 });
     if (i && i.perBac) addBac(i.perBac * qty);
     save(); var b = $("bagBtn"); b.classList.remove("bump"); void b.offsetWidth; b.classList.add("bump");
@@ -802,6 +912,7 @@ body.logo-in #heroLogo{opacity:1}
       '<div class="stack"><button class="cta" type="button" id="placeBtn">Place order</button>' +
       '<button class="cta ghost" type="button" data-copy="1">Copy order</button></div>' +
       '<div class="how"><h4>How ordering works</h4><ol><li>Fill in your details and tap Place order.</li><li>WhatsApp opens with your order typed out. Press Send.</li><li>We reply with payment details and sort the rest.</li></ol></div>', keep);
+    VIEW = "bag";
   }
   function readForm() {
     if (!$("fF")) return;
@@ -946,21 +1057,30 @@ body.logo-in #heroLogo{opacity:1}
     requestAnimationFrame(tick);
   })();
 
+  // Start on the last copy of the sheet's list, if this device has one, otherwise the list above.
+  (function () {
+    var live = null;
+    try { live = JSON.parse(localStorage.getItem("pprshop.live") || "null"); } catch (e) {}
+    loadProducts(live && Array.isArray(live.items) && live.items.length ? live.items : null);
+  })();
   (function tidyOld() {
     var extra = 0, changed = false;
     BAG = BAG.filter(function (l) { return l && typeof l === "object" && (l.k === "p" || l.k === "pack"); }).map(function (l) {
       var q = parseInt(l.qty, 10), o = parseInt(l.opt, 10), out = { k: l.k, id: String(l.id), opt: o > 0 ? o : 0, qty: q > 0 ? Math.min(99, q) : 0 };
+      if (l.sku) out.sku = String(l.sku);
       if (Object.prototype.hasOwnProperty.call(l, "bac")) out.bac = !!l.bac;
       return out;
-    }).filter(function (l) { return l.qty > 0 && info(l); });
+    }).filter(function (l) { return l.qty > 0; });
+    fixBag();   // each line follows its SKU; anything no longer sold drops out
     BAG.forEach(function (l) { if (Object.prototype.hasOwnProperty.call(l, "bac")) { changed = true; if (l.bac && !isBac(l)) extra += info(l).perBac * l.qty; delete l.bac; } });
     if (changed) { addBac(extra); save(); }
   })();
   function fitPlaceholder() { var q = $("q"); if (q) q.placeholder = innerWidth < 360 ? "Your goals?" : "What are your goals?"; }
   fitPlaceholder(); addEventListener("resize", fitPlaceholder);
   drawShop(); count();
+  refreshLive();   // ask the sheet for the current list
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { fit(); });
-  window.__shop = { orderText: orderText, SHOP: SHOP, bag: function () { return BAG; }, totals: totals, skuLines: skuLines,
+  window.__shop = { orderText: orderText, SHOP: SHOP, bag: function () { return BAG; }, totals: totals, skuLines: skuLines, refresh: refreshLive,
     shotFor: function (id, st) { var p = prod(id); return shot({ name: p.name, tag: p.tag, liquid: p.liquid, options: [p.options[0]] }, st); },
     packShotFor: function (id) { return packShot(pack(id)); }, fit: fit };
   var done = false;
