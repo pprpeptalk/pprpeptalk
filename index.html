@@ -454,9 +454,12 @@ body.gated .bar{display:none}
   if (!Array.isArray(BAG)) BAG = [];
   /* Gold Coast customers pay cash, get the cash price and have no postage. Their details stay on
      their own device so they don't retype them, and go nowhere until they place the order. */
-  var GOLD = false, ME = { f: "", l: "", ph: "", ad: "" }, SENT = null, BUSY = false;
+  var GOLD = false, ME = { f: "", l: "", ph: "", ad: "" }, SENT = null;
   var HUB = "https://script.google.com/macros/s/AKfycbyxu8CB1qFgk4L9zpgktHyaBTJCToIxgE6sv7rz6sxHKLMdRD6w1-b_y8A9m9glgG-vUQ/exec";
   try { GOLD = localStorage.getItem("pprshop.gc") === "1"; } catch (e) {}
+  // The last order placed on this device, until it is cleared, so the last step can come back after a reload.
+  try { SENT = JSON.parse(localStorage.getItem("pprshop.sent") || "null"); } catch (e) { SENT = null; }
+  if (SENT && !(SENT.ref && SENT.msg && SENT.sig)) SENT = null;
   try { var me0 = JSON.parse(localStorage.getItem("pprshop.me") || "null"); if (me0) ME = { f: String(me0.f || ""), l: String(me0.l || ""), ph: String(me0.ph || ""), ad: String(me0.ad || "") }; } catch (e) {}
   function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   function priceOf(o) { return o.price == null ? null : (GOLD && o.cash != null ? o.cash : o.price); }
@@ -544,7 +547,7 @@ body.gated .bar{display:none}
       return ok;
     });
     var bl = bacLine(); if (bl && lost) { bl.qty = Math.max(0, bl.qty - lost); if (!bl.qty) BAG = BAG.filter(function (x) { return x !== bl; }); }
-    if (JSON.stringify(BAG) !== before) save();
+    if (JSON.stringify(BAG) !== before) { save(); if (lost && document.body.classList.contains("ready")) toast("Something in your cart is no longer available, so it came out"); }
   }
   function setProducts(items) { loadProducts(items); fixBag(); }
   // Whatever the sheet is showing is drawn again with the new list, or closed if what it showed is gone.
@@ -834,6 +837,7 @@ body.gated .bar{display:none}
   }
   function openBag(keep) {
     BAG = BAG.filter(function (l) { return info(l); });
+    if (SENT) { if (SENT.sig === sigNow()) return showSend(); SENT = null; keepSent(); }
     if (!BAG.length) { open('<h2>Your cart</h2><p class="empty">Your cart is empty.<br>Have a look through the collection.</p><div class="stack"><button class="cta ghost" type="button" data-close="1">Keep browsing</button></div>'); return; }
     var t = totals();
     open('<h2>Your cart</h2>' +
@@ -879,8 +883,9 @@ body.gated .bar{display:none}
     return bad;
   }
   function nice(list) { return list.length < 2 ? list.join("") : list.slice(0, -1).join(", ") + " and " + list[list.length - 1]; }
+  function sigNow() { return JSON.stringify([skuLines(), ME, GOLD]); }
+  function keepSent() { store("pprshop.sent", SENT ? JSON.stringify(SENT) : "null"); }
   function placeOrder() {
-    if (BUSY) return;
     var bad = checkForm();
     Array.prototype.forEach.call(document.querySelectorAll(".me input"), function (x) { x.classList.remove("bad"); });
     if (bad.length) {
@@ -889,40 +894,42 @@ body.gated .bar{display:none}
       $(bad[0][0]).focus(); return;
     }
     $("fErr").textContent = "";
-    var lines = skuLines(), sig = JSON.stringify([lines, ME, GOLD]), last = {};
+    var lines = skuLines(), sig = sigNow(), last = {};
     try { last = JSON.parse(localStorage.getItem("pprshop.last") || "{}") || {}; } catch (e) {}
     // The same order placed twice keeps its ref, so the sheet never gets it twice.
     var ref = last.sig === sig && last.ref ? last.ref : "WEB" + (Date.now().toString(36) + Math.random().toString(36).slice(2, 5)).toUpperCase();
     store("pprshop.last", JSON.stringify({ sig: sig, ref: ref }));
-    var msg = orderText(ref), btn = $("placeBtn");
-    BUSY = true; btn.disabled = true; btn.textContent = "Placing your order\u2026";
-    var body = { action: "shopOrder", ref: ref, hp: $("fH") && $("fH").checked ? "x" : "", first: ME.f, initial: ME.l, phone: ME.ph, address: ME.ad, gc: GOLD, lines: lines };
-    var shownYet = false;
-    function show(saved) { if (shownYet) return; shownYet = true; BUSY = false; showSend(ref, msg, saved); }
-    var timer = setTimeout(function () { show(null); }, 15000);
-    fetch(HUB, { method: "POST", redirect: "follow", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) })
-      .then(function (r) { return r.json(); })
-      .then(function (res) { clearTimeout(timer); var ok = !!(res && res.ok); if (shownYet) setSaved(ok); else show(ok); })
-      .catch(function () { clearTimeout(timer); if (shownYet) setSaved(false); else show(false); });
+    SENT = { ref: ref, msg: orderText(ref), sig: sig, lines: lines, hp: $("fH") && $("fH").checked ? "x" : "", at: Date.now(), posted: false, saved: null };
+    keepSent(); showSend();
+  }
+  // The sheet gets the order once, the first time it leaves the page. keepalive lets it finish while WhatsApp opens.
+  function sendToHub() {
+    if (!SENT || SENT.posted || !window.fetch) return;
+    SENT.posted = true; keepSent();
+    var body = { action: "shopOrder", ref: SENT.ref, hp: SENT.hp || "", first: ME.f, initial: ME.l, phone: ME.ph, address: ME.ad, gc: GOLD, lines: SENT.lines };
+    var opts = { method: "POST", redirect: "follow", keepalive: true, headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) };
+    var w = $("waGo"); if (w) w.textContent = "Open WhatsApp again";
+    fetch(HUB, opts).then(function (r) { return r.json(); }).then(function (res) { setSaved(!!(res && res.ok)); }).catch(function () { setSaved(false); });
   }
   function savedText(saved) {
     if (saved) return "We've saved a copy too. If your message doesn't come through, we'll text you on " + esc(ME.ph) + " to confirm.";
-    if (saved === null) return "Sending it on WhatsApp is how it reaches us, so make sure you press Send.";
     return "Sending it on WhatsApp is how it reaches us, so make sure you press Send.";
   }
-  function setSaved(saved) { var el = $("savedMsg"); if (el) el.innerHTML = savedText(saved); }
-  function showSend(ref, msg, saved) {
-    SENT = { ref: ref, msg: msg };
-    var wa = "https://wa.me/" + SHOP.whatsapp + "?text=" + encodeURIComponent(msg);
+  function setSaved(saved) { if (SENT) { SENT.saved = saved; keepSent(); } var el = $("savedMsg"); if (el) el.innerHTML = savedText(saved); }
+  function showSend() {
+    if (!SENT) return openBag();
+    var wa = "https://wa.me/" + SHOP.whatsapp + "?text=" + encodeURIComponent(SENT.msg);
     open('<div class="done"><div class="dn-i" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 11.5a8.5 8.5 0 0 1-12.4 7.6L3.5 20.5l1.4-4A8.5 8.5 0 1 1 20 11.5Z"/></svg></div>' +
       '<h2>Last step</h2><p class="lead">Tap below, then press <b>Send</b> in WhatsApp. Your order isn\'t placed until you do.</p></div>' +
-      '<div class="stack"><a class="cta" id="waGo" href="' + esc(wa) + '" target="_blank" rel="noopener noreferrer">Open WhatsApp and send</a>' +
+      '<div class="stack"><a class="cta" id="waGo" href="' + esc(wa) + '" target="_blank" rel="noopener noreferrer">' + (SENT.posted ? "Open WhatsApp again" : "Open WhatsApp and send") + '</a>' +
       '<button class="cta ghost" type="button" data-copy="1">Copy order</button></div>' +
-      '<p class="refl">Order ref <b>' + esc(ref) + '</b></p><p class="saved" id="savedMsg">' + savedText(saved) + '</p>' +
-      '<div class="stack"><button class="cta ghost" type="button" data-done="1">Done, clear my cart</button></div>');
+      '<p class="refl">Order ref <b>' + esc(SENT.ref) + '</b></p><p class="saved" id="savedMsg">' + savedText(SENT.saved) + '</p>' +
+      '<div class="stack"><button class="cta ghost" type="button" data-back="1">Back to my cart</button><button class="cta ghost" type="button" data-done="1">Sent it, clear my cart</button></div>');
+    VIEW = "sent";
   }
   function copy() {
-    var t = $("waGo") && SENT ? SENT.msg : (readForm(), orderText());
+    var t = VIEW === "sent" && SENT ? SENT.msg : (readForm(), orderText());
+    if (VIEW === "sent") sendToHub();
     function fallback() { var ta = document.createElement("textarea"); ta.value = t; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
       document.body.appendChild(ta); ta.select(); var ok = false; try { ok = document.execCommand("copy"); } catch (e) {} document.body.removeChild(ta); toast(ok ? "Order copied" : "Couldn't copy, use the WhatsApp button"); }
     if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(function () { toast("Order copied"); }, fallback); else fallback();
@@ -931,11 +938,11 @@ body.gated .bar{display:none}
   /* ---------- listeners ---------- */
   document.addEventListener("click", function (e) {
     if (e.target.id === "mask") return close();
-    var b = e.target.closest("[data-close],[data-open],[data-pack],[data-type],[data-opt],[data-q],[data-add],[data-addpack],[data-lq],[data-rm],[data-done],[data-copy],#bagBtn,#waGo,#placeBtn,#hint");
+    var b = e.target.closest("[data-close],[data-open],[data-pack],[data-type],[data-opt],[data-q],[data-add],[data-addpack],[data-lq],[data-rm],[data-done],[data-back],[data-copy],#bagBtn,#waGo,#placeBtn,#hint");
     if (!b) return; var d = b.dataset;
     if (b.id === "bagBtn") return openBag();
     if (b.id === "hint") return $("browse").scrollIntoView({ behavior: RM ? "auto" : "smooth" });
-    if (b.id === "waGo") { toast("Opening WhatsApp, press Send"); setTimeout(function () { var w = $("waGo"); if (w) w.textContent = "Open WhatsApp again"; }, 900); return; }
+    if (b.id === "waGo") { sendToHub(); toast("Opening WhatsApp, press Send"); return; }
     if (b.id === "placeBtn") return placeOrder();
     if (d.close) return close();
     if (d.open) return openProduct(d.open);
@@ -952,7 +959,10 @@ body.gated .bar{display:none}
         BAG = BAG.filter(function (x) { return x.qty > 0; }); save(); }
       return openBag(true); }
     if (d.rm) { readForm(); if (BAG[+d.rm]) { BAG.splice(+d.rm, 1); save(); toast("Bac water removed"); } return openBag(true); }
-    if (d.done) { BAG = []; save(); ME = { f: "", l: "", ph: "", ad: "" }; store("pprshop.me", "null"); store("pprshop.last", "{}"); SENT = null; close(); return toast("Thanks, we'll be in touch"); }
+    if (d.back) { SENT = null; keepSent(); return openBag(); }
+    if (d.done) {
+      if (!d.sure) { d.sure = "1"; b.textContent = "Tap again to clear your cart"; setTimeout(function () { if (b.isConnected) { delete b.dataset.sure; b.textContent = "Sent it, clear my cart"; } }, 4000); return; }
+      BAG = []; save(); ME = { f: "", l: "", ph: "", ad: "" }; store("pprshop.me", "null"); store("pprshop.last", "{}"); SENT = null; keepSent(); close(); return toast("Thanks, we'll be in touch"); }
     if (d.copy) return copy();
   });
   document.addEventListener("keydown", function (e) {
@@ -1041,6 +1051,7 @@ body.gated .bar{display:none}
     var intro = $("intro"), il = $("introLogo");
     if (early) intro.classList.add("skip");
     document.body.classList.remove("lock"); document.body.classList.add("ready");
+    if (SENT && Date.now() - (SENT.at || 0) < 6 * 3600000 && SENT.sig === sigNow()) setTimeout(showSend, 1200);
     var hero = document.querySelector("#heroLogo svg"), a = il.getBoundingClientRect(), b = hero ? hero.getBoundingClientRect() : null;
     if (RM || !b || !b.width || !a.width || window.scrollY > 4 || b.top < 0 || b.bottom > innerHeight) { document.body.classList.add("logo-in"); intro.classList.add("gone"); return; }
     il.style.transformOrigin = "0 0";
