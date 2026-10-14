@@ -527,14 +527,23 @@ body.gated .bar{display:none}
   }
   // Lines in the cart follow their SKU, so a size moving or going off the sheet never turns one product into another.
   function fixBag() {
-    var before = JSON.stringify(BAG);
+    var before = JSON.stringify(BAG), lost = 0;
+    function vialsIn(l) {   // how many vials a line stands for, so its bac water can go with it
+      if (l.k !== "pack") return isBac(l) ? 0 : l.qty;
+      var k = null; PACKS.forEach(function (x) { if (x.id === l.id) k = x; });
+      return k ? k.skus.reduce(function (s, it) { return s + it[1]; }, 0) * l.qty : 0;
+    }
     BAG = BAG.filter(function (l) {
+      var ok = true;
       if (l.k === "p") {
-        if (l.sku) { var f = findSku(l.sku); if (!f) return false; l.id = f.id; l.opt = f.opt; }
-        else { var p = prod(l.id), o = p && p.options[l.opt]; if (!o) return false; l.sku = o.sku; }
+        if (l.sku) { var f = findSku(l.sku); if (!f) ok = false; else { l.id = f.id; l.opt = f.opt; } }
+        else { var p = prod(l.id), o = p && p.options[l.opt]; if (!o) ok = false; else l.sku = o.sku; }
       }
-      return !!info(l);
+      if (ok) ok = !!info(l);
+      if (!ok) lost += vialsIn(l);
+      return ok;
     });
+    var bl = bacLine(); if (bl && lost) { bl.qty = Math.max(0, bl.qty - lost); if (!bl.qty) BAG = BAG.filter(function (x) { return x !== bl; }); }
     if (JSON.stringify(BAG) !== before) save();
   }
   function setProducts(items) { loadProducts(items); fixBag(); }
@@ -951,6 +960,7 @@ body.gated .bar{display:none}
     if ((e.key === "Enter" || e.key === " ") && e.target.classList && e.target.classList.contains("card")) { e.preventDefault(); e.target.click(); }
   });
   document.addEventListener("change", function (e) {
+    if (e.target.id === "pq" && CUR) { if (!(parseInt(e.target.value, 10) > 0)) e.target.value = String(CUR.qty); return; }
     if (e.target.id !== "gcBox") return;
     readForm(); GOLD = e.target.checked; store("pprshop.gc", GOLD ? "1" : "0"); openBag(true);
     toast(GOLD ? "Gold Coast pricing on" : "Gold Coast pricing off");
@@ -959,7 +969,7 @@ body.gated .bar{display:none}
     if (e.target.id === "q") search(e.target.value);
     if (e.target.id === "fL") e.target.value = e.target.value.replace(/[^A-Za-z]/g, "").slice(0, 1).toUpperCase();
     if (/^f[FLPA]$/.test(e.target.id)) { e.target.classList.remove("bad"); readForm(); }
-    if (e.target.id === "pq" && CUR) { var v = parseInt(e.target.value, 10); if (v > 0) { CUR.qty = Math.min(99, v); document.querySelector("[data-add]").textContent = addLabel(); } }
+    if (e.target.id === "pq" && CUR) { var v = parseInt(e.target.value, 10); if (v > 0) { CUR.qty = Math.min(99, v); if (v > 99) e.target.value = "99"; document.querySelector("[data-add]").textContent = addLabel(); } }
   });
   $("searchForm").addEventListener("submit", function (e) {
     e.preventDefault(); search($("q").value); $("q").blur();
