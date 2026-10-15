@@ -91,10 +91,10 @@ body.gated .strip{display:none}
 .bar.solid{background:rgba(253,248,242,.94);-webkit-backdrop-filter:blur(calc(14*var(--u)));backdrop-filter:blur(calc(14*var(--u)));box-shadow:0 calc(6*var(--u)) calc(18*var(--u)) -12px rgba(94,40,16,.35)}
 .bar::after{content:"";position:absolute;left:0;right:0;bottom:0;height:calc(3*var(--u));background:var(--orggrad);opacity:0;transition:opacity .4s}
 .bar.solid::after{opacity:1}
-.bar-in{max-width:calc(1100*var(--u));margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:calc(calc(6*var(--u)) + env(safe-area-inset-top,0px)) calc(16*var(--u)) calc(9*var(--u))}
+.bar-in{max-width:calc(1100*var(--u));margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:calc(calc(7*var(--u)) + env(safe-area-inset-top,0px)) calc(16*var(--u)) calc(8*var(--u))}
 .logo{display:flex;align-items:center;opacity:0;transition:opacity .4s}
 .bar.solid .logo{opacity:1}
-.logo svg{display:block;height:calc(27*var(--u));width:auto;overflow:visible}
+.logo svg{display:block;height:max(31px,calc(38*var(--u)));width:auto;overflow:visible}
 .bag-btn{position:relative;width:calc(40*var(--u));height:calc(40*var(--u));border:0;background:var(--goldgrad);box-shadow:0 calc(6*var(--u)) calc(16*var(--u)) rgba(94,40,16,.25);display:flex;align-items:center;justify-content:center;cursor:pointer}
 .bag-btn svg{width:calc(22*var(--u));height:calc(22*var(--u));fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .bag-btn i{position:absolute;top:calc(-6*var(--u));right:calc(-6*var(--u));min-width:calc(19*var(--u));height:calc(19*var(--u));border-radius:calc(10*var(--u))!important;background:var(--orggrad);color:#fff;font:700 calc(11*var(--u))/calc(19*var(--u)) var(--sans);font-style:normal;text-align:center;padding:0 calc(5*var(--u));box-shadow:0 0 0 2px #fdf8f2}
@@ -118,7 +118,7 @@ html{scroll-padding-top:calc(var(--strip) + calc(70*var(--u)))}
 .hint{position:absolute;bottom:calc(calc(22*var(--u)) + env(safe-area-inset-bottom,0px));left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:calc(6*var(--u));color:var(--gold-l);font-size:calc(12*var(--u));letter-spacing:.2em;text-transform:uppercase;border:0;background:transparent;cursor:pointer}
 .hint svg{width:calc(22*var(--u));height:calc(22*var(--u));fill:none;stroke:var(--gold);stroke-width:1.5;animation:nudge 1.8s ease-in-out infinite}
 @keyframes nudge{50%{transform:translateY(calc(6*var(--u)))}}
-.hero-in{opacity:0;transform:translateY(calc(14*var(--u)));transition:opacity 1s ease,transform 1s ease}
+.hero-in{opacity:0;transform:translateY(calc(14*var(--u)));transition:opacity .65s ease,transform .65s cubic-bezier(.2,.8,.2,1)}
 body.ready .hero-in{opacity:1;transform:none}
 body.ready .hero-in.d2{transition-delay:.15s}
 body.ready .hero-in.d3{transition-delay:.3s}
@@ -279,6 +279,48 @@ body.gated .bar{display:none}
 .ru p:last-child{margin-bottom:0}
 .ru b{color:var(--ink);font-weight:600}
 
+/* ---------- motion ---------- */
+/* The home screen: a warm light drifts across the orange, and the gold logo catches the light now and then. */
+.hero{overflow:hidden}
+.hero::after{content:"";position:absolute;inset:-12%;z-index:0;pointer-events:none;background:radial-gradient(55% 45% at 32% 34%,rgba(255,205,130,.2) 0%,rgba(255,205,130,0) 70%);animation:breathe 16s ease-in-out infinite alternate;border-radius:0!important}
+.hero>*{z-index:1}
+@keyframes breathe{from{transform:translate(0,0) scale(1)}to{transform:translate(9%,7%) scale(1.18)}}
+.hs-sheen{animation:heroSheen 9s 4s cubic-bezier(.4,0,.2,1) infinite}
+@keyframes heroSheen{0%{transform:translateX(0)}13%{transform:translateX(340px)}100%{transform:translateX(340px)}}
+body.logo-in .hero-in{transition:none}
+/* Things lift and settle as they come into view, headings underline themselves in gold. */
+.rv{transform:translateY(calc(26*var(--u))) scale(.985);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1)}
+.sec-h h2{position:relative;padding-bottom:calc(8*var(--u))}
+.sec-h h2::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:calc(36*var(--u));background:var(--goldgrad);border-radius:2px!important;transform:scaleX(0);transform-origin:left center;transition:transform .8s .25s cubic-bezier(.2,.8,.2,1)}
+.sec-h.in h2::after,.hero .sec-h h2::after{transform:scaleX(1)}
+.rv.quick{transition-duration:.3s}
+/* Tiles: the vial lifts under the pointer, the whole tile presses in under a finger. */
+.card{transition:transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s ease,border-color .35s}
+.card.in:hover{transform:translateY(-5px)}
+.card.in:active{transform:scale(.975);transition-duration:.12s}
+.card .pic svg{transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.card:hover .pic svg{transform:translateY(-2.5%) scale(1.045)}
+/* Buttons and chips give a little under a press, the chosen chip pops. */
+.cta,.search button,.chip,.bag-btn,.foot .wa,.gate-go{transition:transform .15s ease,box-shadow .3s ease,background .25s,color .25s,border-color .25s}
+.cta:active,.search button:active,.chip:active,.bag-btn:active,.foot .wa:active{transform:scale(.96)}
+.cta:not(:disabled):hover,.search button:hover,.foot .wa:hover{box-shadow:0 calc(12*var(--u)) calc(26*var(--u)) rgba(153,59,25,.3)}
+.chip.on{animation:pop .4s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{45%{transform:scale(1.07)}}
+/* The bar: its logo slides down into place, the cart badge pops when the count changes. */
+.logo{transform:translateY(calc(-8*var(--u)));transition:opacity .4s,transform .55s cubic-bezier(.2,.8,.2,1)}
+.bar.solid .logo{transform:none}
+.bag-btn i.pop{animation:badge .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes badge{45%{transform:scale(1.45)}}
+.fly{filter:drop-shadow(0 10px 18px rgba(70,24,8,.35))}
+/* Sheets: what is inside settles in a beat behind the sheet itself, the first time it opens. */
+.sheet.fresh>*{animation:sheetIn .55s cubic-bezier(.2,.8,.2,1) both}
+.sheet.fresh>:nth-child(3){animation-delay:.05s}.sheet.fresh>:nth-child(4){animation-delay:.1s}.sheet.fresh>:nth-child(5){animation-delay:.15s}.sheet.fresh>:nth-child(6){animation-delay:.2s}.sheet.fresh>:nth-child(n+7){animation-delay:.25s}
+@keyframes sheetIn{from{opacity:0;transform:translateY(calc(12*var(--u)))}}
+/* The WhatsApp button sends out a soft ring every few seconds. */
+.foot .wa{position:relative;animation:ring 3.4s ease-out infinite}
+@keyframes ring{0%{box-shadow:0 calc(8*var(--u)) calc(20*var(--u)) rgba(153,59,25,.22),0 0 0 0 rgba(194,83,31,.38)}60%,100%{box-shadow:0 calc(8*var(--u)) calc(20*var(--u)) rgba(153,59,25,.22),0 0 0 calc(16*var(--u)) rgba(194,83,31,0)}}
+.toast{transition:opacity .3s,transform .45s cubic-bezier(.2,.8,.2,1)}
+
 /* ---------- smaller screens ---------- */
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}.rv{opacity:1;transform:none}.ix *{animation:none!important;opacity:1!important;transform:none!important}.intro-logo{transition:none}}
 @media (max-width:540px){
@@ -340,6 +382,7 @@ body.gated .bar{display:none}
   .hero{padding-top:calc(64*var(--u));padding-bottom:calc(48*var(--u))}
   .hero .lg svg{width:min(70vw,calc(300*var(--u)))}
   .sheet{max-height:96vh}
+  .sheet .pic{aspect-ratio:2/1}
 }
 </style>
 </head>
@@ -585,9 +628,8 @@ body.gated .bar{display:none}
     return u("br-hx", "br-hx") + u("br-w1", "br-w1") + (PEPTIDES ? u("br-rl", "br-rl") + u("br-w2", "br-w2") : '') + u("br-w3", "br-w3", PEPTIDES ? '' : W3UP);
   }
   var LOGO_FULL = '<svg viewBox="' + LVB + '" role="img" aria-label="Proactive' + (PEPTIDES ? ' Peptides' : '') + ' Research">' + lockupUses(false) + '</svg>';
-  // Up in the bar once you scroll: the helix with PROACTIVE beside it, the word nearly twice its lockup size.
-  var LOGO_COMPACT = '<svg viewBox="-4 -4 380 79.31" role="img" aria-label="Proactive"><use class="br-hx" href="#br-hx"/><g transform="translate(-36.2,-5.84) scale(1.97)"><use class="br-w1" href="#br-w1"/></g></svg>';
-  function logoSvg(kind) { return kind === "compact" ? LOGO_COMPACT : LOGO_FULL; }
+  // Up in the bar once you scroll: the same lockup, just small.
+  function logoSvg(kind) { return LOGO_FULL; }
   /* The loading screen's copy: the helix settles in, PROACTIVE rises up from under the rule line, the rules
      grow outward, PEPTIDES and RESEARCH follow, then a sheen runs across the gold. */
   var LOGO_INTRO = '<svg viewBox="' + LVB + '" class="ix gold" aria-hidden="true"><defs>' +
@@ -637,8 +679,10 @@ body.gated .bar{display:none}
     return h.join('');
   }
   function vialP(name) { return '<use href="#vialImg"/>' + labelP(name); }
+  var SHORT = matchMedia("(max-height:520px)");
+  function par() { return SHORT.matches ? "xMidYMid meet" : "xMidYMid slice"; }
   function shot(p, strength) {
-    return '<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" role="img" aria-label="' + esc(p.name) + '">' + vialP(p.name) + '</svg>';
+    return '<svg viewBox="0 0 100 100" preserveAspectRatio="' + par() + '" role="img" aria-label="' + esc(p.name) + '">' + vialP(p.name) + '</svg>';
   }
   function packShot(k) {
     var names = (k.items || []).map(function (it) { var p = prod(it[0]); return p ? p.name : ""; }).filter(Boolean);
@@ -648,7 +692,7 @@ body.gated .bar{display:none}
       var cx = 50 + (i - (n - 1) / 2) * step, dy = 100 * (1 - sc) * .54;   // the small vials keep the same middle as a big one
       h += '<g transform="translate(' + (cx - 50 * sc).toFixed(2) + ',' + dy.toFixed(2) + ') scale(' + sc + ')"' + (n > 1 ? ' clip-path="url(#vialClip)"' : '') + '>' + vialP(nm) + '</g>';
     });
-    return '<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" role="img" aria-label="' + esc(k.name) + '">' + h + '</svg>';
+    return '<svg viewBox="0 0 100 100" preserveAspectRatio="' + par() + '" role="img" aria-label="' + esc(k.name) + '">' + h + '</svg>';
   }
 
   // Safety net: anything still wider than its space is squeezed to fit, so no word ever crosses a frame.
@@ -672,8 +716,12 @@ body.gated .bar{display:none}
   function drawShop() {
     $("popular").innerHTML = SHOP.products.filter(function (p) { return p.popular; }).sort(function (a, b) { return a.popular - b.popular; }).map(card).join("");
     $("packages").innerHTML = SHOP.packages.map(packCard).join("");
+    drawAll();
+  }
+  // The chips and the Shop all grid on their own, for a chip tap.
+  function drawAll() {
     var types = ["All"].concat(SHOP.products.map(function (p) { return p.type; }).filter(function (t, i, a) { return a.indexOf(t) === i; }));
-    $("chips").innerHTML = types.map(function (t) { return '<button class="chip' + (t === TYPE ? " on" : "") + '" type="button" data-type="' + t + '">' + t + '</button>'; }).join("");
+    $("chips").innerHTML = types.map(function (t) { return '<button class="chip' + (t === TYPE ? " on" : "") + '" type="button" data-type="' + t + '">' + esc(t) + '</button>'; }).join("");
     $("all").innerHTML = SHOP.products.filter(function (p) { return TYPE === "All" || p.type === TYPE; }).map(card).join("");
     watch(); fit();
   }
@@ -732,6 +780,7 @@ body.gated .bar{display:none}
     box.innerHTML = '<div class="sec-h"><h2>Results</h2><span>' + total + (total === 1 ? " match" : " matches") + '</span></div>' +
       (total ? '<div class="grid">' + hits.map(card).join("") + packs.map(function (k, i) { return packCard(k, hits.length + i); }).join("") + '</div>' :
         '<p class="none">Nothing matched that. Try other words, or scroll down to see everything.</p>');
+    Array.prototype.forEach.call(box.querySelectorAll(".rv"), function (el) { el.classList.add("quick"); el.style.transitionDelay = "0ms"; });
     watch(); fit(box);
   }
   // Things fade and rise in as they come into view.
@@ -741,7 +790,7 @@ body.gated .bar{display:none}
   function watch() { Array.prototype.forEach.call(document.querySelectorAll(".rv:not(.in)"), function (el) { if (IO && !RM) IO.observe(el); else el.classList.add("in"); }); }
 
   /* ---------- details: prices and specs only show in here ---------- */
-  function open(html, keep) { VIEW = null; var y = $("sheet").scrollTop; $("sheet").innerHTML = '<button class="x" type="button" data-close="1" aria-label="Close">&times;</button>' + html; $("mask").classList.add("on"); document.body.classList.add("lock"); $("sheet").scrollTop = keep ? y : 0; fit($("sheet")); }
+  function open(html, keep) { VIEW = null; var y = $("sheet").scrollTop; $("sheet").classList.toggle("fresh", !keep); $("sheet").innerHTML = '<button class="x" type="button" data-close="1" aria-label="Close">&times;</button>' + html; $("mask").classList.add("on"); document.body.classList.add("lock"); $("sheet").scrollTop = keep ? y : 0; fit($("sheet")); }
   function close() { $("mask").classList.remove("on"); $("sheet").innerHTML = ""; document.body.classList.remove("lock"); CUR = null; VIEW = null; }
   function openProduct(id) { if (!prod(id)) return; CUR = { id: id, opt: 0, qty: 1 }; drawProduct(); }
   function drawProduct() {
@@ -783,7 +832,8 @@ body.gated .bar{display:none}
   function isBac(l) { return l.k === "p" && l.id === SHOP.bacId; }
   function count() {
     var n = 0, b = 0; BAG.forEach(function (l) { if (isBac(l)) b += l.qty; else n += l.qty; });
-    if (!n) n = b; $("bagCount").textContent = n ? String(n) : "";
+    if (!n) n = b; var bc = $("bagCount"), was = bc.textContent; bc.textContent = n ? String(n) : "";
+    if (n && bc.textContent !== was && !RM) { bc.classList.remove("pop"); void bc.offsetWidth; bc.classList.add("pop"); }
   }
   function info(l) {
     if (l.k === "pack") { var k = pack(l.id); if (!k) return null; var t = packTotal(k);
@@ -947,11 +997,11 @@ body.gated .bar{display:none}
     if (d.close) return close();
     if (d.open) return openProduct(d.open);
     if (d.pack) return openPack(d.pack);
-    if (d.type) { TYPE = d.type; return drawShop(); }
+    if (d.type) { TYPE = d.type; return drawAll(); }
     if (d.opt) { CUR.opt = +d.opt; return drawProduct(); }
     if (d.q) { CUR.qty = Math.max(1, Math.min(99, CUR.qty + +d.q)); $("pq").value = CUR.qty; document.querySelector("[data-add]").textContent = addLabel(); return; }
-    if (d.add) { var p = prod(CUR.id); add({ k: "p", id: CUR.id, opt: CUR.opt }, CUR.qty); close(); return toast(p.id === SHOP.bacId ? "Bac water added" : p.name + " added, with bac water"); }
-    if (d.addpack) { add({ k: "pack", id: d.addpack, opt: 0 }, 1); close(); return toast(pack(d.addpack).name + " added, with bac water"); }
+    if (d.add) { var p = prod(CUR.id); flyToCart(); add({ k: "p", id: CUR.id, opt: CUR.opt }, CUR.qty); close(); return toast(p.id === SHOP.bacId ? "Bac water added" : p.name + " added, with bac water"); }
+    if (d.addpack) { flyToCart(); add({ k: "pack", id: d.addpack, opt: 0 }, 1); close(); return toast(pack(d.addpack).name + " added, with bac water"); }
     if (d.lq) { readForm(); var s = d.lq.split(","), l = BAG[+s[0]];
       if (l) { var inf = info(l), was = l.qty, bl = bacLine(); l.qty = Math.max(0, Math.min(99, l.qty + +s[1]));
         // one more or one less vial takes its bac water with it, if bac water is still in the cart
@@ -965,6 +1015,7 @@ body.gated .bar{display:none}
       BAG = []; save(); ME = { f: "", l: "", ph: "", ad: "" }; store("pprshop.me", "null"); store("pprshop.last", "{}"); SENT = null; keepSent(); close(); return toast("Thanks, we'll be in touch"); }
     if (d.copy) return copy();
   });
+  document.addEventListener("touchstart", function () {}, { passive: true });
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && $("mask").classList.contains("on")) return close();
     if ((e.key === "Enter" || e.key === " ") && e.target.classList && e.target.classList.contains("card")) { e.preventDefault(); e.target.click(); }
@@ -987,6 +1038,58 @@ body.gated .bar{display:none}
   });
   window.addEventListener("scroll", function () { $("bar").classList.toggle("solid", window.scrollY > window.innerHeight * .6); }, { passive: true });
 
+  /* ---------- motion ----------
+     The picture in the open sheet flies up into the cart button when something is added. */
+  function flyToCart() {
+    var pic = document.querySelector("#sheet .pic svg"), bag = $("bagBtn");
+    if (RM || !pic || !bag || !pic.animate) return;
+    var a = pic.getBoundingClientRect(), b = bag.getBoundingClientRect(), c = pic.cloneNode(true);
+    c.removeAttribute("role"); c.setAttribute("aria-hidden", "true"); c.setAttribute("class", "fly");
+    c.style.cssText = "position:fixed;left:" + a.left + "px;top:" + a.top + "px;width:" + a.width + "px;height:" + a.height + "px;z-index:65;pointer-events:none;margin:0";
+    document.body.appendChild(c);
+    var dx = b.left + b.width / 2 - (a.left + a.width / 2), dy = b.top + b.height / 2 - (a.top + a.height / 2);
+    c.animate([
+      { transform: "translate(0,0) scale(1)", opacity: 1 },
+      { transform: "translate(" + dx * .45 + "px," + (dy * .4 - 50) + "px) scale(.45)", opacity: 1, offset: .5 },
+      { transform: "translate(" + dx + "px," + dy + "px) scale(.08)", opacity: .3 }
+    ], { duration: 700, easing: "cubic-bezier(.4,0,.2,1)", fill: "forwards" }).onfinish = function () {
+      c.remove(); bag.classList.remove("bump"); void bag.offsetWidth; bag.classList.add("bump");
+    };
+  }
+  /* The home screen logo catches the light every few seconds: a soft band runs across the gold. */
+  (function () {
+    var svg = document.querySelector("#heroLogo svg"); if (!svg || RM) return;
+    svg.insertAdjacentHTML("beforeend", '<defs><linearGradient id="hsSheen" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>' +
+      '<mask id="hsMask" maskUnits="userSpaceOnUse" x="-8" y="-8" width="223.16" height="87.31"><g fill="#fff">' + lockupUses(true) + '</g></mask></defs>' +
+      '<g mask="url(#hsMask)"><g transform="skewX(-18)"><rect class="hs-sheen" x="-150" y="-20" width="70" height="120" fill="url(#hsSheen)"/></g></g>');
+  })();
+  /* As you scroll off the home screen the logo and search drift up a touch slower than the page and fade out. */
+  (function () {
+    if (RM) return;
+    var parts = [$("heroLogo"), $("searchForm")].filter(Boolean), waiting = false;
+    function frame() {
+      waiting = false;
+      var y = window.scrollY, h = innerHeight || 1;
+      if (!document.body.classList.contains("logo-in")) return;
+      if (document.body.classList.contains("searching")) { parts.forEach(function (el) { el.style.transform = ""; el.style.opacity = ""; }); return; }
+      if (y > h * 1.2) return;
+      var k = Math.max(0, 1 - y / (h * .62));
+      parts.forEach(function (el, i) { el.style.transform = y > 0 ? "translateY(" + (y * (.16 + i * .06)).toFixed(1) + "px)" : ""; el.style.opacity = y > 0 ? k.toFixed(3) : ""; });
+    }
+    addEventListener("scroll", function () { if (!waiting) { waiting = true; requestAnimationFrame(frame); } }, { passive: true });
+  })();
+  /* The search box suggests things to look for, typed out one at a time, until someone taps into it. */
+  (function () {
+    var q = $("q"), ideas = ["weight loss", "recovery", "skin", "energy", "sleep", "tanning"], i = 0, t = null, stop = false;
+    if (!q || RM) return;
+    function type(word, n) { if (stop) return; q.placeholder = "Try: " + word.slice(0, n) + (n < word.length ? "|" : ""); t = setTimeout(function () { n < word.length ? type(word, n + 1) : erase(word, word.length); }, n < word.length ? 75 : 1700); }
+    function erase(word, n) { if (stop) return; q.placeholder = "Try: " + word.slice(0, n) + "|"; if (n > 0) t = setTimeout(function () { erase(word, n - 1); }, 38); else { i = (i + 1) % ideas.length; t = setTimeout(function () { type(ideas[i], 0); }, 500); } }
+    function halt() { if (stop) return; stop = true; clearTimeout(t); fitPlaceholder(); }
+    q.addEventListener("focus", halt); q.addEventListener("input", halt);
+    addEventListener("resize", function () { if (!stop) { clearTimeout(t); stop = true; setTimeout(function () { stop = false; type(ideas[i], 0); }, 300); } });
+    setTimeout(function () { if (document.activeElement !== q && !q.value) type(ideas[0], 0); }, 4500);
+  })();
+
   /* ---------- gold specks drifting down the screen ---------- */
   (function specks() {
     var c = $("specks"), x = c.getContext && c.getContext("2d"), hero = $("top"); if (!x) return;
@@ -1002,10 +1105,12 @@ body.gated .bar{display:none}
       g.addColorStop(0, "rgba(247,221,147," + a + ")"); g.addColorStop(.45, "rgba(246,185,80," + a * .5 + ")"); g.addColorStop(1, "rgba(246,185,80,0)");
       x.fillStyle = g; x.beginPath(); x.arc(p.x, p.y, p.r * 3, 0, 6.283); x.fill();
     }
+    var idle = false;
     function tick() {
       if (!run) return;
       x.clearRect(0, 0, W, H);
       var edge = hero ? hero.getBoundingClientRect().bottom : H;   // the specks live on the orange, not over the shop
+      if (edge <= 0) { idle = true; return; }   // scrolled past it: rest until it is back
       P.forEach(function (p, i) {
         p.y += p.v; p.ph += p.tw; p.x += Math.sin(p.ph) * p.sway * .15;
         if (p.y > H + 10) P[i] = make(true);
@@ -1014,6 +1119,7 @@ body.gated .bar{display:none}
       requestAnimationFrame(tick);
     }
     if (RM) { var e0 = hero ? hero.getBoundingClientRect().bottom : H; P.forEach(function (p) { if (p.y < e0) draw(p); }); return; }
+    addEventListener("scroll", function () { if (idle && run && hero && hero.getBoundingClientRect().bottom > 0) { idle = false; requestAnimationFrame(tick); } }, { passive: true });
     requestAnimationFrame(tick);
   })();
 
