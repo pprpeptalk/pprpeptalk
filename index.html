@@ -472,8 +472,8 @@ body.logo-in .hero-in{transition:none}
       { id: "cjc", name: "CJC-1295 + Ipamorelin", tag: "CJC + IPA", type: "Blends", popular: 4, about: "Used to raise your body's own growth hormone, for recovery, sleep and body shape.", options: [{ label: "5mg + 5mg", price: 130, cash: 120, sku: "CJC1295" }] },
       { id: "glow", name: "GLOW", tag: "GLOW", type: "Blends", about: "Used for skin, hair and recovery, all in one vial.", options: [{ label: "70mg", price: 170, cash: 160, sku: "Glow" }] },
       { id: "bpc", name: "BPC-157", tag: "BPC-157", type: "Singles", about: "Used for healing, mainly gut issues and muscle or tendon injuries.", options: [{ label: "10mg", price: 120, cash: 100, sku: "BPC" }] },
-      { id: "tesa", name: "Tesamorelin", tag: "TESA", type: "Singles", about: "Used to reduce stubborn belly fat.", options: [{ label: "10mg", price: 85, cash: 75, sku: "Tesamorlin" }] },
-      { id: "nad", name: "NAD+", tag: "NAD+", type: "Singles", about: "Used for energy, focus and healthy ageing.", options: [{ label: "100mg", price: 50, cash: 45, sku: "NAD" }] },
+      { id: "tesa", name: "Tesamorelin", tag: "TESA", type: "Singles", about: "Used to reduce stubborn belly fat.", options: [{ label: "10mg", price: 85, cash: 75, sku: "Tesamorelin" }] },
+      { id: "nad", name: "NAD+", tag: "NAD+", type: "Singles", about: "Used for energy, focus and healthy ageing.", options: [{ label: "100mg", price: 50, cash: 45, sku: "NAD100" }] },
       { id: "ghk", name: "GHK-Cu", tag: "GHK-CU", type: "Singles", about: "Used for skin firmness, fine lines and healing.", options: [{ label: "50mg", price: 65, cash: 60, sku: "GHK-CU50" }, { label: "100mg", price: 110, cash: 100, sku: "GHK-CU100" }] },
       { id: "mots", name: "MOTS-c", tag: "MOTS-C", type: "Singles", about: "Used for energy, fitness and fat loss.", options: [{ label: "10mg", price: 75, cash: 65, sku: "Mots-c" }] },
       { id: "mt2", name: "Melanotan II", tag: "MT-2", type: "Singles", about: "Used for tanning.", options: [{ label: "10mg", price: 60, cash: 50, sku: "MEL" }] },
@@ -484,14 +484,14 @@ body.logo-in .hero-in{transition:none}
     // with bac water.
     packages: [
       { id: "pk-recovery", name: "The Recovery Stack", about: "BPC-157 + TB-500 for injuries, with CJC-1295 + Ipamorelin for recovery and sleep.", skus: [["BPC157", 1], ["CJC1295", 1]] },
-      { id: "pk-lean", name: "The Lean Stack", about: "Retatrutide for weight loss, with Tesamorelin for stubborn belly fat.", skus: [["RETAT20", 1], ["Tesamorlin", 1]] },
-      { id: "pk-energy", name: "The Energy Stack", about: "NAD+ and MOTS-c together for energy, fitness and healthy ageing.", skus: [["NAD", 1], ["Mots-c", 1]] },
+      { id: "pk-lean", name: "The Lean Stack", about: "Retatrutide for weight loss, with Tesamorelin for stubborn belly fat.", skus: [["RETAT20", 1], ["Tesamorelin", 1]] },
+      { id: "pk-energy", name: "The Energy Stack", about: "NAD+ and MOTS-c together for energy, fitness and healthy ageing.", skus: [["NAD100", 1], ["Mots-c", 1]] },
       { id: "pk-skin", name: "The Summer Stack", about: "GHK-Cu for skin, with Melanotan II for a tan.", skus: [["GHK-CU50", 1], ["MEL", 1]] }
     ]
   };
   // Old or spare SKUs and which product above they belong to, so a size coming back on the sheet lands under
   // the right name. Lower case.
-  var ALIAS = { retat15: "reta", "ghk-cu": "ghk" };
+  var ALIAS = { retat15: "reta", "ghk-cu": "ghk", nad: "nad", nad500: "nad", nad1000: "nad", tesamorlin: "tesa" };
   // Sizes the sheet can't say in one Strength cell. Lower case SKU, the words customers see.
   var LABELS = { bpc157: "10mg + 10mg", cjc1295: "5mg + 5mg" };
 
@@ -769,11 +769,39 @@ body.logo-in .hero-in{transition:none}
     });
     return t;
   }
-  function score(hay, words) {
-    var t = tokens(hay), keys = Object.keys(t);
+  // Product names, tags and SKUs also match from the first two letters typed, so ret finds Retatrutide
+  // while you're still typing. Everything else keeps the four letter rule, so fat still doesn't find fatigue.
+  function score(hay, words, names) {
+    var t = tokens(hay), keys = Object.keys(t), nk = names ? Object.keys(tokens(names)) : [];
     return words.filter(function (w) {
-      return forms(w).some(function (f) { return t[f] || (f.length >= 4 && keys.some(function (k) { return k.indexOf(f) === 0; })); });
+      return forms(w).some(function (f) {
+        return t[f] || (f.length >= 4 && keys.some(function (k) { return k.indexOf(f) === 0; })) ||
+          (f.length >= 2 && nk.some(function (k) { return k.indexOf(f) === 0; }));
+      });
     }).length;
+  }
+  // How many letters apart two words are, for typos: rat is one off ret, retatrudide one off retatrutide.
+  function apart(a, b) {
+    var d = [], i, j;
+    for (i = 0; i <= a.length; i++) d[i] = [i];
+    for (j = 1; j <= b.length; j++) d[0][j] = j;
+    for (i = 1; i <= a.length; i++) for (j = 1; j <= b.length; j++)
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    return d[a.length][b.length];
+  }
+  // Only tried when nothing matched: a word one letter off the start of a product's name, tag or SKU,
+  // or two off for longer words, starting with the same letter.
+  function nearName(names, words) {
+    var nk = Object.keys(tokens(names));
+    return words.some(function (w) {
+      if (w.length < 3) return false;
+      var max = w.length >= 6 ? 2 : 1;
+      return nk.some(function (k) {
+        if (k.length < 3 || k[0] !== w[0]) return false;   // typos keep the first letter, so rat doesn't find water
+        for (var n = Math.max(1, w.length - 1); n <= Math.min(k.length, w.length + 1); n++) if (apart(w, k.slice(0, n)) <= max) return true;
+        return false;
+      });
+    });
   }
   function search(q) {
     var box = $("results"); q = String(q || "").trim().toLowerCase();
@@ -787,16 +815,21 @@ body.logo-in .hero-in{transition:none}
     // Every size's SKU too, as written and squashed together, so GHK-CU50, ghk cu50 and ghkcu50 all find it.
     function skusOf(p) { return p.options.map(function (o) { var k = String(o.sku == null ? "" : o.sku); return k + " " + k.replace(/[^a-z0-9]/gi, ""); }).join(" "); }
     function hayOf(p) { return (p.name + " " + p.tag + " " + p.type + " " + p.about + " " + (KEYS[p.id] || "") + " " + p.options.map(function (o) { return o.label; }).join(" ") + " " + skusOf(p)).toLowerCase(); }
-    var hits = SHOP.products.map(function (p) { return { p: p, n: score(hayOf(p), words) }; })
+    function namesOf(p) { return (p.name + " " + p.tag + " " + skusOf(p)).toLowerCase(); }
+    var hits = SHOP.products.map(function (p) { return { p: p, n: score(hayOf(p), words, namesOf(p)) }; })
       .filter(function (h) { return h.n > 0; }).sort(function (a, b) { return b.n - a.n; }).map(function (h) { return h.p; });
     // Stacks come up too, on their own words or the words of what's in them.
     var packs = SHOP.packages.map(function (k) {
       var hay = (k.name + " " + k.about + " " + k.items.map(function (it) { var p = prod(it[0]); return p ? hayOf(p) : ""; }).join(" ")).toLowerCase();
-      return { k: k, n: score((k.name + " " + k.about).toLowerCase(), words) * 2 + score(hay, words) };
+      var names = k.items.map(function (it) { var p = prod(it[0]); return p ? namesOf(p) : ""; }).join(" ");
+      return { k: k, n: score((k.name + " " + k.about).toLowerCase(), words) * 2 + score(hay, words, names) };
     }).filter(function (h) { return h.n > 0; }).sort(function (a, b) { return b.n - a.n; }).map(function (h) { return h.k; });
+    // Nothing at all: try for a typo before giving up.
+    var near = false;
+    if (!hits.length && !packs.length) { hits = SHOP.products.filter(function (p) { return nearName(namesOf(p), words); }); near = hits.length > 0; }
     var total = hits.length + packs.length;
     box.hidden = false; document.body.classList.add("searching");
-    box.innerHTML = '<div class="sec-h"><h2>Results</h2><span>' + total + (total === 1 ? " match" : " matches") + '</span></div>' +
+    box.innerHTML = '<div class="sec-h"><h2>Results</h2><span>' + total + (near ? " close" : "") + (total === 1 ? " match" : " matches") + '</span></div>' +
       (total ? '<div class="grid">' + hits.map(card).join("") + packs.map(function (k, i) { return packCard(k, hits.length + i); }).join("") + '</div>' :
         '<p class="none">Nothing matched that. Try other words, or scroll down to see everything.</p>');
     Array.prototype.forEach.call(box.querySelectorAll(".rv"), function (el) { el.classList.add("quick"); el.style.transitionDelay = "0ms"; });
