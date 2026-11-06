@@ -241,6 +241,10 @@ section{padding-top:calc(56*var(--u))}
 .lead{font-size:calc(17*var(--u));line-height:1.5;color:var(--ink);margin:0 0 calc(20*var(--u))}
 .refl{text-align:center;font-size:calc(14*var(--u));color:var(--muted);margin:calc(16*var(--u)) 0 calc(4*var(--u))}
 .saved{text-align:center;font-size:calc(14*var(--u));color:var(--muted);line-height:1.5;margin:0 auto calc(18*var(--u));max-width:calc(380*var(--u))}
+.pay{margin:calc(-4*var(--u)) 0 calc(14*var(--u))}
+.payt{display:block;font-size:calc(13*var(--u));color:var(--muted);margin:0 0 calc(8*var(--u)) calc(2*var(--u))}
+.payr{display:flex;gap:calc(10*var(--u))}
+.payr .gc{flex:1;margin:0}
 .gcx{font-style:normal;font-size:calc(12*var(--u));color:var(--org);font-weight:600;margin-left:calc(8*var(--u))}
 .toast{position:fixed;left:50%;bottom:calc(calc(26*var(--u)) + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(calc(10*var(--u)));z-index:50;background:var(--ink);color:var(--gold-l);padding:calc(11*var(--u)) calc(18*var(--u));border-radius:calc(8*var(--u))!important;font-size:calc(14*var(--u));opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap;box-shadow:0 calc(10*var(--u)) calc(30*var(--u)) rgba(35,31,32,.3)}
 .toast.on{opacity:1;transform:translateX(-50%)}
@@ -495,17 +499,21 @@ body.logo-in .hero-in{transition:none}
   var BAG = [], TYPE = "All", CUR = null, toastT = null, RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
   try { BAG = JSON.parse(localStorage.getItem("pprshop.bag2") || "[]") || []; } catch (e) { BAG = []; }
   if (!Array.isArray(BAG)) BAG = [];
-  /* Gold Coast customers pay cash, get the cash price and have no postage. Their details stay on
-     their own device so they don't retype them, and go nowhere until they place the order. */
-  var GOLD = false, ME = { f: "", l: "", ph: "", ad: "" }, SENT = null;
+  /* Gold Coast customers have no postage and pick how they pay: cash gets the cash price, bank transfer
+     the normal price. Everyone else posts and pays by bank transfer. Their details stay on their own
+     device so they don't retype them, and go nowhere until they place the order. */
+  var GOLD = false, PAY = "cash", ME = { f: "", l: "", ph: "", ad: "" }, SENT = null;
   var HUB = "https://script.google.com/macros/s/AKfycbyxu8CB1qFgk4L9zpgktHyaBTJCToIxgE6sv7rz6sxHKLMdRD6w1-b_y8A9m9glgG-vUQ/exec";
   try { GOLD = localStorage.getItem("pprshop.gc") === "1"; } catch (e) {}
+  try { PAY = localStorage.getItem("pprshop.pay") === "bank" ? "bank" : "cash"; } catch (e) {}
+  // Cash prices only for Gold Coast, paying cash.
+  function isCash() { return GOLD && PAY === "cash"; }
   // The last order placed on this device, until it is cleared, so the last step can come back after a reload.
   try { SENT = JSON.parse(localStorage.getItem("pprshop.sent") || "null"); } catch (e) { SENT = null; }
   if (SENT && !(SENT.ref && SENT.msg && SENT.sig)) SENT = null;
   try { var me0 = JSON.parse(localStorage.getItem("pprshop.me") || "null"); if (me0) ME = { f: String(me0.f || ""), l: String(me0.l || ""), ph: String(me0.ph || ""), ad: String(me0.ad || "") }; } catch (e) {}
   function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
-  function priceOf(o) { return o.price == null ? null : (GOLD && o.cash != null ? o.cash : o.price); }
+  function priceOf(o) { return o.price == null ? null : (isCash() && o.cash != null ? o.cash : o.price); }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function money(v) { return "$" + (Math.round(v * 100) / 100).toLocaleString("en-AU", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
   function prod(id) { for (var i = 0; i < SHOP.products.length; i++) if (SHOP.products[i].id === id) return SHOP.products[i]; return null; }
@@ -815,7 +823,7 @@ body.logo-in .hero-in{transition:none}
         '<div><span>Form</span><span>' + (p.liquid ? "Sterile liquid" : "Freeze dried powder") + '</span></div>' +
         (isBac ? '' : '<div><span>Bac water</span><span>' + money(bacPrice()) + ' each, added to cart</span></div>') +
         '<div><span>Storage</span><span>Keep cool and out of the light</span></div>' +
-        '<div><span>Price' + (GOLD ? '<em class="gcx">Gold Coast cash</em>' : '') + '</span><span class="big">' + (o.price == null ? "On request" : money(priceOf(o))) + '</span></div></div>' +
+        '<div><span>Price' + (isCash() ? '<em class="gcx">Gold Coast cash</em>' : '') + '</span><span class="big">' + (o.price == null ? "On request" : money(priceOf(o))) + '</span></div></div>' +
       '<div class="buy"><div class="step"><button type="button" data-q="-1" aria-label="One less">&minus;</button>' +
         '<input id="pq" inputmode="numeric" value="' + CUR.qty + '" aria-label="Quantity"><button type="button" data-q="1" aria-label="One more">+</button></div>' +
         '<button class="cta" type="button" data-add="1">' + addLabel() + '</button></div>');
@@ -832,7 +840,7 @@ body.logo-in .hero-in{transition:none}
     open('<div class="pic">' + packShot(k) + '</div><h2>' + esc(k.name) + '</h2><p class="use">' + esc(k.about) + '</p>' +
       '<div class="specs">' + k.items.map(function (it) { var p = prod(it[0]), o = p.options[it[1]];
         return '<div><span>' + esc(p.name + " " + o.label) + (it[2] > 1 ? " x" + it[2] : "") + '</span><span>' + (o.price == null ? "On request" : money(priceOf(o) * it[2])) + '</span></div>'; }).join("") +
-      '<div><span>Package price' + (GOLD ? '<em class="gcx">Gold Coast cash</em>' : '') + '</span><span class="big">' + money(t.price) + '</span></div>' +
+      '<div><span>Package price' + (isCash() ? '<em class="gcx">Gold Coast cash</em>' : '') + '</span><span class="big">' + money(t.price) + '</span></div>' +
       '<div><span>Bac water x' + t.vials + '</span><span>' + money(bacPrice() * t.vials) + ', added to cart</span></div></div>' +
       '<div class="buy"><button class="cta" type="button" data-addpack="' + k.id + '">Add package to cart</button></div>');
     VIEW = "pack:" + id;
@@ -877,7 +885,8 @@ body.logo-in .hero-in{transition:none}
     if (who()) out.push("Name: " + who());
     if (ME.ph) out.push("Phone: " + ME.ph);
     if (ME.ad) out.push("Address: " + ME.ad);
-    out.push(GOLD ? "Gold Coast, paying cash" : "Posting, paying by bank transfer", "");
+    out.push("Paying by: " + (isCash() ? "Cash" : "Bank transfer"));
+    out.push(GOLD ? "Gold Coast, pick up or drop off" : "Posting", "");
     shown().forEach(function (ix) { var l = BAG[ix], i = info(l); if (!i) return;
       out.push(i.name + (l.k === "pack" ? "" : " " + i.sub) + " x" + l.qty + ", " + (i.price == null ? "price to confirm" : money(i.price * l.qty)));
       if (l.k === "pack") out.push("   " + i.sub);
@@ -896,6 +905,11 @@ body.logo-in .hero-in{transition:none}
     });
     return order.map(function (s) { return { sku: s, qty: m[s] }; });
   }
+  // One way to pay, drawn the same as the Gold Coast box.
+  function payBox(v, label, on) {
+    return '<label class="gc' + (on ? " on" : "") + '"><input type="radio" name="pay" value="' + v + '"' + (on ? " checked" : "") + '>' +
+      '<span class="tick" aria-hidden="true"></span><span class="gct"><b>' + label + '</b></span></label>';
+  }
   function openBag(keep) {
     BAG = BAG.filter(function (l) { return info(l); });
     if (SENT) { if (SENT.sig === sigNow()) return showSend(); SENT = null; keepSent(); }
@@ -911,9 +925,12 @@ body.logo-in .hero-in{transition:none}
       '<div class="sum"><div><span>Subtotal</span><span>' + money(t.sub) + (t.unknown ? " plus items to confirm" : "") + '</span></div>' +
         '<div><span>Postage</span><span>' + (GOLD ? "None" : t.post ? money(t.post) + " express" : "Free") + '</span></div>' +
         '<div class="tot"><span>Total</span><span>' + money(t.total) + '</span></div>' +
-        '<p class="cashnote">' + (GOLD ? "Gold Coast pricing" : "Express postage is free from " + money(SHOP.freeFrom).replace(".00", "")) + '</p></div>' +
+        '<p class="cashnote">' + (isCash() ? "Gold Coast cash pricing" : GOLD ? "Gold Coast, bank transfer pricing" : "Express postage is free from " + money(SHOP.freeFrom).replace(".00", "")) + '</p></div>' +
       '<label class="gc' + (GOLD ? " on" : "") + '"><input type="checkbox" id="gcBox"' + (GOLD ? " checked" : "") + '><span class="tick" aria-hidden="true"></span>' +
         '<span class="gct"><b>Gold Coast</b></span></label>' +
+      // How they pay: Gold Coast picks cash or bank transfer, everyone else has bank transfer only.
+      '<div class="pay" role="radiogroup" aria-label="Paying by"><span class="payt">Paying by</span><div class="payr">' +
+        (GOLD ? payBox("cash", "Cash", PAY === "cash") : "") + payBox("bank", "Bank transfer", !isCash()) + '</div></div>' +
       '<div class="me"><h3>Your details</h3>' +
         '<div class="two"><div class="fld"><label for="fF">First name</label><input id="fF" autocomplete="given-name" maxlength="30" value="' + esc(ME.f) + '"></div>' +
         '<div class="fld sm"><label for="fL">Last name initial</label><input id="fL" maxlength="1" autocomplete="off" autocapitalize="characters" value="' + esc(ME.l) + '"></div></div>' +
@@ -944,7 +961,7 @@ body.logo-in .hero-in{transition:none}
     return bad;
   }
   function nice(list) { return list.length < 2 ? list.join("") : list.slice(0, -1).join(", ") + " and " + list[list.length - 1]; }
-  function sigNow() { return JSON.stringify([skuLines(), ME, GOLD]); }
+  function sigNow() { return JSON.stringify([skuLines(), ME, GOLD, isCash()]); }
   function keepSent() { store("pprshop.sent", SENT ? JSON.stringify(SENT) : "null"); }
   function placeOrder() {
     var bad = checkForm();
@@ -967,7 +984,7 @@ body.logo-in .hero-in{transition:none}
   function sendToHub() {
     if (!SENT || SENT.posted || !window.fetch) return;
     SENT.posted = true; keepSent();
-    var body = { action: "shopOrder", ref: SENT.ref, hp: SENT.hp || "", first: ME.f, initial: ME.l, phone: ME.ph, address: ME.ad, gc: GOLD, lines: SENT.lines };
+    var body = { action: "shopOrder", ref: SENT.ref, hp: SENT.hp || "", first: ME.f, initial: ME.l, phone: ME.ph, address: ME.ad, gc: GOLD, pay: isCash() ? "cash" : "bank", lines: SENT.lines };
     var opts = { method: "POST", redirect: "follow", keepalive: true, headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) };
     var w = $("waGo"); if (w) w.textContent = "Open WhatsApp again";
     fetch(HUB, opts).then(function (r) { return r.json(); }).then(function (res) { setSaved(!!(res && res.ok)); }).catch(function () { setSaved(false); });
@@ -1033,9 +1050,13 @@ body.logo-in .hero-in{transition:none}
   });
   document.addEventListener("change", function (e) {
     if (e.target.id === "pq" && CUR) { if (!(parseInt(e.target.value, 10) > 0)) e.target.value = String(CUR.qty); return; }
+    if (e.target.name === "pay") {
+      readForm(); PAY = e.target.value === "bank" ? "bank" : "cash"; store("pprshop.pay", PAY); openBag(true);
+      toast(isCash() ? "Cash prices on" : "Bank transfer prices on"); return;
+    }
     if (e.target.id !== "gcBox") return;
     readForm(); GOLD = e.target.checked; store("pprshop.gc", GOLD ? "1" : "0"); openBag(true);
-    toast(GOLD ? "Gold Coast pricing on" : "Gold Coast pricing off");
+    toast(GOLD ? (isCash() ? "Gold Coast, cash prices on" : "Gold Coast, bank transfer prices") : "Posting, bank transfer prices");
   });
   document.addEventListener("input", function (e) {
     if (e.target.id === "q") search(e.target.value);
