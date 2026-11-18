@@ -464,7 +464,7 @@ body.logo-in .hero-in{transition:none}
      price null means "price on request". Every vial comes with bac water in the bag; people remove it there
      if they don't want it. */
   var SHOP = {
-    whatsapp: "61494599813", freeFrom: 199, postage: 12, bacId: "bac",
+    whatsapp: "61494599813", freeFrom: 199, postage: 15, bacId: "bac",
     products: [
       { id: "reta", name: "Retatrutide", tag: "RETA", type: "Singles", popular: 1, about: "Used for weight loss by lowering appetite.", options: [{ label: "20mg", price: 160, cash: 150, sku: "RETAT20" }] },
       { id: "klow", name: "KLOW", tag: "KLOW", type: "Blends", popular: 2, about: "Used for the same things as GLOW, plus inflammation in the gut and skin.", options: [{ label: "80mg", price: 190, cash: 180, sku: "Klow" }] },
@@ -499,14 +499,15 @@ body.logo-in .hero-in{transition:none}
   var BAG = [], TYPE = "All", CUR = null, toastT = null, RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
   try { BAG = JSON.parse(localStorage.getItem("pprshop.bag2") || "[]") || []; } catch (e) { BAG = []; }
   if (!Array.isArray(BAG)) BAG = [];
-  /* Gold Coast customers have no postage and pick how they pay: cash gets the cash price, bank transfer
-     the normal price. Everyone else posts and pays by bank transfer. Their details stay on their own
-     device so they don't retype them, and go nowhere until they place the order. */
+  /* Gold Coast customers pick how they pay. Cash gets the cash price and is picked up or dropped off, so
+     it has no postage. Bank transfer is the normal price and is posted, so it pays postage whether they
+     are on the Gold Coast or not. Everyone else posts and pays by bank transfer. Their details stay on
+     their own device so they don't retype them, and go nowhere until they place the order. */
   var GOLD = false, PAY = "cash", ME = { f: "", l: "", ph: "", ad: "" }, SENT = null;
   var HUB = "https://script.google.com/macros/s/AKfycbyxu8CB1qFgk4L9zpgktHyaBTJCToIxgE6sv7rz6sxHKLMdRD6w1-b_y8A9m9glgG-vUQ/exec";
   try { GOLD = localStorage.getItem("pprshop.gc") === "1"; } catch (e) {}
   try { PAY = localStorage.getItem("pprshop.pay") === "bank" ? "bank" : "cash"; } catch (e) {}
-  // Cash prices only for Gold Coast, paying cash.
+  // Cash prices, and no postage, only for Gold Coast paying cash.
   function isCash() { return GOLD && PAY === "cash"; }
   // The last order placed on this device, until it is cleared, so the last step can come back after a reload.
   try { SENT = JSON.parse(localStorage.getItem("pprshop.sent") || "null"); } catch (e) { SENT = null; }
@@ -908,7 +909,8 @@ body.logo-in .hero-in{transition:none}
   function totals() {
     var sub = 0, unknown = false;
     BAG.forEach(function (l) { var i = info(l); if (!i) return; if (i.price == null) unknown = true; else sub += i.price * l.qty; });
-    var post = GOLD || !sub || sub >= SHOP.freeFrom ? 0 : SHOP.postage;
+    // Postage goes on every bank transfer order under the free postage mark, Gold Coast or not. Cash never pays it.
+    var post = isCash() || !sub || sub >= SHOP.freeFrom ? 0 : SHOP.postage;
     return { sub: sub, unknown: unknown, post: post, total: sub + post };
   }
   function who() { var f = ME.f ? ME.f.charAt(0).toUpperCase() + ME.f.slice(1) : ""; return [f, ME.l].filter(Boolean).join(" "); }
@@ -919,12 +921,12 @@ body.logo-in .hero-in{transition:none}
     if (ME.ph) out.push("Phone: " + ME.ph);
     if (ME.ad) out.push("Address: " + ME.ad);
     out.push("Paying by: " + (isCash() ? "Cash" : "Bank transfer"));
-    out.push(GOLD ? "Gold Coast, pick up or drop off" : "Posting", "");
+    out.push(isCash() ? "Gold Coast, pick up or drop off" : GOLD ? "Gold Coast, posting" : "Posting", "");
     shown().forEach(function (ix) { var l = BAG[ix], i = info(l); if (!i) return;
       out.push(i.name + (l.k === "pack" ? "" : " " + i.sub) + " x" + l.qty + ", " + (i.price == null ? "price to confirm" : money(i.price * l.qty)));
       if (l.k === "pack") out.push("   " + i.sub);
     });
-    out.push("", GOLD ? "Postage: none, Gold Coast" : "Postage: " + (t.post ? money(t.post) + " express" : "free"));
+    out.push("", isCash() ? "Postage: none, Gold Coast" : "Postage: " + (t.post ? money(t.post) + " express" : "free"));
     out.push("Total: " + money(t.total) + (t.unknown ? " plus items to confirm" : ""));
     return out.join("\n");
   }
@@ -956,9 +958,9 @@ body.logo-in .hero-in{transition:none}
           (bac ? '<div class="bacrm"><span>Don\'t need bac water?</span><button type="button" data-rm="' + i + '">Remove</button></div>' : '') + '</div>';
       }).join("") + '</div>' +
       '<div class="sum"><div><span>Subtotal</span><span>' + money(t.sub) + (t.unknown ? " plus items to confirm" : "") + '</span></div>' +
-        '<div><span>Postage</span><span>' + (GOLD ? "None" : t.post ? money(t.post) + " express" : "Free") + '</span></div>' +
+        '<div><span>Postage</span><span>' + (isCash() ? "None" : t.post ? money(t.post) + " express" : "Free") + '</span></div>' +
         '<div class="tot"><span>Total</span><span>' + money(t.total) + '</span></div>' +
-        '<p class="cashnote">' + (isCash() ? "Gold Coast cash pricing" : GOLD ? "Gold Coast, bank transfer pricing" : "Express postage is free from " + money(SHOP.freeFrom).replace(".00", "")) + '</p></div>' +
+        '<p class="cashnote">' + (isCash() ? "Gold Coast cash pricing" : "Express postage is free from " + money(SHOP.freeFrom).replace(".00", "")) + '</p></div>' +
       '<label class="gc' + (GOLD ? " on" : "") + '"><input type="checkbox" id="gcBox"' + (GOLD ? " checked" : "") + '><span class="tick" aria-hidden="true"></span>' +
         '<span class="gct"><b>Gold Coast</b></span></label>' +
       // How they pay: Gold Coast picks cash or bank transfer, everyone else has bank transfer only.
@@ -968,7 +970,7 @@ body.logo-in .hero-in{transition:none}
         '<div class="two"><div class="fld"><label for="fF">First name</label><input id="fF" autocomplete="given-name" maxlength="30" value="' + esc(ME.f) + '"></div>' +
         '<div class="fld sm"><label for="fL">Last name initial</label><input id="fL" maxlength="1" autocomplete="off" autocapitalize="characters" value="' + esc(ME.l) + '"></div></div>' +
         '<div class="fld"><label for="fP">Phone</label><input id="fP" type="tel" inputmode="tel" autocomplete="tel" maxlength="16" value="' + esc(ME.ph) + '"></div>' +
-        '<div class="fld"><label for="fA">' + (GOLD ? "Address" : "Postal address") + '</label><input id="fA" autocomplete="street-address" maxlength="200" placeholder="Street, suburb, postcode" value="' + esc(ME.ad) + '"></div>' +
+        '<div class="fld"><label for="fA">' + (isCash() ? "Address" : "Postal address") + '</label><input id="fA" autocomplete="street-address" maxlength="200" placeholder="Street, suburb, postcode" value="' + esc(ME.ad) + '"></div>' +
         '<input id="fH" class="hp" type="checkbox" tabindex="-1" aria-hidden="true">' +
         '<p class="err" id="fErr" role="alert"></p></div>' +
       '<div class="warn"><b>Please note.</b> Placing your order opens WhatsApp with it all typed out. You need to press <b>Send</b> in WhatsApp for it to reach us.</div>' +
@@ -990,7 +992,7 @@ body.logo-in .hero-in{transition:none}
     if (!/^[A-Za-z\u00C0-\u024F][A-Za-z\u00C0-\u024F' -]*$/.test(ME.f)) bad.push(["fF", "your first name"]);
     if (!ME.l) bad.push(["fL", "the first letter of your last name"]);
     if (!/^\d{8,12}$/.test(d)) bad.push(["fP", "a phone number we can reach you on"]);
-    if (ME.ad.length < 6) bad.push(["fA", GOLD ? "your address" : "your postal address"]);
+    if (ME.ad.length < 6) bad.push(["fA", isCash() ? "your address" : "your postal address"]);
     return bad;
   }
   function nice(list) { return list.length < 2 ? list.join("") : list.slice(0, -1).join(", ") + " and " + list[list.length - 1]; }
@@ -1017,7 +1019,9 @@ body.logo-in .hero-in{transition:none}
   function sendToHub() {
     if (!SENT || SENT.posted || !window.fetch) return;
     SENT.posted = true; keepSent();
-    var body = { action: "shopOrder", ref: SENT.ref, hp: SENT.hp || "", first: ME.f, initial: ME.l, phone: ME.ph, address: ME.ad, gc: GOLD, pay: isCash() ? "cash" : "bank", lines: SENT.lines };
+    // gc tells the sheet the order is Gold Coast cash, picked up or dropped off. A Gold Coast order paid by
+    // bank transfer is posted like any other, so it goes down as a posted order.
+    var body = { action: "shopOrder", ref: SENT.ref, hp: SENT.hp || "", first: ME.f, initial: ME.l, phone: ME.ph, address: ME.ad, gc: isCash(), pay: isCash() ? "cash" : "bank", lines: SENT.lines };
     var opts = { method: "POST", redirect: "follow", keepalive: true, headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) };
     var w = $("waGo"); if (w) w.textContent = "Open WhatsApp again";
     fetch(HUB, opts).then(function (r) { return r.json(); }).then(function (res) { setSaved(!!(res && res.ok)); }).catch(function () { setSaved(false); });
